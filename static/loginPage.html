@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.3/css/bulma.min.css">
+</head>
+<body>
+    <section class="hero is-primary is-fullheight">
+        <div class="hero-head">
+            <header class="navbar">
+                <div class="container">
+                    <div class="navbar-brand is-align-items-center is-justify-content-center" style="width: 100%;">
+                        <a class="navbar-item">
+                            <h1 class="title has-text-white">EASM Security Project</h1>
+                        </a>
+                    </div>
+                </div>
+            </header>
+        </div>
+        <div class="hero-body">
+            <div class="container">
+                <div class="columns is-centered">
+                    <div class="column is-4-desktop">
+                        <form action="/auth" method="POST" class="box">
+                            <h1 class="title has-text-centered" style="color: black;">Login</h1>
+                            <div class="field">
+                                <label class="label has-text-centered">Email</label>
+                                <div class="control has-icons-left">
+                                    <input class="input" type="email" name="email" placeholder="e.g. alex@example.com" required>
+                                    <span class="icon is-small is-left">
+                                        <i class="fas fa-envelope"></i>
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="field">
+                                <label class="label has-text-centered">Password</label>
+                                <div class="control has-icons-left">
+                                    <input class="input" type="password" name="password" placeholder="********" required>
+                                    <span class="icon is-small is-left">
+                                        <i class="fas fa-lock"></i>
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="field">
+                                <button class="button is-primary is-fullwidth">Login</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <script defer src="https://use.fontawesome.com/releases/v5.3.1/js/all.js"></script>
+</body>
+</html>
