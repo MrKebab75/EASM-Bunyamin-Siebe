@@ -6,11 +6,11 @@ from Scripts import Certificaat
 from Scripts import Portscan
 
 @click.command()
-@click.argument("option", type=click.IntRange(1,4))
+@click.argument("option", type=click.Choice(["subdomains", "lease", "certificate", "portscan"]))
 @click.option("--domain", help="Domain name (if required)")
 @click.option("--file", "domains_file", default="domains.txt", help="Domains file for subdomain task")
 def main(option, domain, domains_file):
-    if option == 1:
+    if option == "subdomains":
         # Subdomain enumeration
         domains = subdom.read_domains_from_file(domains_file)
         output_file = "subdomains_with_ips.csv"
@@ -24,20 +24,20 @@ def main(option, domain, domains_file):
                     csvfile.flush()
         click.echo(f"Results saved to {output_file}")
         
-    elif option == 2:
+    elif option == "lease":
         # Domain lease check
         d = domain or click.prompt("Voer de domeinnaam in (bijv. example.com)")
         Domeingeldigheid.check_domain_lease(d)
         
-    elif option == 3:
+    elif option == "certificate":
         # Certificate check
         d = domain or click.prompt("Voer de domeinnaam in (bijv. example.com)")
         Certificaat.check_certificate(d)
         
-    elif option == 4:
+    elif option == "portscan":
         # Portscan
         d = domain or click.prompt("Voer de domeinnaam in (bijv. example.com)")
         Portscan.scan_with_nmap(d)
-        
+
 if __name__ == "__main__":
     main()
