@@ -1,3 +1,4 @@
+import os
 import csv
 import click
 from Scripts import subdom
@@ -8,12 +9,16 @@ from Scripts import Portscan
 @click.command()
 @click.argument("option", type=click.Choice(["subdomains", "lease", "certificate", "portscan"]))
 @click.option("--domain", help="Domain name (if required)")
-@click.option("--file", "domains_file", default="domains.txt", help="Domains file for subdomain task")
+@click.option("--file", "domains_file", default="Scripts/domains.txt", help="Domains file for subdomain task")
 def main(option, domain, domains_file):
     if option == "subdomains":
+        # Create output directory "foundData" in the project root
+        output_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), "foundData")
+        os.makedirs(output_dir, exist_ok=True)
+        
         # Subdomain enumeration
         domains = subdom.read_domains_from_file(domains_file)
-        output_file = "subdomains_with_ips.csv"
+        output_file = os.path.join(output_dir, "subdomains_with_ips.csv")
         with open(output_file, 'w', newline='') as csvfile:
             csv_writer = csv.writer(csvfile)
             csv_writer.writerow(["Subdomain", "IPv4", "IPv6"])
