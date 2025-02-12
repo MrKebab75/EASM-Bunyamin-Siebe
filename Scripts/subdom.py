@@ -2,6 +2,7 @@ import subprocess
 import sys
 import csv
 import re
+import os
 
 # Function to clean domain (remove https://, http://, www.)
 def clean_domain(domain):
@@ -55,8 +56,13 @@ def read_domains_from_file(file_path):
         sys.exit(1)
 
 def main():
+    # Define the output directory
+    output_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "foundData")
     domains_file = "domains.txt"
-    output_file = "subdomains_with_ips.csv"
+    output_file = os.path.join(output_dir, "subdomains_with_ips.csv")
+
+    # Create output directory if it doesn't exist
+    os.makedirs(output_dir, exist_ok=True)
 
     # Read and clean domains from the file
     domains = read_domains_from_file(domains_file)
