@@ -5,9 +5,10 @@ from Scripts import subdom
 from Scripts import Domeingeldigheid
 from Scripts import Certificaat
 from Scripts import Portscan
+from Scripts import CVEScanner
 
 @click.command()
-@click.argument("option", type=click.Choice(["subdomains", "lease", "certificate", "portscan"]))
+@click.argument("option", type=click.Choice(["subdomains", "lease", "certificate", "portscan", "cvescan"]))
 @click.option("--domain", help="Domain name (if required)")
 @click.option("--file", "domains_file", default="Scripts/domains.txt", help="Domains file for subdomain task")
 def main(option, domain, domains_file):
@@ -43,6 +44,8 @@ def main(option, domain, domains_file):
         # Portscan
         d = domain or click.prompt("Voer de domeinnaam in (bijv. example.com)")
         Portscan.scan_with_nmap(d)
+    elif option == "cvescan":
+        CVEScanner.main()
 
 if __name__ == "__main__":
     main()
