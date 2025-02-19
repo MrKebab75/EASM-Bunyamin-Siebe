@@ -35,7 +35,9 @@ def find_subdomains_with_ips(domain):
             ip_addresses = parts[1:] if len(parts) > 1 else []  # Remaining parts are IPs
 
             # Separate IPv4 and IPv6
-            ipv4 = next((ip for ip in ip_addresses if classify_ip(ip) == "IPv4"), "Unresolved")
+            ipv4_list = [ip for ip in ip_addresses if classify_ip(ip) == "IPv4"]
+            ipv4 = ipv4_list[0] if ipv4_list else "Unresolved"
+
             ipv6 = next((ip for ip in ip_addresses if classify_ip(ip) == "IPv6"), "Unresolved")
 
             results.append((subdomain, ipv4, ipv6))
