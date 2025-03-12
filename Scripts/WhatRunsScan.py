@@ -6,6 +6,7 @@ import subprocess
 import os
 import json
 import time
+import re
 from datetime import datetime
 
 def scan_ports_and_services(ip, verbose=True):
@@ -85,6 +86,42 @@ def scan_ports_and_services(ip, verbose=True):
     
     return results
 
+def get_cve_url(cve_id):
+    """Generate a URL to the NIST NVD page for a given CVE."""
+    return f"https://nvd.nist.gov/vuln/detail/{cve_id}"
+
+def extract_severity(text):
+    """Extract CVSS score and severity from vulnerability description."""
+    # Look for CVSS score patterns like "CVSS: 9.8/10" or "CVSS:9.8"
+    cvss_pattern = re.compile(r'CVSS:?\s*(\d+\.\d+)')
+    cvss_match = cvss_pattern.search(text)
+    
+    cvss_score = float(cvss_match.group(1)) if cvss_match else None
+    
+    # Look for severity words
+    severity = "Unknown"
+    if "critical" in text.lower():
+        severity = "Critical"
+    elif "high" in text.lower():
+        severity = "High"
+    elif "medium" in text.lower():
+        severity = "Medium"
+    elif "low" in text.lower():
+        severity = "Low"
+    
+    # If we have a CVSS score but no explicit severity, derive it
+    if cvss_score is not None and severity == "Unknown":
+        if cvss_score >= 9.0:
+            severity = "Critical"
+        elif cvss_score >= 7.0:
+            severity = "High"
+        elif cvss_score >= 4.0:
+            severity = "Medium"
+        else:
+            severity = "Low"
+            
+    return cvss_score, severity
+
 def check_vulnerabilities(ip, port, results, verbose=True):
     """Check if services running on a specific port have known vulnerabilities."""
     try:
@@ -112,12 +149,18 @@ def check_vulnerabilities(ip, port, results, verbose=True):
             if 'CVE-' in line:
                 # Save previous CVE if exists
                 if current_cve:
+                    details_text = '\n'.join(cve_details)
+                    cvss, severity = extract_severity(details_text)
                     cve_findings.append({
                         'id': current_cve,
-                        'details': '\n'.join(cve_details)
+                        'details': details_text,
+                        'url': get_cve_url(current_cve),
+                        'cvss': cvss,
+                        'severity': severity
                     })
                     if verbose:
-                        print(f"[+] Found vulnerability: {current_cve}")
+                        sev_str = f" [{severity}" + (f", CVSS: {cvss}" if cvss else "") + "]"
+                        print(f"[+] Found vulnerability: {current_cve}{sev_str}")
                 
                 # Extract new CVE
                 current_cve = line[line.find('CVE-'):].split()[0].rstrip(':,')
@@ -127,12 +170,18 @@ def check_vulnerabilities(ip, port, results, verbose=True):
         
         # Add the last CVE if exists
         if current_cve:
+            details_text = '\n'.join(cve_details)
+            cvss, severity = extract_severity(details_text)
             cve_findings.append({
                 'id': current_cve,
-                'details': '\n'.join(cve_details)
+                'details': details_text,
+                'url': get_cve_url(current_cve),
+                'cvss': cvss,
+                'severity': severity
             })
             if verbose:
-                print(f"[+] Found vulnerability: {current_cve}")
+                sev_str = f" [{severity}" + (f", CVSS: {cvss}" if cvss else "") + "]"
+                print(f"[+] Found vulnerability: {current_cve}{sev_str}")
         
         # Add vulnerabilities to the results
         if cve_findings:
@@ -176,7 +225,11 @@ def print_ip_summary(result):
             # Show vulnerability IDs if any found
             if vuln_count > 0:
                 for vuln in info['vulnerabilities']:
-                    print(f"  - {vuln['id']}")
+                    severity_str = f" - {vuln['severity']}"
+                    if vuln['cvss']:
+                        severity_str += f" (CVSS: {vuln['cvss']})"
+                    print(f"  - {vuln['id']}{severity_str}")
+                    print(f"    URL: {vuln['url']}")
         
         print(f"\nTotal vulnerabilities found: {total_vulns}")
     
@@ -230,7 +283,12 @@ def write_results_to_file(results_list, output_file, format='txt'):
                     if vuln_count > 0:
                         f.write("\n    VULNERABILITIES:\n")
                         for vuln in info['vulnerabilities']:
-                            f.write(f"    * {vuln['id']}\n")
+                            severity_str = f" - {vuln['severity']}"
+                            if vuln['cvss']:
+                                severity_str += f" (CVSS: {vuln['cvss']})"
+                            
+                            f.write(f"    * {vuln['id']}{severity_str}\n")
+                            f.write(f"      URL: {vuln['url']}\n")
                             for detail in vuln['details'].split('\n'):
                                 f.write(f"      {detail}\n")
                         f.write("\n")
@@ -261,7 +319,12 @@ def write_incremental_log(result, log_file):
             if vuln_count > 0:
                 f.write("\n    VULNERABILITIES:\n")
                 for vuln in info['vulnerabilities']:
-                    f.write(f"    * {vuln['id']}\n")
+                    severity_str = f" - {vuln['severity']}"
+                    if vuln['cvss']:
+                        severity_str += f" (CVSS: {vuln['cvss']})"
+                    
+                    f.write(f"    * {vuln['id']}{severity_str}\n")
+                    f.write(f"      URL: {vuln['url']}\n")
                     for detail in vuln['details'].split('\n'):
                         f.write(f"      {detail}\n")
                 f.write("\n")
