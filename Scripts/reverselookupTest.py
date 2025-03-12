@@ -179,3 +179,5 @@ if __name__ == "__main__":
 
     # analyzer = DomainAnalyzer(viewdns_api_key='c4c91bd9cc3c2baa71ca279f965debe6e70964f5')
     # analyzer.process_company_list('Company.csv', '../foundData/reverselookup.csv')
+
+# python3 reverselookupTest.py

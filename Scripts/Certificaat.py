@@ -27,3 +27,5 @@ def check_certificate(domain):
 if __name__ == "__main__":
     domeinnaam = input("Voer een domeinnaam in (bijv. 'example.com'): ")
     check_certificate(domeinnaam)
+
+# python3 Certificaat.py

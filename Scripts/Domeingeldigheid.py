@@ -23,3 +23,5 @@ def check_domain_lease(domain):
 if __name__ == "__main__":
     domain = input("Voer de domeinnaam in (bijv. example.com): ")
     check_domain_lease(domain)
+
+# python3 Domeingeldigheid.py

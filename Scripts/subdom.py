@@ -85,139 +85,140 @@
 
 # if __name__ == "__main__":
 #     main()
-import asyncio
-import aiofiles
-import csv
-import re
-import os
-import pandas as pd
+    import asyncio
+    import aiofiles
+    import csv
+    import re
+    import os
+    import pandas as pd
 
-# Function to clean domain (remove https://, http://, www.)
-def clean_domain(domain):
-    domain = domain.strip()
-    domain = re.sub(r'^https?://', '', domain)  # Remove http:// or https://
-    domain = re.sub(r'^www\.', '', domain)  # Remove www.
-    return domain
+    # Function to clean domain (remove https://, http://, www.)
+    def clean_domain(domain):
+        domain = domain.strip()
+        domain = re.sub(r'^https?://', '', domain)  # Remove http:// or https://
+        domain = re.sub(r'^www\.', '', domain)  # Remove www.
+        return domain
 
-# Function to classify an IP as IPv4 or IPv6
-def classify_ip(ip):
-    if ':' in ip:  # IPv6 contains colons
-        return "IPv6"
-    elif '.' in ip:  # IPv4 contains dots
-        return "IPv4"
-    return "Unknown"
+    # Function to classify an IP as IPv4 or IPv6
+    def classify_ip(ip):
+        if ':' in ip:  # IPv6 contains colons
+            return "IPv6"
+        elif '.' in ip:  # IPv4 contains dots
+            return "IPv4"
+        return "Unknown"
 
-# Async function to run Amass and get subdomains with IPs
-async def find_subdomains_with_ips(domain):
-    print(f"Finding subdomains for {domain} using Amass...")
-    results = []
-    try:
-        # Run Amass asynchronously
-        process = await asyncio.create_subprocess_exec(
-            'amass', 'enum', '-v', '-d', domain, '-ip',
-            stdout=asyncio.subprocess.PIPE,
-            stderr=asyncio.subprocess.PIPE
-        )
+    # Async function to run Amass and get subdomains with IPs
+    async def find_subdomains_with_ips(domain):
+        print(f"Finding subdomains for {domain} using Amass...")
+        results = []
+        try:
+            # Run Amass asynchronously
+            process = await asyncio.create_subprocess_exec(
+                'amass', 'enum', '-v', '-d', domain, '-ip',
+                stdout=asyncio.subprocess.PIPE,
+                stderr=asyncio.subprocess.PIPE
+            )
 
-        stdout, stderr = await process.communicate()
+            stdout, stderr = await process.communicate()
 
-        if stderr:
-            print(f"Error for {domain}: {stderr.decode()}")
+            if stderr:
+                print(f"Error for {domain}: {stderr.decode()}")
 
-        # Process the output
-        for line in stdout.decode().splitlines():
-            parts = line.split()  # Amass outputs "subdomain IP"
-            subdomain = parts[0]  # First part is the subdomain
-            ip_addresses = parts[1:] if len(parts) > 1 else []  # Remaining parts are IPs
+            # Process the output
+            for line in stdout.decode().splitlines():
+                parts = line.split()  # Amass outputs "subdomain IP"
+                subdomain = parts[0]  # First part is the subdomain
+                ip_addresses = parts[1:] if len(parts) > 1 else []  # Remaining parts are IPs
 
-            # Separate IPv4 and IPv6
-            ipv4_list = [ip for ip in ip_addresses if classify_ip(ip) == "IPv4"]
-            ipv4 = ipv4_list[0] if ipv4_list else "Unresolved"
+                # Separate IPv4 and IPv6
+                ipv4_list = [ip for ip in ip_addresses if classify_ip(ip) == "IPv4"]
+                ipv4 = ipv4_list[0] if ipv4_list else "Unresolved"
 
-            ipv6 = next((ip for ip in ip_addresses if classify_ip(ip) == "IPv6"), "Unresolved")
+                ipv6 = next((ip for ip in ip_addresses if classify_ip(ip) == "IPv6"), "Unresolved")
 
-            results.append((subdomain, ipv4, ipv6))
-            print(f"  [+] {subdomain} -> IPv4: {ipv4}, IPv6: {ipv6}")  # Show progress
+                results.append((subdomain, ipv4, ipv6))
+                print(f"  [+] {subdomain} -> IPv4: {ipv4}, IPv6: {ipv6}")  # Show progress
 
-    except Exception as e:
-        print(f"Error running Amass for {domain}: {e}")
+        except Exception as e:
+            print(f"Error running Amass for {domain}: {e}")
 
-    return results
+        return results
 
-async def read_domains_from_excel(file_path):
-    try:
-        # Read the Excel file using pandas
-        df = pd.read_excel(file_path)
-        
-        # Assuming 'Domain Name' is the column name
-        domains = df['Domain Name'].dropna().tolist()
-        
-        # Clean each domain
-        return [clean_domain(domain) for domain in domains if str(domain).strip()]
-    except FileNotFoundError:
-        print(f"File {file_path} not found.")
-        exit(1)
-    except Exception as e:
-        print(f"Error reading Excel file: {e}")
-        exit(1)
+    async def read_domains_from_excel(file_path):
+        try:
+            # Read the Excel file using pandas
+            df = pd.read_excel(file_path)
+            
+            # Assuming 'Domain Name' is the column name
+            domains = df['Domain Name'].dropna().tolist()
+            
+            # Clean each domain
+            return [clean_domain(domain) for domain in domains if str(domain).strip()]
+        except FileNotFoundError:
+            print(f"File {file_path} not found.")
+            exit(1)
+        except Exception as e:
+            print(f"Error reading Excel file: {e}")
+            exit(1)
 
-async def write_to_csv(file_path, data, write_header=False):
-    """Asynchronously writes subdomain data to CSV"""
-    async with aiofiles.open(file_path, 'a', newline='') as csvfile:
-        rows = []
-        
-        if write_header:
-            rows.append("Subdomain,IPv4,IPv6")
+    async def write_to_csv(file_path, data, write_header=False):
+        """Asynchronously writes subdomain data to CSV"""
+        async with aiofiles.open(file_path, 'a', newline='') as csvfile:
+            rows = []
+            
+            if write_header:
+                rows.append("Subdomain,IPv4,IPv6")
 
-        for subdomains_with_ips in data:
-            for subdomain, ipv4, ipv6 in subdomains_with_ips:
-                rows.append(f"{subdomain},{ipv4},{ipv6}")
+            for subdomains_with_ips in data:
+                for subdomain, ipv4, ipv6 in subdomains_with_ips:
+                    rows.append(f"{subdomain},{ipv4},{ipv6}")
 
-        await csvfile.write('\n'.join(rows) + '\n')
+            await csvfile.write('\n'.join(rows) + '\n')
 
-async def main():
-    # Define the output directory
-    output_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "foundData")
-    domains_file = "Domains.xlsx"
-    output_file = os.path.join(output_dir, "subdomains_with_ips.csv")
+    async def main():
+        # Define the output directory
+        output_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "foundData")
+        domains_file = "Domains.xlsx"
+        output_file = os.path.join(output_dir, "subdomains_with_ips.csv")
 
-    # Create output directory if it doesn't exist
-    os.makedirs(output_dir, exist_ok=True)
+        # Create output directory if it doesn't exist
+        os.makedirs(output_dir, exist_ok=True)
 
-    # Read and clean domains from the Excel file
-    domains = await read_domains_from_excel(domains_file)
+        # Read and clean domains from the Excel file
+        domains = await read_domains_from_excel(domains_file)
 
-    # Check if file already exists (to avoid duplicate headers)
-    file_exists = os.path.isfile(output_file)
+        # Check if file already exists (to avoid duplicate headers)
+        file_exists = os.path.isfile(output_file)
 
-    # Process domains in smaller batches
-    batch_size = 2  # Process 2 domains at a time
+        # Process domains in smaller batches
+        batch_size = 2  # Process 2 domains at a time
 
-    try:
-        for i in range(0, len(domains), batch_size):
-            batch = domains[i:i + batch_size]
-            print(f"\nProcessing batch {i//batch_size + 1}/{-(-len(domains)//batch_size)}")
+        try:
+            for i in range(0, len(domains), batch_size):
+                batch = domains[i:i + batch_size]
+                print(f"\nProcessing batch {i//batch_size + 1}/{-(-len(domains)//batch_size)}")
 
-            # Run Amass for the current batch
-            tasks = [find_subdomains_with_ips(domain) for domain in batch]
-            batch_results = await asyncio.gather(*tasks)
+                # Run Amass for the current batch
+                tasks = [find_subdomains_with_ips(domain) for domain in batch]
+                batch_results = await asyncio.gather(*tasks)
 
-            # Write results after every batch to prevent data loss
-            await write_to_csv(output_file, batch_results, write_header=not file_exists and i == 0)
-            file_exists = True  # Ensure headers are not written again
+                # Write results after every batch to prevent data loss
+                await write_to_csv(output_file, batch_results, write_header=not file_exists and i == 0)
+                file_exists = True  # Ensure headers are not written again
 
-            # Add delay between batches
-            if i + batch_size < len(domains):
-                print("Waiting 10 seconds before next batch...")
-                await asyncio.sleep(10)
+                # Add delay between batches
+                if i + batch_size < len(domains):
+                    print("Waiting 10 seconds before next batch...")
+                    await asyncio.sleep(10)
 
-    except KeyboardInterrupt:
-        print("\nProcess interrupted! Saving progress before exiting...")
+        except KeyboardInterrupt:
+            print("\nProcess interrupted! Saving progress before exiting...")
 
-    finally:
-        print(f"\nResults saved to {output_file}")
+        finally:
+            print(f"\nResults saved to {output_file}")
 
-# Run the async main function
-if __name__ == "__main__":
-    asyncio.run(main())
+    # Run the async main function
+    if __name__ == "__main__":
+        asyncio.run(main())
 
+    # python3 subdom.py
