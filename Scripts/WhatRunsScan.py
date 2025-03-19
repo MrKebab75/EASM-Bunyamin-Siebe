@@ -339,6 +339,7 @@ def scan_ports_and_services(ip, domains=None, verbose=True):
         domain_str = f" ({', '.join(domains)})" if domains else ""
         print(f"\n[*] Scanning ports and services on {ip}{domain_str}...")
     
+    # Run nmap scan as before
     try:
         # Run nmap with service detection
         command = ['nmap', '-sV', '-p-', '--open', '--reason', ip]
@@ -350,100 +351,100 @@ def scan_ports_and_services(ip, domains=None, verbose=True):
         if nmap_process.returncode != 0:
             if verbose:
                 print(f"[!] Error scanning {ip}: {nmap_process.stderr}")
-            return results
-            
-        # Parse nmap output to get ports and services
-        for line in nmap_process.stdout.splitlines():
-            if '/tcp' in line or '/udp' in line:
-                parts = line.split()
-                if len(parts) >= 3:
-                    port_info = parts[0]
-                    state = parts[1]
-                    service_str = ' '.join(parts[2:])
-                    
-                    # Extract port number and protocol
-                    port, protocol = port_info.split('/')
-                    
-                    # Parse service and version information
-                    service_name, service_version = parse_service_version(service_str)
-                    
-                    # Store port information
-                    results['ports'][port] = {
-                        'protocol': protocol,
-                        'state': state,
-                        'service': service_str,
-                        'service_name': service_name,
-                        'service_version': service_version,
-                        'vulnerabilities': [],
-                        'technologies': []  # Initialize technologies list
-                    }
-                    
-                    if verbose:
-                        version_info = f" (version: {service_version})" if service_version != "Unknown" else ""
-                        print(f"[+] Found: Port {port}/{protocol} is {state} - {service_name}{version_info}")
-
-        # After finding all open ports, probe each one for web services
-        web_ports = []
-        all_ports = list(results['ports'].keys())
-
-        if verbose:
-            print(f"[*] Checking all {len(all_ports)} open ports for web services...")
-
-        # First, add ports with obvious web services based on nmap detection
-        for port, info in results['ports'].items():
-            if check_for_web_service(info['service']) or port in ['80', '443', '8080', '8443', '8000', '8008', '3000']:
-                web_ports.append((port, 'https' if port == '443' or port == '8443' else 'http'))
-
-        # Then, probe all remaining ports with HTTP requests to check if they respond like web servers
-        remaining_ports = [p for p in all_ports if not any(p == wp[0] for wp in web_ports)]
-        if remaining_ports:
-            if verbose:
-                print(f"[*] Probing {len(remaining_ports)} additional ports for hidden web services...")
-            
-            for port in remaining_ports:
-                # Try HTTPS first, then fallback to HTTP
-                for protocol in ['https', 'http']:
-                    try:
-                        url = f"{protocol}://{ip}:{port}"
-                        response = requests.get(url, timeout=3, verify=False, allow_redirects=False)
-                        
-                        # Check if it looks like a web response
-                        if response.status_code and (
-                            'html' in response.headers.get('Content-Type', '').lower() or 
-                            '<html' in response.text.lower()[:500] or
-                            'server' in response.headers or
-                            'set-cookie' in response.headers
-                        ):
-                            web_ports.append((port, protocol))
-                            if verbose:
-                                print(f"[+] Discovered hidden web service on {url}")
-                            break  # No need to try HTTP if HTTPS worked
-                    except requests.exceptions.RequestException:
-                        continue  # Try next protocol or port
-        
-        # For web ports, detect technologies
-        if web_ports:
-            if verbose:
-                print(f"[*] Checking for web technologies on {len(web_ports)} potential web ports...")
-                
-            for port, protocol in web_ports:
-                technologies = detect_web_technologies(ip, port, protocol, domains=domains, verbose=verbose)
-                results['ports'][port]['technologies'] = technologies
-        
-        # For each open port, check for vulnerabilities
-        port_count = len(results['ports'])
-        if port_count > 0:
-            if verbose:
-                print(f"[*] Found {port_count} open ports on {ip}")
-                print(f"[*] Checking for vulnerabilities...")
-            
-            for port in results['ports']:
-                if verbose:
-                    print(f"[*] Checking vulnerabilities on port {port}...")
-                check_vulnerabilities(ip, port, results, verbose)
+            # Don't return here, continue to WhatRuns check if domains are available
         else:
+            # Process nmap results as before
+            for line in nmap_process.stdout.splitlines():
+                if '/tcp' in line or '/udp' in line:
+                    parts = line.split()
+                    if len(parts) >= 3:
+                        port_info = parts[0]
+                        state = parts[1]
+                        service_str = ' '.join(parts[2:])
+                        
+                        # Extract port number and protocol
+                        port, protocol = port_info.split('/')
+                        
+                        # Parse service and version information
+                        service_name, service_version = parse_service_version(service_str)
+                        
+                        # Store port information
+                        results['ports'][port] = {
+                            'protocol': protocol,
+                            'state': state,
+                            'service': service_str,
+                            'service_name': service_name,
+                            'service_version': service_version,
+                            'vulnerabilities': [],
+                            'technologies': []  # Initialize technologies list
+                        }
+                        
+                        if verbose:
+                            version_info = f" (version: {service_version})" if service_version != "Unknown" else ""
+                            print(f"[+] Found: Port {port}/{protocol} is {state} - {service_name}{version_info}")
+
+            # After finding all open ports, probe each one for web services
+            web_ports = []
+            all_ports = list(results['ports'].keys())
+
             if verbose:
-                print(f"[*] No open ports found on {ip}")
+                print(f"[*] Checking all {len(all_ports)} open ports for web services...")
+
+            # First, add ports with obvious web services based on nmap detection
+            for port, info in results['ports'].items():
+                if check_for_web_service(info['service']) or port in ['80', '443', '8080', '8443', '8000', '8008', '3000']:
+                    web_ports.append((port, 'https' if port == '443' or port == '8443' else 'http'))
+
+            # Then, probe all remaining ports with HTTP requests to check if they respond like web servers
+            remaining_ports = [p for p in all_ports if not any(p == wp[0] for wp in web_ports)]
+            if remaining_ports:
+                if verbose:
+                    print(f"[*] Probing {len(remaining_ports)} additional ports for hidden web services...")
+                
+                for port in remaining_ports:
+                    # Try HTTPS first, then fallback to HTTP
+                    for protocol in ['https', 'http']:
+                        try:
+                            url = f"{protocol}://{ip}:{port}"
+                            response = requests.get(url, timeout=3, verify=False, allow_redirects=False)
+                            
+                            # Check if it looks like a web response
+                            if response.status_code and (
+                                'html' in response.headers.get('Content-Type', '').lower() or 
+                                '<html' in response.text.lower()[:500] or
+                                'server' in response.headers or
+                                'set-cookie' in response.headers
+                            ):
+                                web_ports.append((port, protocol))
+                                if verbose:
+                                    print(f"[+] Discovered hidden web service on {url}")
+                                break  # No need to try HTTP if HTTPS worked
+                        except requests.exceptions.RequestException:
+                            continue  # Try next protocol or port
+            
+            # For web ports, detect technologies
+            if web_ports:
+                if verbose:
+                    print(f"[*] Checking for web technologies on {len(web_ports)} potential web ports...")
+                    
+                for port, protocol in web_ports:
+                    technologies = detect_web_technologies(ip, port, protocol, domains=domains, verbose=verbose)
+                    results['ports'][port]['technologies'] = technologies
+            
+            # For each open port, check for vulnerabilities
+            port_count = len(results['ports'])
+            if port_count > 0:
+                if verbose:
+                    print(f"[*] Found {port_count} open ports on {ip}")
+                    print(f"[*] Checking for vulnerabilities...")
+                
+                for port in results['ports']:
+                    if verbose:
+                        print(f"[*] Checking vulnerabilities on port {port}...")
+                    check_vulnerabilities(ip, port, results, verbose)
+            else:
+                if verbose:
+                    print(f"[*] No open ports found on {ip}")
             
     except subprocess.TimeoutExpired:
         if verbose:
@@ -451,6 +452,47 @@ def scan_ports_and_services(ip, domains=None, verbose=True):
     except Exception as e:
         if verbose:
             print(f"[!] Error during scan of {ip}: {str(e)}")
+    
+    # Check if we have any domains and should run WhatRuns API regardless of open ports
+    if WHATRUNS_ENABLED and domains:
+        whatruns_technologies_found = False
+        
+        if verbose:
+            print(f"[*] No open ports found with nmap, but domains are available.")
+            print(f"[*] Checking WhatRuns API for domain technologies...")
+        
+        for domain in domains:
+            if verbose:
+                print(f"[*] Querying WhatRuns API for domain: {domain}")
+                
+            try:
+                whatruns_techs = detect_technologies_with_whatruns(domain, timeout=10, verbose=verbose)
+                
+                if whatruns_techs:
+                    # If WhatRuns found technologies but nmap found no open ports,
+                    # create a special "web" port entry to show the technologies
+                    if not results['ports']:
+                        results['ports']['80'] = {
+                            'protocol': 'tcp',
+                            'state': 'filtered',  # We don't know the actual state
+                            'service': 'http',
+                            'service_name': 'http',
+                            'service_version': 'Unknown',
+                            'vulnerabilities': [],
+                            'technologies': whatruns_techs
+                        }
+                        whatruns_technologies_found = True
+                        
+                        if verbose:
+                            print(f"[+] Found {len(whatruns_techs)} technologies through WhatRuns API for {domain}")
+                    
+            except Exception as e:
+                if verbose:
+                    print(f"[!] Error using WhatRuns for domain {domain}: {str(e)}")
+        
+        if whatruns_technologies_found:
+            if verbose:
+                print(f"[*] Added technologies from WhatRuns API to results")
     
     # Print summary of findings
     print_ip_summary(results)
