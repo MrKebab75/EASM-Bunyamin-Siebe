@@ -96,20 +96,36 @@ def detect_technologies_with_whatruns(domain, timeout=10, verbose=True):
                 dt = datetime.fromtimestamp(item['detectedTime'] / 1000)
                 ldt = datetime.fromtimestamp(item['latestDetectedTime'] / 1000)
                 
+                # Enhanced version extraction
+                version = 'Unknown'
+                if 'version' in item and item['version']:
+                    version = item['version']
+                # Some technologies store version in 'info' field
+                elif 'info' in item and item['info']:
+                    # Try to extract version from info field
+                    info_str = str(item['info'])
+                    # Look for version patterns like "v1.2.3" or "1.2.3"
+                    version_match = re.search(r'v?(\d+\.\d+(\.\d+)*)', info_str)
+                    if version_match:
+                        version = version_match.group(0)
+                
                 technologies.append({
                     'name': item['name'],
-                    'version': item.get('version', 'Unknown'),
+                    'version': version,
                     'categories': [app_type],
                     'confidence': 90,
                     'detected_time': dt.strftime('%Y-%m-%d'),
-                    'latest_detected': ldt.strftime('%Y-%m-%d')
+                    'latest_detected': ldt.strftime('%Y-%m-%d'),
+                    'detection_source': 'WhatRuns'  # Mark the source explicitly
                 })
                 
                 if verbose:
-                    print(f"[+] WhatRuns detected: {item['name']} ({app_type})")
+                    version_info = f" {version}" if version != 'Unknown' else ""
+                    print(f"[+] WhatRuns detected: {item['name']}{version_info} ({app_type})")
         
         if verbose:
-            print(f"[+] WhatRuns found {len(technologies)} technologies")
+            versions_found = sum(1 for t in technologies if t['version'] != 'Unknown')
+            print(f"[+] WhatRuns found {len(technologies)} technologies ({versions_found} with version info)")
             
     except Exception as e:
         if verbose:
@@ -326,7 +342,7 @@ def scan_ports_and_services(ip, domains=None, verbose=True):
     Scan an IP address for open ports and identify running services.
     Returns a dictionary with port information and service details.
     """
-    domains = domains or []  # Default to empty list if None
+    domains = domains or []
     
     results = {
         'ip': ip,
@@ -339,7 +355,27 @@ def scan_ports_and_services(ip, domains=None, verbose=True):
         domain_str = f" ({', '.join(domains)})" if domains else ""
         print(f"\n[*] Scanning ports and services on {ip}{domain_str}...")
     
-    # Run nmap scan as before
+    # First, get WhatRuns technologies for each domain ONCE (not per port)
+    whatruns_techs = {}
+    if WHATRUNS_ENABLED and domains:
+        if verbose:
+            print(f"[*] Checking WhatRuns API for {len(domains)} domain(s)...")
+            
+        for domain in domains:
+            if verbose:
+                print(f"[*] Querying WhatRuns API for domain: {domain}")
+                
+            try:
+                domain_techs = detect_technologies_with_whatruns(domain, timeout=10, verbose=verbose)
+                if domain_techs:
+                    whatruns_techs[domain] = domain_techs
+                    if verbose:
+                        print(f"[+] WhatRuns found {len(domain_techs)} technologies for {domain}")
+            except Exception as e:
+                if verbose:
+                    print(f"[!] Error using WhatRuns for domain {domain}: {str(e)}")
+    
+    # Now run the nmap scan
     try:
         # Run nmap with service detection
         command = ['nmap', '-sV', '-p-', '--open', '--reason', ip]
@@ -351,9 +387,8 @@ def scan_ports_and_services(ip, domains=None, verbose=True):
         if nmap_process.returncode != 0:
             if verbose:
                 print(f"[!] Error scanning {ip}: {nmap_process.stderr}")
-            # Don't return here, continue to WhatRuns check if domains are available
         else:
-            # Process nmap results as before
+            # Process nmap results
             for line in nmap_process.stdout.splitlines():
                 if '/tcp' in line or '/udp' in line:
                     parts = line.split()
@@ -422,16 +457,27 @@ def scan_ports_and_services(ip, domains=None, verbose=True):
                         except requests.exceptions.RequestException:
                             continue  # Try next protocol or port
             
-            # For web ports, detect technologies
+            # For web ports, detect technologies with webtech and headers (not WhatRuns)
             if web_ports:
                 if verbose:
                     print(f"[*] Checking for web technologies on {len(web_ports)} potential web ports...")
                     
                 for port, protocol in web_ports:
-                    technologies = detect_web_technologies(ip, port, protocol, domains=domains, verbose=verbose)
+                    # Use detect_web_technologies WITHOUT domains to avoid calling WhatRuns again
+                    # We'll add the WhatRuns technologies separately
+                    technologies = detect_web_technologies(ip, port, protocol, domains=None, verbose=verbose)
+                    
+                    # Add any WhatRuns technologies we already got
+                    for domain in domains:
+                        if domain in whatruns_techs:
+                            domain_techs = whatruns_techs[domain]
+                            for tech in domain_techs:
+                                if not any(t['name'].lower() == tech['name'].lower() for t in technologies):
+                                    technologies.append(tech)
+                            
                     results['ports'][port]['technologies'] = technologies
             
-            # For each open port, check for vulnerabilities
+            # Rest of your vulnerability scanning code
             port_count = len(results['ports'])
             if port_count > 0:
                 if verbose:
@@ -453,46 +499,28 @@ def scan_ports_and_services(ip, domains=None, verbose=True):
         if verbose:
             print(f"[!] Error during scan of {ip}: {str(e)}")
     
-    # Check if we have any domains and should run WhatRuns API regardless of open ports
-    if WHATRUNS_ENABLED and domains:
-        whatruns_technologies_found = False
+    # If we found WhatRuns technologies but no open ports, add them to port 80
+    if whatruns_techs and not results['ports']:
+        # Combine all technologies from all domains
+        all_whatruns_techs = []
+        for domain, techs in whatruns_techs.items():
+            for tech in techs:
+                if not any(t['name'].lower() == tech['name'].lower() for t in all_whatruns_techs):
+                    all_whatruns_techs.append(tech)
         
-        if verbose:
-            print(f"[*] No open ports found with nmap, but domains are available.")
-            print(f"[*] Checking WhatRuns API for domain technologies...")
-        
-        for domain in domains:
+        if all_whatruns_techs:
+            results['ports']['80'] = {
+                'protocol': 'tcp',
+                'state': 'filtered',
+                'service': 'http',
+                'service_name': 'http',
+                'service_version': 'Unknown',
+                'vulnerabilities': [],
+                'technologies': all_whatruns_techs
+            }
+            
             if verbose:
-                print(f"[*] Querying WhatRuns API for domain: {domain}")
-                
-            try:
-                whatruns_techs = detect_technologies_with_whatruns(domain, timeout=10, verbose=verbose)
-                
-                if whatruns_techs:
-                    # If WhatRuns found technologies but nmap found no open ports,
-                    # create a special "web" port entry to show the technologies
-                    if not results['ports']:
-                        results['ports']['80'] = {
-                            'protocol': 'tcp',
-                            'state': 'filtered',  # We don't know the actual state
-                            'service': 'http',
-                            'service_name': 'http',
-                            'service_version': 'Unknown',
-                            'vulnerabilities': [],
-                            'technologies': whatruns_techs
-                        }
-                        whatruns_technologies_found = True
-                        
-                        if verbose:
-                            print(f"[+] Found {len(whatruns_techs)} technologies through WhatRuns API for {domain}")
-                    
-            except Exception as e:
-                if verbose:
-                    print(f"[!] Error using WhatRuns for domain {domain}: {str(e)}")
-        
-        if whatruns_technologies_found:
-            if verbose:
-                print(f"[*] Added technologies from WhatRuns API to results")
+                print(f"[*] No open ports found, but added {len(all_whatruns_techs)} technologies from WhatRuns API")
     
     # Print summary of findings
     print_ip_summary(results)
@@ -653,7 +681,18 @@ def print_ip_summary(result):
                 for tech in info['technologies']:
                     version = f" {tech['version']}" if tech['version'] != 'Unknown' else ""
                     categories = ', '.join(tech['categories']) if tech['categories'] else 'Unknown'
-                    print(f"    - {tech['name']}{version} ({categories})")
+                    
+                    # Add source information if available
+                    source_info = ""
+                    if 'detection_source' in tech:
+                        source_info = f" [{tech['detection_source']}]"
+                        
+                    # Add first detection date for WhatRuns discoveries
+                    date_info = ""
+                    if 'detected_time' in tech:
+                        date_info = f" (First seen: {tech['detected_time']})"
+                        
+                    print(f"    - {tech['name']}{version} ({categories}){source_info}{date_info}")
             
             # Show vulnerability IDs if any found
             if vuln_count > 0:
@@ -795,7 +834,15 @@ def write_incremental_log(result, log_file):
                 for tech in info['technologies']:
                     version = f" {tech['version']}" if tech['version'] != 'Unknown' else ""
                     categories = ', '.join(tech['categories']) if tech['categories'] else 'Unknown'
-                    f.write(f"    * {tech['name']}{version}\n")
+                    
+                    # Add source and date info
+                    extra_info = ""
+                    if 'detection_source' in tech:
+                        extra_info += f" [{tech['detection_source']}]"
+                    if 'detected_time' in tech:
+                        extra_info += f" First seen: {tech['detected_time']}"
+                        
+                    f.write(f"    * {tech['name']}{version}{extra_info}\n")
                     f.write(f"      Categories: {categories}\n")
                 f.write("\n")
             
