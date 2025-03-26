@@ -316,24 +316,9 @@ def detect_web_technologies(ip, port, protocol="http", domains=None, timeout=10,
             if verbose:
                 print(f"[!] Error in fallback technology detection on {url}: {str(e)}")
     
-    # Add WhatRuns detection using domain names from CSV
-    if WHATRUNS_ENABLED and domains:
-        for domain in domains:
-            if verbose:
-                print(f"[*] Using WhatRuns API for domain: {domain}")
-                
-            try:
-                whatruns_techs = detect_technologies_with_whatruns(domain, timeout, verbose)
-                
-                # Add unique technologies from WhatRuns
-                for tech in whatruns_techs:
-                    if not any(t['name'].lower() == tech['name'].lower() for t in technologies):
-                        technologies.append(tech)
-                        if verbose and tech['name'] != 'Unknown':
-                            print(f"[+] WhatRuns added: {tech['name']} {tech['version']}")
-            except Exception as e:
-                if verbose:
-                    print(f"[!] Error using WhatRuns for domain {domain}: {str(e)}")
+    # REMOVED: WhatRuns API scanning code that was here
+    # WhatRuns data is collected once at domain level in scan_ports_and_services
+    # and distributed to each port there
     
     return technologies
 
