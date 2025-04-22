@@ -169,7 +169,6 @@ def check_for_web_service(service):
 def detect_web_technologies(ip, port, protocol="http", domains=None, timeout=10, verbose=True):
     """
     Detect web technologies running on a web server.
-    If domains are provided, they'll be used for WhatRuns API detection.
     """
     technologies = []
     domains = domains or []
@@ -316,47 +315,20 @@ def detect_web_technologies(ip, port, protocol="http", domains=None, timeout=10,
             if verbose:
                 print(f"[!] Error in fallback technology detection on {url}: {str(e)}")
     
-    # Add WhatRuns detection using domain names from CSV
-    if WHATRUNS_ENABLED and domains:
-        for domain in domains:
-            if verbose:
-                print(f"[*] Using WhatRuns API for domain: {domain}")
-                
-            try:
-                whatruns_techs = detect_technologies_with_whatruns(domain, timeout, verbose)
-                
-                # Add unique technologies from WhatRuns
-                for tech in whatruns_techs:
-                    if not any(t['name'].lower() == tech['name'].lower() for t in technologies):
-                        technologies.append(tech)
-                        if verbose and tech['name'] != 'Unknown':
-                            print(f"[+] WhatRuns added: {tech['name']} {tech['version']}")
-            except Exception as e:
-                if verbose:
-                    print(f"[!] Error using WhatRuns for domain {domain}: {str(e)}")
-    
     return technologies
 
 def scan_ports_and_services(ip, domains=None, verbose=True):
-    """
-    Scan an IP address for open ports and identify running services.
-    Returns a dictionary with port information and service details.
-    """
     domains = domains or []
     
     results = {
         'ip': ip,
         'domains': domains,
         'timestamp': datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
-        'ports': {}
+        'ports': {},
+        'domain_technologies': {}  # New section for domain-level technologies
     }
     
-    if verbose:
-        domain_str = f" ({', '.join(domains)})" if domains else ""
-        print(f"\n[*] Scanning ports and services on {ip}{domain_str}...")
-    
-    # First, get WhatRuns technologies for each domain ONCE (not per port)
-    whatruns_techs = {}
+    # Get WhatRuns technologies for each domain ONCE
     if WHATRUNS_ENABLED and domains:
         if verbose:
             print(f"[*] Checking WhatRuns API for {len(domains)} domain(s)...")
@@ -368,7 +340,8 @@ def scan_ports_and_services(ip, domains=None, verbose=True):
             try:
                 domain_techs = detect_technologies_with_whatruns(domain, timeout=10, verbose=verbose)
                 if domain_techs:
-                    whatruns_techs[domain] = domain_techs
+                    # Store technologies with the domain, not ports
+                    results['domain_technologies'][domain] = domain_techs
                     if verbose:
                         print(f"[+] WhatRuns found {len(domain_techs)} technologies for {domain}")
             except Exception as e:
@@ -463,18 +436,10 @@ def scan_ports_and_services(ip, domains=None, verbose=True):
                     print(f"[*] Checking for web technologies on {len(web_ports)} potential web ports...")
                     
                 for port, protocol in web_ports:
-                    # Use detect_web_technologies WITHOUT domains to avoid calling WhatRuns again
-                    # We'll add the WhatRuns technologies separately
+                    # Use detect_web_technologies WITHOUT domains - no WhatRuns data
                     technologies = detect_web_technologies(ip, port, protocol, domains=None, verbose=verbose)
                     
-                    # Add any WhatRuns technologies we already got
-                    for domain in domains:
-                        if domain in whatruns_techs:
-                            domain_techs = whatruns_techs[domain]
-                            for tech in domain_techs:
-                                if not any(t['name'].lower() == tech['name'].lower() for t in technologies):
-                                    technologies.append(tech)
-                            
+                    # DO NOT add WhatRuns technologies here
                     results['ports'][port]['technologies'] = technologies
             
             # Rest of your vulnerability scanning code
@@ -498,29 +463,6 @@ def scan_ports_and_services(ip, domains=None, verbose=True):
     except Exception as e:
         if verbose:
             print(f"[!] Error during scan of {ip}: {str(e)}")
-    
-    # If we found WhatRuns technologies but no open ports, add them to port 80
-    if whatruns_techs and not results['ports']:
-        # Combine all technologies from all domains
-        all_whatruns_techs = []
-        for domain, techs in whatruns_techs.items():
-            for tech in techs:
-                if not any(t['name'].lower() == tech['name'].lower() for t in all_whatruns_techs):
-                    all_whatruns_techs.append(tech)
-        
-        if all_whatruns_techs:
-            results['ports']['80'] = {
-                'protocol': 'tcp',
-                'state': 'filtered',
-                'service': 'http',
-                'service_name': 'http',
-                'service_version': 'Unknown',
-                'vulnerabilities': [],
-                'technologies': all_whatruns_techs
-            }
-            
-            if verbose:
-                print(f"[*] No open ports found, but added {len(all_whatruns_techs)} technologies from WhatRuns API")
     
     # Print summary of findings
     print_ip_summary(results)
@@ -641,16 +583,42 @@ def check_vulnerabilities(ip, port, results, verbose=True):
             print(f"[!] Error checking vulnerabilities for {ip}:{port}: {str(e)}")
 
 def print_ip_summary(result):
-    """Print a summary of findings for an IP address."""
     ip = result['ip']
+    domains = result['domains']
     port_count = len(result['ports'])
+    domain_count = len(result['domain_technologies'])
     
     print(f"\n{'='*60}")
-    print(f"SUMMARY FOR IP: {ip}")
+    # Include domains in the summary header
+    domain_str = f" ({', '.join(domains)})" if domains else ""
+    print(f"SUMMARY FOR IP: {ip}{domain_str}")
     print(f"{'='*60}")
     print(f"Scan completed at: {result['timestamp']}")
     print(f"Open ports found: {port_count}")
     
+    # Show domain technologies first
+    if domain_count > 0:
+        print("\nDOMAIN TECHNOLOGIES:")
+        print(f"{'-'*50}")
+        
+        for domain, techs in result['domain_technologies'].items():
+            print(f"Domain: {domain}")
+            for tech in techs:
+                version = f" {tech['version']}" if tech['version'] != 'Unknown' else ""
+                categories = ', '.join(tech['categories']) if tech['categories'] else 'Unknown'
+                
+                source_info = ""
+                if 'detection_source' in tech:
+                    source_info = f" [{tech['detection_source']}]"
+                    
+                date_info = ""
+                if 'detected_time' in tech:
+                    date_info = f" (First seen: {tech['detected_time']})"
+                    
+                print(f"  - {tech['name']}{version} ({categories}){source_info}{date_info}")
+            print()
+    
+    # Then show port details as before
     if port_count > 0:
         print("\nPORT DETAILS:")
         print(f"{'-'*50}")
@@ -747,7 +715,10 @@ def write_results_to_file(results_list, output_file, format='txt'):
             f.write(f"Generated on: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}\n\n")
             
             for result in results_list:
-                f.write(f"IP Address: {result['ip']}\n")
+                # Add domains to the header
+                domains = result['domains']
+                domain_str = f" ({', '.join(domains)})" if domains else ""
+                f.write(f"IP Address: {result['ip']}{domain_str}\n")
                 f.write(f"Scan Time: {result['timestamp']}\n")
                 f.write("-" * 80 + "\n")
                 
@@ -802,14 +773,42 @@ def write_results_to_file(results_list, output_file, format='txt'):
 def write_incremental_log(result, log_file):
     """Write scan results for an IP incrementally to avoid data loss."""
     with open(log_file, 'a') as f:
-        f.write(f"\nIP Address: {result['ip']}\n")
+        # Add domains to the header
+        domains = result['domains']
+        domain_str = f" ({', '.join(domains)})" if domains else ""
+        f.write(f"\nIP Address: {result['ip']}{domain_str}\n")
         f.write(f"Scan Time: {result['timestamp']}\n")
         f.write("-" * 80 + "\n")
+        
+        # Add domain technologies section
+        domain_count = len(result['domain_technologies'])
+        if domain_count > 0:
+            f.write("\nDOMAIN TECHNOLOGIES:\n")
+            f.write("-" * 50 + "\n")
+            
+            for domain, techs in result['domain_technologies'].items():
+                f.write(f"Domain: {domain}\n")
+                for tech in techs:
+                    version = f" {tech['version']}" if tech['version'] != 'Unknown' else ""
+                    categories = ', '.join(tech['categories']) if tech['categories'] else 'Unknown'
+                    
+                    # Add source and date info
+                    extra_info = ""
+                    if 'detection_source' in tech:
+                        extra_info += f" [{tech['detection_source']}]"
+                    if 'detected_time' in tech:
+                        extra_info += f" (First seen: {tech['detected_time']})"
+                        
+                    f.write(f"  - {tech['name']}{version} ({categories}){extra_info}\n")
+                f.write("\n")
         
         if not result['ports']:
             f.write("No open ports found.\n\n")
             return
         
+        # Now continue with port details
+        f.write("\nPORT DETAILS:\n")
+        f.write("-" * 50 + "\n")
         f.write("PORT      PROTOCOL  STATE   SERVICE                  VERSION         FINDINGS\n")
         f.write("-" * 95 + "\n")
         
@@ -840,7 +839,7 @@ def write_incremental_log(result, log_file):
                     if 'detection_source' in tech:
                         extra_info += f" [{tech['detection_source']}]"
                     if 'detected_time' in tech:
-                        extra_info += f" First seen: {tech['detected_time']}"
+                        extra_info += f" (First seen: {tech['detected_time']})"
                         
                     f.write(f"    * {tech['name']}{version}{extra_info}\n")
                     f.write(f"      Categories: {categories}\n")
