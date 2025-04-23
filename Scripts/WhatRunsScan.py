@@ -328,6 +328,9 @@ def scan_ports_and_services(ip, domains=None, verbose=True):
         'domain_technologies': {}  # New section for domain-level technologies
     }
     
+    # Track which domains have technologies detected by WhatRuns
+    domains_with_techs = set()
+    
     # Get WhatRuns technologies for each domain ONCE
     if WHATRUNS_ENABLED and domains:
         if verbose:
@@ -342,6 +345,7 @@ def scan_ports_and_services(ip, domains=None, verbose=True):
                 if domain_techs:
                     # Store technologies with the domain, not ports
                     results['domain_technologies'][domain] = domain_techs
+                    domains_with_techs.add(domain)  # Mark this domain as having techs
                     if verbose:
                         print(f"[+] WhatRuns found {len(domain_techs)} technologies for {domain}")
             except Exception as e:
@@ -430,17 +434,36 @@ def scan_ports_and_services(ip, domains=None, verbose=True):
                         except requests.exceptions.RequestException:
                             continue  # Try next protocol or port
             
-            # For web ports, detect technologies with webtech and headers (not WhatRuns)
+            # For web ports, only detect technologies if WhatRuns didn't find any
             if web_ports:
-                if verbose:
-                    print(f"[*] Checking for web technologies on {len(web_ports)} potential web ports...")
+                # Only use webtech/fingerprinting if WhatRuns isn't available or didn't find technologies
+                if not WHATRUNS_ENABLED or not domains_with_techs or len(domains_with_techs) < len(domains):
+                    if verbose:
+                        if not WHATRUNS_ENABLED:
+                            reason = "WhatRuns API is disabled"
+                        elif not domains_with_techs:
+                            reason = "WhatRuns didn't find any technologies"
+                        else:
+                            reason = "Some domains don't have WhatRuns technologies"
+                        print(f"[*] Using alternative technology detection because {reason}")
+                        print(f"[*] Checking for web technologies on {len(web_ports)} potential web ports...")
                     
-                for port, protocol in web_ports:
-                    # Use detect_web_technologies WITHOUT domains - no WhatRuns data
-                    technologies = detect_web_technologies(ip, port, protocol, domains=None, verbose=verbose)
-                    
-                    # DO NOT add WhatRuns technologies here
-                    results['ports'][port]['technologies'] = technologies
+                    for port, protocol in web_ports:
+                        # Only scan domains that don't have technologies from WhatRuns
+                        domains_to_scan = [d for d in domains if d not in domains_with_techs]
+                        
+                        # If all domains have technologies, just use IP
+                        if not domains_to_scan and not domains_with_techs:
+                            if verbose:
+                                print(f"[*] Using basic fingerprinting for {ip}:{port}")
+                            # Use detect_web_technologies WITHOUT domains
+                            technologies = detect_web_technologies(ip, port, protocol, domains=None, verbose=verbose)
+                            results['ports'][port]['technologies'] = technologies
+                        else:
+                            # No additional port scanning needed - we already have technologies from WhatRuns
+                            results['ports'][port]['technologies'] = []
+                elif verbose:
+                    print(f"[*] Skipping additional technology detection - WhatRuns already found technologies for all domains")
             
             # Rest of your vulnerability scanning code
             port_count = len(results['ports'])
@@ -722,10 +745,35 @@ def write_results_to_file(results_list, output_file, format='txt'):
                 f.write(f"Scan Time: {result['timestamp']}\n")
                 f.write("-" * 80 + "\n")
                 
+                # Add domain technologies section
+                domain_count = len(result['domain_technologies'])
+                if domain_count > 0:
+                    f.write("\nDOMAIN TECHNOLOGIES:\n")
+                    f.write("-" * 50 + "\n")
+                    
+                    for domain, techs in result['domain_technologies'].items():
+                        f.write(f"Domain: {domain}\n")
+                        for tech in techs:
+                            version = f" {tech['version']}" if tech['version'] != 'Unknown' else ""
+                            categories = ', '.join(tech['categories']) if tech['categories'] else 'Unknown'
+                            
+                            # Add source and date info
+                            extra_info = ""
+                            if 'detection_source' in tech:
+                                extra_info += f" [{tech['detection_source']}]"
+                            if 'detected_time' in tech:
+                                extra_info += f" (First seen: {tech['detected_time']})"
+                                
+                            f.write(f"  - {tech['name']}{version} ({categories}){extra_info}\n")
+                        f.write("\n")
+                
                 if not result['ports']:
                     f.write("No open ports found.\n\n")
                     continue
                 
+                # Now continue with port details
+                f.write("\nPORT DETAILS:\n")
+                f.write("-" * 50 + "\n")
                 f.write("PORT      PROTOCOL  STATE   SERVICE                  VERSION         FINDINGS\n")
                 f.write("-" * 95 + "\n")
                 
