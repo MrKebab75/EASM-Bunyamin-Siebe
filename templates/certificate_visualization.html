@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Certificate Visualization</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.3/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.1/css/dataTables.bootstrap5.min.css">
+    <style>
+        body {
+            background-color: #f8f9fa;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        .card {
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+            border: none;
+            transition: transform 0.3s ease;
+        }
+        .card:hover {
+            transform: translateY(-5px);
+        }
+        .card-header {
+            background-color: #3b5998;
+            color: white;
+            border-radius: 10px 10px 0 0 !important;
+            padding: 15px 20px;
+            font-weight: bold;
+        }
+        .card-body {
+            padding: 20px;
+        }
+        .nav-pills .nav-link.active {
+            background-color: #3b5998;
+        }
+        .nav-pills .nav-link {
+            color: #3b5998;
+        }
+        .filter-section {
+            background-color: white;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        .stats-card {
+            text-align: center;
+            padding: 15px;
+        }
+        .stats-card h3 {
+            margin-bottom: 5px;
+            font-weight: bold;
+            color: #3b5998;
+        }
+        .stats-card p {
+            color: #6c757d;
+            margin-bottom: 0;
+        }
+        .loader {
+            border: 5px solid #f3f3f3;
+            border-top: 5px solid #3b5998;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            animation: spin 2s linear infinite;
+            margin: 20px auto;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        .badge-valid {
+            background-color: #28a745;
+        }
+        .badge-expiring {
+            background-color: #ffc107;
+        }
+        .badge-expired {
+            background-color: #dc3545;
+        }
+        .search-box {
+            border-radius: 20px;
+            padding-left: 20px;
+            border: 1px solid #ced4da;
+        }
+        .cert-table th {
+            background-color: #3b5998;
+            color: white;
+        }
+        .progress {
+            height: 8px;
+            margin-top: 5px;
+        }
+        .progress-bar-expiring {
+            background-color: #ffc107;
+        }
+        .progress-bar-danger {
+            background-color: #dc3545;
+        }
+        .progress-bar-safe {
+            background-color: #28a745;
+        }
+        .expiration-indicator {
+            display: flex;
+            align-items: center;
+            margin-top: 5px;
+        }
+        .expiration-text {
+            margin-left: 10px;
+            font-size: 0.9rem;
+        }
+        .status-valid {
+            color: #28a745;
+        }
+        .status-expiring {
+            color: #ffc107;
+        }
+        .status-expired {
+            color: #dc3545;
+        }
+    </style>
+</head>
+<body>
+    <div class="container-fluid py-4">
+        <h1 class="text-center mb-4">Certificate Visualization Dashboard</h1>
+        
+        <!-- Stats Row -->
+        <div class="row mb-4">
+            <div class="col-md-3">
+                <div class="card stats-card">
+                    <h3 id="total-certificates">0</h3>
+                    <p>Total Certificates</p>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card stats-card">
+                    <h3 id="valid-certificates">0</h3>
+                    <p>Valid Certificates</p>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card stats-card">
+                    <h3 id="expiring-certificates">0</h3>
+                    <p>Expiring Soon (< 30 days)</p>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card stats-card">
+                    <h3 id="expired-certificates">0</h3>
+                    <p>Expired Certificates</p>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Filter Section -->
+        <div class="filter-section mb-4">
+            <div class="row align-items-center">
+                <div class="col-md-4">
+                    <input type="text" id="cert-search" class="form-control search-box" placeholder="Search domains...">
+                </div>
+                <div class="col-md-3">
+                    <select id="status-filter" class="form-select">
+                        <option value="all">All Certificates</option>
+                        <option value="valid">Valid</option>
+                        <option value="expiring">Expiring Soon</option>
+                        <option value="expired">Expired</option>
+                    </select>
+                </div>
+                <div class="col-md-3">
+                    <select id="issuer-filter" class="form-select">
+                        <option value="all">All Issuers</option>
+                        <!-- Will be populated dynamically -->
+                    </select>
+                </div>
+                <div class="col-md-2">
+                    <button id="reset-filters" class="btn btn-outline-secondary w-100">Reset Filters</button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Tabs -->
+        <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
+            <li class="nav-item" role="presentation">
+                <button class="nav-link active" id="pills-table-tab" data-bs-toggle="pill" data-bs-target="#pills-table" type="button" role="tab" aria-controls="pills-table" aria-selected="true">Table View</button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="pills-cards-tab" data-bs-toggle="pill" data-bs-target="#pills-cards" type="button" role="tab" aria-controls="pills-cards" aria-selected="false">Card View</button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="pills-chart-tab" data-bs-toggle="pill" data-bs-target="#pills-chart" type="button" role="tab" aria-controls="pills-chart" aria-selected="false">Chart View</button>
+            </li>
+        </ul>
+        
+        <!-- Tab Content -->
+        <div class="tab-content" id="pills-tabContent">
+            <!-- Table View -->
+            <div class="tab-pane fade show active" id="pills-table" role="tabpanel" aria-labelledby="pills-table-tab">
+                <div class="card">
+                    <div class="card-header">
+                        Certificate List
+                    </div>
+                    <div class="card-body">
+                        <div id="table-loader" class="loader"></div>
+                        <div id="table-container" style="display: none;">
+                            <table id="certificates-table" class="table table-striped cert-table">
+                                <thead>
+                                    <tr>
+                                        <th>Domain</th>
+                                        <th>Status</th>
+                                        <th>Issuer</th>
+                                        <th>Expires</th>
+                                        <th>Days Left</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="certificates-table-body">
+                                    <!-- Table rows will be inserted here -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Card View -->
+            <div class="tab-pane fade" id="pills-cards" role="tabpanel" aria-labelledby="pills-cards-tab">
+                <div id="cards-loader" class="loader"></div>
+                <div id="certificates-cards" class="row" style="display: none;">
+                    <!-- Certificate cards will be inserted here -->
+                </div>
+            </div>
+            
+            <!-- Chart View -->
+            <div class="tab-pane fade" id="pills-chart" role="tabpanel" aria-labelledby="pills-chart-tab">
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="card">
+                            <div class="card-header">Certificate Status Distribution</div>
+                            <div class="card-body">
+                                <canvas id="status-chart" height="300"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="card">
+                            <div class="card-header">Certificate Issuers Distribution</div>
+                            <div class="card-body">
+                                <canvas id="issuers-chart" height="300"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row mt-4">
+                    <div class="col-md-12">
+                        <div class="card">
+                            <div class="card-header">Expiration Timeline</div>
+                            <div class="card-body">
+                                <canvas id="expiration-chart" height="200"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Certificate Details Modal -->
+        <div class="modal fade" id="certDetailsModal" tabindex="-1" aria-labelledby="certDetailsModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="certDetailsModalLabel">Certificate Details</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body" id="modal-body-content">
+                        <!-- Modal content will be populated dynamically -->
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.3.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.1/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.1/js/dataTables.bootstrap5.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="/static/js/certificate_visualization.js"></script>
+</body>
+</html> 

@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Domain Viewer</title>
+  <style>
+    body { font-family: Arial, sans-serif; background: #f4f4f4; padding: 20px; }
+    .controls { margin-bottom: 20px; }
+    .controls button { margin-right: 10px; padding: 10px 15px; }
+    .domain-box { background: white; border: 1px solid #ddd; margin-bottom: 10px; padding: 10px; border-radius: 5px; }
+    .inactive { color: gray; }
+    .subdomains { display: none; margin-top: 10px; }
+    .subdomain { padding-left: 20px; }
+    .toggle-btn { margin-left: 10px; font-size: 12px; }
+  </style>
+</head>
+<body>
+
+  <h1>All Domains & Subdomains</h1>
+
+  <div class="controls">
+    <button onclick="filterDomains('all')">Show All</button>
+    <button onclick="filterDomains('active')">Active Only</button>
+    <button onclick="filterDomains('inactive')">Inactive Only</button>
+  </div>
+
+  <div id="domains-container">Loading data...</div>
+
+  <script>
+    let allSubdomains = [];
+    let inactiveDomains = [];
+    let currentFilter = 'all';
+
+    function isInactive(domain) {
+      return inactiveDomains.includes(domain);
+    }
+
+    function isActiveDomain(domainObj) {
+      return domainObj.results.some(r => r.ip && r.subdomain !== "No names were discovered");
+    }
+
+    function renderDomains() {
+      const container = document.getElementById("domains-container");
+      container.innerHTML = '';
+
+      allSubdomains.forEach(domainObj => {
+        const domain = domainObj.domain;
+        const inactive = isInactive(domain);
+        const active = isActiveDomain(domainObj);
+
+        if (
+          (currentFilter === 'active' && !active) ||
+          (currentFilter === 'inactive' && !inactive)
+        ) return;
+
+        const box = document.createElement('div');
+        box.className = "domain-box";
+
+        const header = document.createElement('div');
+        header.innerHTML = `<strong${inactive ? ' class="inactive"' : ''}>${domain}</strong>
+          <button class="toggle-btn" onclick="toggleSubdomains(this)">Show Subdomains</button>`;
+        box.appendChild(header);
+
+        const subdomainList = document.createElement('div');
+        subdomainList.className = "subdomains";
+
+        domainObj.results.forEach(sub => {
+          const item = document.createElement('div');
+          item.className = "subdomain";
+          item.textContent = `${sub.subdomain} — ${sub.ip || 'No IP'}`;
+          subdomainList.appendChild(item);
+        });
+
+        box.appendChild(subdomainList);
+        container.appendChild(box);
+      });
+    }
+
+    function toggleSubdomains(button) {
+      const subdomains = button.parentElement.nextElementSibling;
+      if (subdomains.style.display === 'block') {
+        subdomains.style.display = 'none';
+        button.textContent = 'Show Subdomains';
+      } else {
+        subdomains.style.display = 'block';
+        button.textContent = 'Hide Subdomains';
+      }
+    }
+
+    function filterDomains(type) {
+      currentFilter = type;
+      renderDomains();
+    }
+
+    // Load JSON files
+    Promise.all([
+      fetch('../foundData/all_subdomains.json').then(res => res.json()),
+      fetch('../foundData/inactiveDomains.json').then(res => res.json())
+    ])
+    .then(([subdomainsData, inactiveData]) => {
+      allSubdomains = subdomainsData;
+      inactiveDomains = inactiveData;
+      renderDomains();
+    })
+    .catch(err => {
+      document.getElementById("domains-container").innerText = "Failed to load data.";
+      console.error("Error loading JSON files:", err);
+    });
+  </script>
+
+</body>
+</html>

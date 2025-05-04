@@ -38,6 +38,22 @@
             font-weight: bold;
             font-size: 1rem;
         }
+        .nav-links {
+            display: flex;
+            justify-content: center;
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid #30363d;
+        }
+        .nav-links a {
+            color: #58a6ff;
+            margin: 0 15px;
+            text-decoration: none;
+            font-weight: bold;
+        }
+        .nav-links a:hover {
+            text-decoration: underline;
+        }
     </style>
 </head>
 <body>
@@ -50,6 +66,12 @@
                 </button>
             {% endfor %}
         </form>
+        
+        <div class="nav-links">
+            <a href="{{ url_for('domain_visualization') }}">Domain Visualization</a>
+            <a href="{{ url_for('certificate_visualization') }}">Certificate Visualization</a>
+        </div>
+        
         {% if output %}
             <h2 class="mt-5" style="color:#58a6ff;">Terminal Output:</h2>
             <pre class="bg-dark p-3 rounded text-white" style="max-height: 400px; overflow-y: scroll;">
