@@ -77,7 +77,11 @@ async function loadData() {
             order: [[4, 'asc']], // Sort by days left
             info: true,
             pageLength: 10,
-            lengthMenu: [10, 25, 50, 100]
+            lengthMenu: [10, 25, 50, 100],
+            drawCallback: function() {
+                // Reattach event listeners after table redraw (pagination, sorting, etc.)
+                attachDetailsButtonListeners();
+            }
         });
         
         // Initialize charts
@@ -643,6 +647,11 @@ function filterCertificates() {
     
     // Update the UI with filtered certificates
     updateUI(filteredCertificates);
+    
+    // Reset to first page
+    if (certsTable) {
+        certsTable.page(0).draw(false);
+    }
 }
 
 // Update the UI with filtered certificates
@@ -763,12 +772,18 @@ function updateUI(filteredCertificates) {
         });
     });
     
-    // Reattach event listeners to the table buttons
-    document.querySelectorAll('.view-details').forEach(button => {
+    // Reattach event listeners to buttons
+    // Note: For table view, this is now handled by the drawCallback
+    // but we still attach listeners to cards here
+    document.querySelectorAll('#certificates-cards .view-details').forEach(button => {
         const domainName = button.getAttribute('data-domain');
         const cert = allCertificates.find(c => c.domain === domainName);
         if (cert) {
-            button.addEventListener('click', function() {
+            // Remove existing event listeners to prevent duplicates
+            const newButton = button.cloneNode(true);
+            button.parentNode.replaceChild(newButton, button);
+            
+            newButton.addEventListener('click', function() {
                 showCertificateDetails(cert);
             });
         }
@@ -809,4 +824,21 @@ function formatMonth(monthString) {
     const [year, month] = monthString.split('-');
     const date = new Date(parseInt(year), parseInt(month) - 1, 1);
     return date.toLocaleDateString(undefined, { year: 'numeric', month: 'short' });
+}
+
+// Function to attach event listeners to all details buttons
+function attachDetailsButtonListeners() {
+    document.querySelectorAll('.view-details').forEach(button => {
+        // Remove existing event listeners to prevent duplicates
+        const newButton = button.cloneNode(true);
+        button.parentNode.replaceChild(newButton, button);
+        
+        const domainName = newButton.getAttribute('data-domain');
+        const cert = allCertificates.find(c => c.domain === domainName);
+        if (cert) {
+            newButton.addEventListener('click', function() {
+                showCertificateDetails(cert);
+            });
+        }
+    });
 } 

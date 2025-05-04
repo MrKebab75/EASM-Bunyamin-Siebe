@@ -62,7 +62,11 @@ async function loadData() {
             ordering: true,
             info: true,
             pageLength: 10,
-            lengthMenu: [10, 25, 50, 100]
+            lengthMenu: [10, 25, 50, 100],
+            drawCallback: function() {
+                // Reattach event listeners after table redraw (pagination, sorting, etc.)
+                attachDetailsButtonListeners();
+            }
         });
     } catch (error) {
         console.error('Error loading data:', error);
@@ -168,7 +172,7 @@ function populateTable() {
         // Actions
         const actionsCell = document.createElement('td');
         const viewBtn = document.createElement('button');
-        viewBtn.classList.add('btn', 'btn-sm', 'btn-primary');
+        viewBtn.classList.add('btn', 'btn-sm', 'btn-primary', 'view-details');
         viewBtn.innerHTML = '<i class="bi bi-eye"></i> Details';
         viewBtn.setAttribute('data-domain', domain.domain);
         viewBtn.addEventListener('click', function() {
@@ -311,6 +315,11 @@ function filterDomains() {
     
     // Update the UI with filtered domains
     updateUI(filteredDomains);
+    
+    // Reset to first page
+    if (domainsTable) {
+        domainsTable.page(0).draw(false);
+    }
 }
 
 // Update the UI with filtered domains
@@ -320,9 +329,13 @@ function updateUI(filteredDomains) {
     
     // Add filtered domains to the table
     filteredDomains.forEach(domain => {
+        let statusBadge = domain.isActive ? 
+            '<span class="badge bg-success rounded-pill">Active</span>' : 
+            '<span class="badge bg-danger rounded-pill">Inactive</span>';
+        
         domainsTable.row.add([
             domain.domain,
-            `<span class="badge ${domain.isActive ? 'bg-success' : 'bg-danger'} rounded-pill">${domain.isActive ? 'Active' : 'Inactive'}</span>`,
+            statusBadge,
             domain.subdomains_found,
             `<button class="btn btn-sm btn-primary view-details" data-domain="${domain.domain}"><i class="bi bi-eye"></i> Details</button>`
         ]).draw(false);
@@ -331,13 +344,12 @@ function updateUI(filteredDomains) {
     // Update cards view
     domainsCards.innerHTML = '';
     filteredDomains.forEach(domain => {
-        const card = document.createElement('div');
-        card.classList.add('col-md-4', 'mb-4');
-        
         const statusClass = domain.isActive ? 'border-success' : 'border-danger';
         const statusText = domain.isActive ? 'Active' : 'Inactive';
         const statusBadgeClass = domain.isActive ? 'bg-success' : 'bg-danger';
         
+        const card = document.createElement('div');
+        card.classList.add('col-md-4', 'mb-4');
         card.innerHTML = `
             <div class="card h-100 ${statusClass}" style="border-width: 2px;">
                 <div class="card-header d-flex justify-content-between align-items-center">
@@ -345,8 +357,8 @@ function updateUI(filteredDomains) {
                     <span class="badge ${statusBadgeClass} rounded-pill">${statusText}</span>
                 </div>
                 <div class="card-body">
-                    <p>Subdomains found: ${domain.subdomains_found}</p>
-                    <button class="btn btn-primary view-details" data-domain="${domain.domain}">
+                    <p><strong>Subdomains:</strong> ${domain.subdomains_found}</p>
+                    <button class="btn btn-primary view-details mt-3" data-domain="${domain.domain}">
                         <i class="bi bi-eye"></i> View Details
                     </button>
                 </div>
@@ -354,20 +366,18 @@ function updateUI(filteredDomains) {
         `;
         
         domainsCards.appendChild(card);
-        
-        // Add event listener to the button
-        const detailsBtn = card.querySelector('.view-details');
-        detailsBtn.addEventListener('click', function() {
-            showDomainDetails(domain);
-        });
     });
     
-    // Reattach event listeners to the table buttons
-    document.querySelectorAll('.view-details').forEach(button => {
+    // Reattach event listeners to card buttons
+    document.querySelectorAll('#domains-cards .view-details').forEach(button => {
         const domainName = button.getAttribute('data-domain');
         const domain = allDomains.find(d => d.domain === domainName);
         if (domain) {
-            button.addEventListener('click', function() {
+            // Remove existing event listeners to prevent duplicates
+            const newButton = button.cloneNode(true);
+            button.parentNode.replaceChild(newButton, button);
+            
+            newButton.addEventListener('click', function() {
                 showDomainDetails(domain);
             });
         }
@@ -382,4 +392,21 @@ function resetFilters() {
     
     // Trigger filter update
     filterDomains();
+}
+
+// Function to attach event listeners to all details buttons
+function attachDetailsButtonListeners() {
+    document.querySelectorAll('.view-details').forEach(button => {
+        // Remove existing event listeners to prevent duplicates
+        const newButton = button.cloneNode(true);
+        button.parentNode.replaceChild(newButton, button);
+        
+        const domainName = newButton.getAttribute('data-domain');
+        const domain = allDomains.find(d => d.domain === domainName);
+        if (domain) {
+            newButton.addEventListener('click', function() {
+                showDomainDetails(domain);
+            });
+        }
+    });
 } 

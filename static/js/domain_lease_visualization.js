@@ -77,7 +77,11 @@ async function loadData() {
             order: [[4, 'asc']], // Sort by days left
             info: true,
             pageLength: 10,
-            lengthMenu: [10, 25, 50, 100]
+            lengthMenu: [10, 25, 50, 100],
+            drawCallback: function() {
+                // Reattach event listeners after table redraw (pagination, sorting, etc.)
+                attachDetailsButtonListeners();
+            }
         });
         
         // Initialize charts
@@ -660,6 +664,11 @@ function filterDomains() {
     
     // Update the UI with filtered domains
     updateUI(filteredDomains);
+    
+    // Reset to first page
+    if (domainsTable) {
+        domainsTable.page(0).draw(false);
+    }
 }
 
 // Update the UI with filtered domains
@@ -714,12 +723,17 @@ function updateUI(filteredDomains) {
     // Update cards view
     updateCardsView(filteredDomains);
     
-    // Reattach event listeners to the table buttons
-    document.querySelectorAll('.view-details').forEach(button => {
+    // Reattach event listeners to card buttons
+    // Note: For table view, this is handled by the drawCallback
+    document.querySelectorAll('#domains-cards .view-details').forEach(button => {
         const domainName = button.getAttribute('data-domain');
         const domain = allDomains.find(d => d.domain === domainName);
         if (domain) {
-            button.addEventListener('click', function() {
+            // Remove existing event listeners to prevent duplicates
+            const newButton = button.cloneNode(true);
+            button.parentNode.replaceChild(newButton, button);
+            
+            newButton.addEventListener('click', function() {
                 showDomainDetails(domain);
             });
         }
@@ -827,4 +841,21 @@ function formatMonth(monthString) {
     const [year, month] = monthString.split('-');
     const date = new Date(parseInt(year), parseInt(month) - 1, 1);
     return date.toLocaleDateString(undefined, { year: 'numeric', month: 'short' });
+}
+
+// Function to attach event listeners to all details buttons
+function attachDetailsButtonListeners() {
+    document.querySelectorAll('.view-details').forEach(button => {
+        // Remove existing event listeners to prevent duplicates
+        const newButton = button.cloneNode(true);
+        button.parentNode.replaceChild(newButton, button);
+        
+        const domainName = newButton.getAttribute('data-domain');
+        const domain = allDomains.find(d => d.domain === domainName);
+        if (domain) {
+            newButton.addEventListener('click', function() {
+                showDomainDetails(domain);
+            });
+        }
+    });
 } 
