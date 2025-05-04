@@ -1,24 +1,24 @@
 // Global variables
-let allCertificates = [];
-let certsTable;
+let allDomains = [];
+let domainsTable;
 let statusChart;
-let issuersChart;
+let registrarsChart;
 let expirationChart;
 
 // DOM Elements
-const certSearch = document.getElementById('cert-search');
+const domainSearch = document.getElementById('domain-search');
 const statusFilter = document.getElementById('status-filter');
-const issuerFilter = document.getElementById('issuer-filter');
+const registrarFilter = document.getElementById('registrar-filter');
 const resetFiltersBtn = document.getElementById('reset-filters');
-const certificatesTableBody = document.getElementById('certificates-table-body');
-const certificatesCards = document.getElementById('certificates-cards');
+const domainsTableBody = document.getElementById('domains-table-body');
+const domainsCards = document.getElementById('domains-cards');
 const tableLoader = document.getElementById('table-loader');
 const cardsLoader = document.getElementById('cards-loader');
 const tableContainer = document.getElementById('table-container');
-const totalCertificatesEl = document.getElementById('total-certificates');
-const validCertificatesEl = document.getElementById('valid-certificates');
-const expiringCertificatesEl = document.getElementById('expiring-certificates');
-const expiredCertificatesEl = document.getElementById('expired-certificates');
+const totalDomainsEl = document.getElementById('total-domains');
+const validDomainsEl = document.getElementById('valid-domains');
+const expiringDomainsEl = document.getElementById('expiring-domains');
+const expiredDomainsEl = document.getElementById('expired-domains');
 
 // Colors for charts
 const chartColors = [
@@ -31,9 +31,9 @@ document.addEventListener('DOMContentLoaded', function() {
     loadData();
     
     // Set up event listeners
-    certSearch.addEventListener('input', filterCertificates);
-    statusFilter.addEventListener('change', filterCertificates);
-    issuerFilter.addEventListener('change', filterCertificates);
+    domainSearch.addEventListener('input', filterDomains);
+    statusFilter.addEventListener('change', filterDomains);
+    registrarFilter.addEventListener('change', filterDomains);
     resetFiltersBtn.addEventListener('click', resetFilters);
     
     // Set up tab change event to redraw charts
@@ -41,7 +41,7 @@ document.addEventListener('DOMContentLoaded', function() {
         tab.addEventListener('shown.bs.tab', function(e) {
             if (e.target.id === 'pills-chart-tab') {
                 if (statusChart) statusChart.update();
-                if (issuersChart) issuersChart.update();
+                if (registrarsChart) registrarsChart.update();
                 if (expirationChart) expirationChart.update();
             }
         });
@@ -51,14 +51,14 @@ document.addEventListener('DOMContentLoaded', function() {
 // Load data from JSON files
 async function loadData() {
     try {
-        // Fetch certificates data
-        const response = await fetch('/api/certificates');
-        allCertificates = await response.json();
+        // Fetch domains data
+        const response = await fetch('/api/domain_lease');
+        allDomains = await response.json();
         
-        console.log('Certificates loaded:', allCertificates.length);
+        console.log('Domain leases loaded:', allDomains.length);
         
-        // Process certificates (categorize by expiry)
-        processCertificates();
+        // Process domains (categorize by expiry)
+        processDomains();
         
         // Initialize the UI
         initializeUI();
@@ -67,10 +67,10 @@ async function loadData() {
         tableLoader.style.display = 'none';
         cardsLoader.style.display = 'none';
         tableContainer.style.display = 'block';
-        certificatesCards.style.display = 'flex';
+        domainsCards.style.display = 'flex';
         
         // Initialize DataTable
-        certsTable = $('#certificates-table').DataTable({
+        domainsTable = $('#domains-table').DataTable({
             paging: true,
             searching: false, // We'll use our own search
             ordering: true,
@@ -90,43 +90,29 @@ async function loadData() {
     }
 }
 
-// Process certificates for display
-function processCertificates() {
+// Process domains for display
+function processDomains() {
     // Add display status category (valid, expiring, expired, unknown)
-    // Also validate and fix any potentially missing or malformed data
-    allCertificates.forEach(cert => {
-        // Ensure required properties exist
-        if (!cert.domain) cert.domain = 'Unknown';
-        if (!cert.issuer) cert.issuer = 'Unknown';
-        if (!cert.valid_until) cert.valid_until = null;
-        if (!cert.valid_from) cert.valid_from = null;
-        if (!cert.subject) cert.subject = 'Unknown';
-        if (!cert.alt_names) cert.alt_names = [];
-        if (!cert.serial_number) cert.serial_number = 'Unknown';
-        
-        // Set display status
-        if (cert.status === 'unknown') {
-            cert.displayStatus = 'unknown';
-            if (!cert.days_remaining) cert.days_remaining = 0;
-        } else if (cert.expired || !cert.days_remaining || cert.days_remaining <= 0) {
-            cert.displayStatus = 'expired';
-            cert.expired = true;
-            if (!cert.days_remaining) cert.days_remaining = 0;
-        } else if (cert.days_remaining <= 30) {
-            cert.displayStatus = 'expiring';
+    allDomains.forEach(domain => {
+        if (domain.status === 'unknown' || !domain.days_remaining) {
+            domain.displayStatus = 'unknown';
+        } else if (domain.days_remaining <= 0) {
+            domain.displayStatus = 'expired';
+        } else if (domain.days_remaining <= 90) {
+            domain.displayStatus = 'expiring';
         } else {
-            cert.displayStatus = 'valid';
+            domain.displayStatus = 'valid';
         }
     });
 }
 
-// Initialize the UI with certificate data
+// Initialize the UI with domain data
 function initializeUI() {
     // Update statistics
     updateStats();
     
-    // Populate the issuer filter dropdown
-    populateIssuerFilter();
+    // Populate the registrar filter dropdown
+    populateRegistrarFilter();
     
     // Populate the table and cards
     populateTable();
@@ -135,43 +121,48 @@ function initializeUI() {
 
 // Update statistics in the UI
 function updateStats() {
-    const validCount = allCertificates.filter(cert => cert.displayStatus === 'valid').length;
-    const expiringCount = allCertificates.filter(cert => cert.displayStatus === 'expiring').length;
-    const expiredCount = allCertificates.filter(cert => cert.displayStatus === 'expired').length;
-    const unknownCount = allCertificates.filter(cert => cert.displayStatus === 'unknown').length;
+    const validCount = allDomains.filter(domain => domain.displayStatus === 'valid').length;
+    const expiringCount = allDomains.filter(domain => domain.displayStatus === 'expiring').length;
+    const expiredCount = allDomains.filter(domain => 
+        domain.displayStatus === 'expired' || domain.displayStatus === 'unknown'
+    ).length;
     
-    totalCertificatesEl.textContent = allCertificates.length;
-    validCertificatesEl.textContent = validCount;
-    expiringCertificatesEl.textContent = expiringCount;
-    expiredCertificatesEl.textContent = expiredCount + unknownCount;
+    totalDomainsEl.textContent = allDomains.length;
+    validDomainsEl.textContent = validCount;
+    expiringDomainsEl.textContent = expiringCount;
+    expiredDomainsEl.textContent = expiredCount;
 }
 
-// Populate the issuer filter dropdown
-function populateIssuerFilter() {
-    // Get unique issuers
-    const issuers = [...new Set(allCertificates.map(cert => cert.issuer))].sort();
+// Populate the registrar filter dropdown
+function populateRegistrarFilter() {
+    // Get unique registrars (excluding null/undefined values)
+    const registrars = [...new Set(
+        allDomains
+            .filter(domain => domain.registrar)
+            .map(domain => domain.registrar)
+    )].sort();
     
     // Add options to the dropdown
-    issuers.forEach(issuer => {
+    registrars.forEach(registrar => {
         const option = document.createElement('option');
-        option.value = issuer;
-        option.textContent = issuer;
-        issuerFilter.appendChild(option);
+        option.value = registrar;
+        option.textContent = registrar;
+        registrarFilter.appendChild(option);
     });
 }
 
-// Populate the table with certificate data
+// Populate the table with domain data
 function populateTable() {
     // Clear existing table data
-    certificatesTableBody.innerHTML = '';
+    domainsTableBody.innerHTML = '';
     
     // Generate table rows
-    allCertificates.forEach(cert => {
+    allDomains.forEach(domain => {
         const row = document.createElement('tr');
         
         // Domain name
         const domainCell = document.createElement('td');
-        domainCell.textContent = cert.domain || 'Unknown';
+        domainCell.textContent = domain.domain;
         row.appendChild(domainCell);
         
         // Status
@@ -179,38 +170,40 @@ function populateTable() {
         const statusBadge = document.createElement('span');
         statusBadge.classList.add('badge', 'rounded-pill');
         
-        if (cert.displayStatus === 'valid') {
+        if (domain.displayStatus === 'valid') {
             statusBadge.classList.add('bg-success');
             statusBadge.textContent = 'Valid';
-        } else if (cert.displayStatus === 'expiring') {
+        } else if (domain.displayStatus === 'expiring') {
             statusBadge.classList.add('bg-warning', 'text-dark');
             statusBadge.textContent = 'Expiring Soon';
-        } else if (cert.displayStatus === 'expired') {
+        } else if (domain.displayStatus === 'expired') {
             statusBadge.classList.add('bg-danger');
             statusBadge.textContent = 'Expired';
-        } else if (cert.displayStatus === 'unknown') {
+        } else {
             statusBadge.classList.add('bg-secondary');
             statusBadge.textContent = 'Unknown';
         }
         statusCell.appendChild(statusBadge);
         row.appendChild(statusCell);
         
-        // Issuer
-        const issuerCell = document.createElement('td');
-        issuerCell.textContent = cert.issuer || 'Unknown';
-        row.appendChild(issuerCell);
+        // Registrar
+        const registrarCell = document.createElement('td');
+        registrarCell.textContent = domain.registrar || 'N/A';
+        row.appendChild(registrarCell);
         
         // Expiration date
         const expiresCell = document.createElement('td');
-        expiresCell.textContent = cert.valid_until ? formatDate(cert.valid_until) : 'N/A';
+        expiresCell.textContent = domain.expiration_date ? formatDate(domain.expiration_date) : 'N/A';
         row.appendChild(expiresCell);
         
         // Days remaining
         const daysCell = document.createElement('td');
-        if (cert.expired) {
+        if (domain.displayStatus === 'unknown') {
+            daysCell.innerHTML = `<span class="text-secondary">Unknown</span>`;
+        } else if (domain.displayStatus === 'expired') {
             daysCell.innerHTML = `<span class="text-danger">Expired</span>`;
         } else {
-            daysCell.textContent = cert.days_remaining;
+            daysCell.textContent = domain.days_remaining;
             
             // Add progress bar for expiration
             const progressDiv = document.createElement('div');
@@ -219,14 +212,14 @@ function populateTable() {
             let progressClass = 'progress-bar-safe';
             let progressWidth = 100;
             
-            if (cert.days_remaining <= 15) {
+            if (domain.days_remaining <= 30) {
                 progressClass = 'progress-bar-danger';
-                progressWidth = cert.days_remaining / 15 * 100;
-            } else if (cert.days_remaining <= 30) {
+                progressWidth = domain.days_remaining / 30 * 100;
+            } else if (domain.days_remaining <= 90) {
                 progressClass = 'progress-bar-expiring';
-                progressWidth = cert.days_remaining / 30 * 100;
+                progressWidth = domain.days_remaining / 90 * 100;
             } else {
-                progressWidth = Math.min(100, cert.days_remaining / 90 * 100);
+                progressWidth = Math.min(100, domain.days_remaining / 365 * 100);
             }
             
             progressDiv.innerHTML = `<div class="progress-bar ${progressClass}" role="progressbar" style="width: ${progressWidth}%" aria-valuenow="${progressWidth}" aria-valuemin="0" aria-valuemax="100"></div>`;
@@ -239,24 +232,24 @@ function populateTable() {
         const viewBtn = document.createElement('button');
         viewBtn.classList.add('btn', 'btn-sm', 'btn-primary');
         viewBtn.innerHTML = '<i class="bi bi-eye"></i> Details';
-        viewBtn.setAttribute('data-domain', cert.domain || 'Unknown');
+        viewBtn.setAttribute('data-domain', domain.domain);
         viewBtn.addEventListener('click', function() {
-            showCertificateDetails(cert);
+            showDomainDetails(domain);
         });
         actionsCell.appendChild(viewBtn);
         row.appendChild(actionsCell);
         
-        certificatesTableBody.appendChild(row);
+        domainsTableBody.appendChild(row);
     });
 }
 
-// Populate cards view with certificate data
+// Populate cards view with domain data
 function populateCards() {
     // Clear existing cards
-    certificatesCards.innerHTML = '';
+    domainsCards.innerHTML = '';
     
-    // Generate cards for each certificate
-    allCertificates.forEach(cert => {
+    // Generate cards for each domain
+    allDomains.forEach(domain => {
         const card = document.createElement('div');
         card.classList.add('col-md-4', 'mb-4');
         
@@ -264,31 +257,39 @@ function populateCards() {
         let statusText = 'Valid';
         let statusBadgeClass = 'bg-success';
         
-        if (cert.displayStatus === 'expiring') {
+        if (domain.displayStatus === 'expiring') {
             statusClass = 'border-warning';
             statusText = 'Expiring Soon';
             statusBadgeClass = 'bg-warning text-dark';
-        } else if (cert.displayStatus === 'expired') {
+        } else if (domain.displayStatus === 'expired') {
             statusClass = 'border-danger';
             statusText = 'Expired';
             statusBadgeClass = 'bg-danger';
-        } else if (cert.displayStatus === 'unknown') {
+        } else if (domain.displayStatus === 'unknown') {
             statusClass = 'border-secondary';
             statusText = 'Unknown';
             statusBadgeClass = 'bg-secondary';
         }
         
         let expirationInfo = '';
-        if (cert.expired) {
+        if (domain.displayStatus === 'unknown') {
+            expirationInfo = `<p class="text-secondary">Status unknown</p>`;
+        } else if (domain.displayStatus === 'expired') {
             expirationInfo = `<p class="text-danger">Expired</p>`;
         } else {
+            const progressClass = domain.days_remaining <= 30 ? 'progress-bar-danger' : 
+                                 (domain.days_remaining <= 90 ? 'progress-bar-expiring' : 'progress-bar-safe');
+            const progressWidth = domain.days_remaining <= 30 ? (domain.days_remaining / 30 * 100) :
+                                 (domain.days_remaining <= 90 ? (domain.days_remaining / 90 * 100) :
+                                 Math.min(100, domain.days_remaining / 365 * 100));
+                                 
             expirationInfo = `
-                <p>Days remaining: ${cert.days_remaining}</p>
+                <p>Days remaining: ${domain.days_remaining}</p>
                 <div class="progress">
-                    <div class="progress-bar ${cert.days_remaining <= 15 ? 'progress-bar-danger' : (cert.days_remaining <= 30 ? 'progress-bar-expiring' : 'progress-bar-safe')}" 
+                    <div class="progress-bar ${progressClass}" 
                          role="progressbar" 
-                         style="width: ${Math.min(100, cert.days_remaining / 90 * 100)}%" 
-                         aria-valuenow="${Math.min(100, cert.days_remaining / 90 * 100)}" 
+                         style="width: ${progressWidth}%" 
+                         aria-valuenow="${progressWidth}" 
                          aria-valuemin="0" 
                          aria-valuemax="100"></div>
                 </div>
@@ -298,26 +299,26 @@ function populateCards() {
         card.innerHTML = `
             <div class="card h-100 ${statusClass}" style="border-width: 2px;">
                 <div class="card-header d-flex justify-content-between align-items-center">
-                    <h5 class="mb-0">${cert.domain}</h5>
+                    <h5 class="mb-0">${domain.domain}</h5>
                     <span class="badge ${statusBadgeClass} rounded-pill">${statusText}</span>
                 </div>
                 <div class="card-body">
-                    <p><strong>Issuer:</strong> ${cert.issuer}</p>
-                    <p><strong>Expires:</strong> ${formatDate(cert.valid_until)}</p>
+                    <p><strong>Registrar:</strong> ${domain.registrar || 'N/A'}</p>
+                    <p><strong>Expires:</strong> ${domain.expiration_date ? formatDate(domain.expiration_date) : 'N/A'}</p>
                     ${expirationInfo}
-                    <button class="btn btn-primary view-details mt-3" data-domain="${cert.domain}">
+                    <button class="btn btn-primary view-details mt-3" data-domain="${domain.domain}">
                         <i class="bi bi-eye"></i> View Details
                     </button>
                 </div>
             </div>
         `;
         
-        certificatesCards.appendChild(card);
+        domainsCards.appendChild(card);
         
         // Add event listener to the button
         const detailsBtn = card.querySelector('.view-details');
         detailsBtn.addEventListener('click', function() {
-            showCertificateDetails(cert);
+            showDomainDetails(domain);
         });
     });
 }
@@ -325,16 +326,16 @@ function populateCards() {
 // Initialize charts
 function initializeCharts() {
     initializeStatusChart();
-    initializeIssuersChart();
+    initializeRegistrarsChart();
     initializeExpirationChart();
 }
 
 // Initialize status distribution chart
 function initializeStatusChart() {
-    const validCount = allCertificates.filter(cert => cert.displayStatus === 'valid').length;
-    const expiringCount = allCertificates.filter(cert => cert.displayStatus === 'expiring').length;
-    const expiredCount = allCertificates.filter(cert => cert.displayStatus === 'expired').length;
-    const unknownCount = allCertificates.filter(cert => cert.displayStatus === 'unknown').length;
+    const validCount = allDomains.filter(domain => domain.displayStatus === 'valid').length;
+    const expiringCount = allDomains.filter(domain => domain.displayStatus === 'expiring').length;
+    const expiredCount = allDomains.filter(domain => domain.displayStatus === 'expired').length;
+    const unknownCount = allDomains.filter(domain => domain.displayStatus === 'unknown').length;
     
     const ctx = document.getElementById('status-chart').getContext('2d');
     statusChart = new Chart(ctx, {
@@ -369,30 +370,31 @@ function initializeStatusChart() {
     });
 }
 
-// Initialize issuers distribution chart
-function initializeIssuersChart() {
-    // Count certificates by issuer
-    const issuerCounts = {};
-    allCertificates.forEach(cert => {
-        if (!issuerCounts[cert.issuer]) {
-            issuerCounts[cert.issuer] = 0;
+// Initialize registrars distribution chart
+function initializeRegistrarsChart() {
+    // Count domains by registrar
+    const registrarCounts = {};
+    allDomains.forEach(domain => {
+        const registrar = domain.registrar || 'Unknown';
+        if (!registrarCounts[registrar]) {
+            registrarCounts[registrar] = 0;
         }
-        issuerCounts[cert.issuer]++;
+        registrarCounts[registrar]++;
     });
     
-    // Sort issuers by count (descending)
-    const sortedIssuers = Object.entries(issuerCounts)
+    // Sort registrars by count (descending)
+    const sortedRegistrars = Object.entries(registrarCounts)
         .sort((a, b) => b[1] - a[1])
-        .slice(0, 10); // Show top 10 issuers
+        .slice(0, 10); // Show top 10 registrars
     
-    const ctx = document.getElementById('issuers-chart').getContext('2d');
-    issuersChart = new Chart(ctx, {
+    const ctx = document.getElementById('registrars-chart').getContext('2d');
+    registrarsChart = new Chart(ctx, {
         type: 'bar',
         data: {
-            labels: sortedIssuers.map(entry => entry[0]),
+            labels: sortedRegistrars.map(entry => entry[0]),
             datasets: [{
-                label: 'Number of Certificates',
-                data: sortedIssuers.map(entry => entry[1]),
+                label: 'Number of Domains',
+                data: sortedRegistrars.map(entry => entry[1]),
                 backgroundColor: chartColors,
                 borderWidth: 1
             }]
@@ -418,14 +420,18 @@ function initializeIssuersChart() {
 
 // Initialize expiration timeline chart
 function initializeExpirationChart() {
-    // Group certificates by expiration month
+    // Group domains by expiration month
     const expirationMonths = {};
     
-    // Only include non-expired certificates
-    const validCerts = allCertificates.filter(cert => !cert.expired);
+    // Only include domains with valid expiration dates
+    const validDomains = allDomains.filter(domain => 
+        domain.expiration_date && 
+        domain.displayStatus !== 'expired' && 
+        domain.displayStatus !== 'unknown'
+    );
     
-    validCerts.forEach(cert => {
-        const date = new Date(cert.valid_until);
+    validDomains.forEach(domain => {
+        const date = new Date(domain.expiration_date);
         const monthYear = `${date.getFullYear()}-${(date.getMonth() + 1).toString().padStart(2, '0')}`;
         
         if (!expirationMonths[monthYear]) {
@@ -443,7 +449,7 @@ function initializeExpirationChart() {
         data: {
             labels: sortedMonths.map(month => formatMonth(month)),
             datasets: [{
-                label: 'Certificates Expiring',
+                label: 'Domains Expiring',
                 data: sortedMonths.map(month => expirationMonths[month]),
                 backgroundColor: 'rgba(75, 192, 192, 0.2)',
                 borderColor: 'rgba(75, 192, 192, 1)',
@@ -474,13 +480,13 @@ function initializeExpirationChart() {
     });
 }
 
-// Show certificate details in modal
-function showCertificateDetails(cert) {
-    const modalTitle = document.getElementById('certDetailsModalLabel');
+// Show domain details in modal
+function showDomainDetails(domain) {
+    const modalTitle = document.getElementById('domainDetailsModalLabel');
     const modalBody = document.getElementById('modal-body-content');
     
     // Set modal title
-    modalTitle.textContent = `Certificate for ${cert.domain}`;
+    modalTitle.textContent = `Domain Lease Details: ${domain.domain}`;
     
     // Clear previous content
     modalBody.innerHTML = '';
@@ -492,13 +498,13 @@ function showCertificateDetails(cert) {
     let badgeClass = 'bg-success';
     let statusText = 'Valid';
     
-    if (cert.displayStatus === 'expiring') {
+    if (domain.displayStatus === 'expiring') {
         badgeClass = 'bg-warning text-dark';
         statusText = 'Expiring Soon';
-    } else if (cert.displayStatus === 'expired') {
+    } else if (domain.displayStatus === 'expired') {
         badgeClass = 'bg-danger';
         statusText = 'Expired';
-    } else if (cert.displayStatus === 'unknown') {
+    } else if (domain.displayStatus === 'unknown') {
         badgeClass = 'bg-secondary';
         statusText = 'Unknown';
     }
@@ -510,22 +516,22 @@ function showCertificateDetails(cert) {
     `;
     modalBody.appendChild(statusBadge);
     
-    // Add certificate info
+    // Add domain info
     const infoDiv = document.createElement('div');
     infoDiv.classList.add('mb-3');
     
     // Expiration indicator
     let expirationIndicator = '';
-    if (!cert.expired) {
+    if (domain.displayStatus !== 'unknown' && domain.displayStatus !== 'expired') {
         let progressClass = 'progress-bar-safe';
         let statusClass = 'status-valid';
         let statusText = 'Valid';
         
-        if (cert.days_remaining <= 15) {
+        if (domain.days_remaining <= 30) {
             progressClass = 'progress-bar-danger';
             statusClass = 'status-expired';
             statusText = 'Critical - Expires Very Soon';
-        } else if (cert.days_remaining <= 30) {
+        } else if (domain.days_remaining <= 90) {
             progressClass = 'progress-bar-expiring';
             statusClass = 'status-expiring';
             statusText = 'Warning - Expires Soon';
@@ -535,170 +541,198 @@ function showCertificateDetails(cert) {
             <div class="expiration-indicator">
                 <div class="progress flex-grow-1" style="width: 50%;">
                     <div class="progress-bar ${progressClass}" role="progressbar" 
-                         style="width: ${Math.min(100, cert.days_remaining / 90 * 100)}%" 
-                         aria-valuenow="${Math.min(100, cert.days_remaining / 90 * 100)}" 
+                         style="width: ${Math.min(100, domain.days_remaining / 365 * 100)}%" 
+                         aria-valuenow="${Math.min(100, domain.days_remaining / 365 * 100)}" 
                          aria-valuemin="0" 
                          aria-valuemax="100"></div>
                 </div>
                 <div class="expiration-text ${statusClass}">
-                    ${statusText} (${cert.days_remaining} days remaining)
+                    ${statusText} (${domain.days_remaining} days remaining)
                 </div>
             </div>
         `;
     }
     
-    infoDiv.innerHTML = `
+    // Build the table with domain details
+    let tableHTML = `
         <table class="table table-bordered">
             <tr>
                 <th>Domain</th>
-                <td>${cert.domain}</td>
+                <td>${domain.domain}</td>
             </tr>
             <tr>
-                <th>Issuer</th>
-                <td>${cert.issuer}</td>
+                <th>Status</th>
+                <td>${domain.status}</td>
             </tr>
             <tr>
-                <th>Subject</th>
-                <td>${cert.subject}</td>
+                <th>Registrar</th>
+                <td>${domain.registrar || 'N/A'}</td>
             </tr>
             <tr>
-                <th>Valid From</th>
-                <td>${formatDate(cert.valid_from)}</td>
+                <th>WHOIS Server</th>
+                <td>${domain.whois_server || 'N/A'}</td>
             </tr>
             <tr>
-                <th>Valid Until</th>
-                <td>${formatDate(cert.valid_until)}</td>
+                <th>Creation Date</th>
+                <td>${domain.creation_date ? formatDate(domain.creation_date) : 'N/A'}</td>
+            </tr>
+            <tr>
+                <th>Expiration Date</th>
+                <td>${domain.expiration_date ? formatDate(domain.expiration_date) : 'N/A'}</td>
+            </tr>
+            <tr>
+                <th>Last Updated</th>
+                <td>${domain.last_updated ? formatDate(domain.last_updated) : 'N/A'}</td>
             </tr>
             <tr>
                 <th>Days Remaining</th>
                 <td>
-                    ${cert.expired ? '<span class="text-danger">Expired</span>' : cert.days_remaining}
-                    ${!cert.expired ? expirationIndicator : ''}
+                    ${domain.displayStatus === 'unknown' ? 
+                      '<span class="text-secondary">Unknown</span>' : 
+                      (domain.displayStatus === 'expired' ? 
+                       '<span class="text-danger">Expired</span>' : 
+                       domain.days_remaining)}
+                    ${domain.displayStatus !== 'unknown' && domain.displayStatus !== 'expired' ? expirationIndicator : ''}
                 </td>
             </tr>
             <tr>
-                <th>Version</th>
-                <td>${cert.version}</td>
-            </tr>
-            <tr>
-                <th>Serial Number</th>
-                <td><code>${cert.serial_number}</code></td>
+                <th>Registrant</th>
+                <td>${domain.registrant || 'N/A'}</td>
             </tr>
         </table>
     `;
+    
+    infoDiv.innerHTML = tableHTML;
     modalBody.appendChild(infoDiv);
     
-    // Add alternative names if available
-    if (cert.alt_names && cert.alt_names.length > 0) {
-        const altNamesDiv = document.createElement('div');
+    // Add name servers if available
+    if (domain.name_servers && domain.name_servers.length > 0) {
+        const nameServersDiv = document.createElement('div');
         
-        let altNamesList = '';
-        cert.alt_names.forEach(name => {
-            altNamesList += `<li>${name}</li>`;
+        let nameServersList = '';
+        domain.name_servers.forEach(server => {
+            nameServersList += `<li>${server}</li>`;
         });
         
-        altNamesDiv.innerHTML = `
-            <h5 class="mt-3 mb-2">Alternative Names</h5>
+        nameServersDiv.innerHTML = `
+            <h5 class="mt-3 mb-2">Name Servers</h5>
             <ul>
-                ${altNamesList}
+                ${nameServersList}
             </ul>
         `;
-        modalBody.appendChild(altNamesDiv);
+        modalBody.appendChild(nameServersDiv);
     }
     
     // Show the modal
-    const modal = new bootstrap.Modal(document.getElementById('certDetailsModal'));
+    const modal = new bootstrap.Modal(document.getElementById('domainDetailsModal'));
     modal.show();
 }
 
-// Filter certificates based on search and filter settings
-function filterCertificates() {
-    const searchTerm = certSearch.value.toLowerCase();
+// Filter domains based on search and filter settings
+function filterDomains() {
+    const searchTerm = domainSearch.value.toLowerCase();
     const statusValue = statusFilter.value;
-    const issuerValue = issuerFilter.value;
+    const registrarValue = registrarFilter.value;
     
-    // Filter the certificates
-    const filteredCertificates = allCertificates.filter(cert => {
+    // Filter the domains
+    const filteredDomains = allDomains.filter(domain => {
         // Search filter
-        const matchesSearch = cert.domain.toLowerCase().includes(searchTerm);
+        const matchesSearch = domain.domain.toLowerCase().includes(searchTerm);
         
         // Status filter
         let matchesStatus = true;
         if (statusValue === 'valid') {
-            matchesStatus = cert.displayStatus === 'valid';
+            matchesStatus = domain.displayStatus === 'valid';
         } else if (statusValue === 'expiring') {
-            matchesStatus = cert.displayStatus === 'expiring';
+            matchesStatus = domain.displayStatus === 'expiring';
         } else if (statusValue === 'expired') {
-            matchesStatus = cert.displayStatus === 'expired' || cert.displayStatus === 'unknown';
+            matchesStatus = domain.displayStatus === 'expired' || domain.displayStatus === 'unknown';
         }
         
-        // Issuer filter
-        let matchesIssuer = true;
-        if (issuerValue !== 'all') {
-            matchesIssuer = cert.issuer === issuerValue;
+        // Registrar filter
+        let matchesRegistrar = true;
+        if (registrarValue !== 'all') {
+            matchesRegistrar = domain.registrar === registrarValue;
         }
         
-        return matchesSearch && matchesStatus && matchesIssuer;
+        return matchesSearch && matchesStatus && matchesRegistrar;
     });
     
-    // Update the UI with filtered certificates
-    updateUI(filteredCertificates);
+    // Update the UI with filtered domains
+    updateUI(filteredDomains);
 }
 
-// Update the UI with filtered certificates
-function updateUI(filteredCertificates) {
+// Update the UI with filtered domains
+function updateUI(filteredDomains) {
     // Clear existing table rows
-    certsTable.clear();
+    domainsTable.clear();
     
-    // Add filtered certificates to the table
-    filteredCertificates.forEach(cert => {
+    // Add filtered domains to the table
+    filteredDomains.forEach(domain => {
         let statusBadge = '';
-        if (cert.displayStatus === 'valid') {
+        if (domain.displayStatus === 'valid') {
             statusBadge = '<span class="badge bg-success rounded-pill">Valid</span>';
-        } else if (cert.displayStatus === 'expiring') {
+        } else if (domain.displayStatus === 'expiring') {
             statusBadge = '<span class="badge bg-warning text-dark rounded-pill">Expiring Soon</span>';
-        } else if (cert.displayStatus === 'expired') {
+        } else if (domain.displayStatus === 'expired') {
             statusBadge = '<span class="badge bg-danger rounded-pill">Expired</span>';
-        } else if (cert.displayStatus === 'unknown') {
+        } else {
             statusBadge = '<span class="badge bg-secondary rounded-pill">Unknown</span>';
         }
         
         let daysCell = '';
-        if (cert.expired) {
+        if (domain.displayStatus === 'unknown') {
+            daysCell = '<span class="text-secondary">Unknown</span>';
+        } else if (domain.displayStatus === 'expired') {
             daysCell = '<span class="text-danger">Expired</span>';
         } else {
-            const progressClass = cert.days_remaining <= 15 ? 'progress-bar-danger' : 
-                                (cert.days_remaining <= 30 ? 'progress-bar-expiring' : 'progress-bar-safe');
-            const progressWidth = Math.min(100, cert.days_remaining / 90 * 100);
+            const progressClass = domain.days_remaining <= 30 ? 'progress-bar-danger' : 
+                                 (domain.days_remaining <= 90 ? 'progress-bar-expiring' : 'progress-bar-safe');
+            const progressWidth = Math.min(100, domain.days_remaining <= 30 ? 
+                                         (domain.days_remaining / 30 * 100) : 
+                                         (domain.days_remaining <= 90 ? 
+                                          (domain.days_remaining / 90 * 100) : 
+                                          (domain.days_remaining / 365 * 100)));
             
-            daysCell = `${cert.days_remaining}
+            daysCell = `${domain.days_remaining}
                 <div class="progress">
                     <div class="progress-bar ${progressClass}" role="progressbar" style="width: ${progressWidth}%" 
                         aria-valuenow="${progressWidth}" aria-valuemin="0" aria-valuemax="100"></div>
                 </div>`;
         }
         
-        const domainName = cert.domain || 'Unknown';
-        const issuer = cert.issuer || 'Unknown';
-        const validUntil = cert.valid_until ? formatDate(cert.valid_until) : 'N/A';
-        
-        const actionButton = `<button class="btn btn-sm btn-primary view-details" data-domain="${domainName}">
-                <i class="bi bi-eye"></i> Details
-             </button>`;
-             
-        certsTable.row.add([
-            domainName,
+        domainsTable.row.add([
+            domain.domain,
             statusBadge,
-            issuer,
-            validUntil,
+            domain.registrar || 'N/A',
+            domain.expiration_date ? formatDate(domain.expiration_date) : 'N/A',
             daysCell,
-            actionButton
+            `<button class="btn btn-sm btn-primary view-details" data-domain="${domain.domain}"><i class="bi bi-eye"></i> Details</button>`
         ]).draw(false);
     });
     
     // Update cards view
-    certificatesCards.innerHTML = '';
-    filteredCertificates.forEach(cert => {
+    updateCardsView(filteredDomains);
+    
+    // Reattach event listeners to the table buttons
+    document.querySelectorAll('.view-details').forEach(button => {
+        const domainName = button.getAttribute('data-domain');
+        const domain = allDomains.find(d => d.domain === domainName);
+        if (domain) {
+            button.addEventListener('click', function() {
+                showDomainDetails(domain);
+            });
+        }
+    });
+}
+
+// Update cards view with filtered domains
+function updateCardsView(filteredDomains) {
+    // Clear existing cards
+    domainsCards.innerHTML = '';
+    
+    // Generate cards for filtered domains
+    filteredDomains.forEach(domain => {
         const card = document.createElement('div');
         card.classList.add('col-md-4', 'mb-4');
         
@@ -706,31 +740,39 @@ function updateUI(filteredCertificates) {
         let statusText = 'Valid';
         let statusBadgeClass = 'bg-success';
         
-        if (cert.displayStatus === 'expiring') {
+        if (domain.displayStatus === 'expiring') {
             statusClass = 'border-warning';
             statusText = 'Expiring Soon';
             statusBadgeClass = 'bg-warning text-dark';
-        } else if (cert.displayStatus === 'expired') {
+        } else if (domain.displayStatus === 'expired') {
             statusClass = 'border-danger';
             statusText = 'Expired';
             statusBadgeClass = 'bg-danger';
-        } else if (cert.displayStatus === 'unknown') {
+        } else if (domain.displayStatus === 'unknown') {
             statusClass = 'border-secondary';
             statusText = 'Unknown';
             statusBadgeClass = 'bg-secondary';
         }
         
         let expirationInfo = '';
-        if (cert.expired) {
+        if (domain.displayStatus === 'unknown') {
+            expirationInfo = `<p class="text-secondary">Status unknown</p>`;
+        } else if (domain.displayStatus === 'expired') {
             expirationInfo = `<p class="text-danger">Expired</p>`;
         } else {
+            const progressClass = domain.days_remaining <= 30 ? 'progress-bar-danger' : 
+                                 (domain.days_remaining <= 90 ? 'progress-bar-expiring' : 'progress-bar-safe');
+            const progressWidth = domain.days_remaining <= 30 ? (domain.days_remaining / 30 * 100) :
+                                 (domain.days_remaining <= 90 ? (domain.days_remaining / 90 * 100) :
+                                 Math.min(100, domain.days_remaining / 365 * 100));
+                                 
             expirationInfo = `
-                <p>Days remaining: ${cert.days_remaining}</p>
+                <p>Days remaining: ${domain.days_remaining}</p>
                 <div class="progress">
-                    <div class="progress-bar ${cert.days_remaining <= 15 ? 'progress-bar-danger' : (cert.days_remaining <= 30 ? 'progress-bar-expiring' : 'progress-bar-safe')}" 
+                    <div class="progress-bar ${progressClass}" 
                          role="progressbar" 
-                         style="width: ${Math.min(100, cert.days_remaining / 90 * 100)}%" 
-                         aria-valuenow="${Math.min(100, cert.days_remaining / 90 * 100)}" 
+                         style="width: ${progressWidth}%" 
+                         aria-valuenow="${progressWidth}" 
                          aria-valuemin="0" 
                          aria-valuemax="100"></div>
                 </div>
@@ -740,68 +782,44 @@ function updateUI(filteredCertificates) {
         card.innerHTML = `
             <div class="card h-100 ${statusClass}" style="border-width: 2px;">
                 <div class="card-header d-flex justify-content-between align-items-center">
-                    <h5 class="mb-0">${cert.domain}</h5>
+                    <h5 class="mb-0">${domain.domain}</h5>
                     <span class="badge ${statusBadgeClass} rounded-pill">${statusText}</span>
                 </div>
                 <div class="card-body">
-                    <p><strong>Issuer:</strong> ${cert.issuer}</p>
-                    <p><strong>Expires:</strong> ${formatDate(cert.valid_until)}</p>
+                    <p><strong>Registrar:</strong> ${domain.registrar || 'N/A'}</p>
+                    <p><strong>Expires:</strong> ${domain.expiration_date ? formatDate(domain.expiration_date) : 'N/A'}</p>
                     ${expirationInfo}
-                    <button class="btn btn-primary view-details mt-3" data-domain="${cert.domain}">
+                    <button class="btn btn-primary view-details mt-3" data-domain="${domain.domain}">
                         <i class="bi bi-eye"></i> View Details
                     </button>
                 </div>
             </div>
         `;
         
-        certificatesCards.appendChild(card);
+        domainsCards.appendChild(card);
         
         // Add event listener to the button
         const detailsBtn = card.querySelector('.view-details');
         detailsBtn.addEventListener('click', function() {
-            showCertificateDetails(cert);
+            showDomainDetails(domain);
         });
-    });
-    
-    // Reattach event listeners to the table buttons
-    document.querySelectorAll('.view-details').forEach(button => {
-        const domainName = button.getAttribute('data-domain');
-        const cert = allCertificates.find(c => c.domain === domainName);
-        if (cert) {
-            button.addEventListener('click', function() {
-                showCertificateDetails(cert);
-            });
-        }
     });
 }
 
 // Reset all filters
 function resetFilters() {
-    certSearch.value = '';
+    domainSearch.value = '';
     statusFilter.value = 'all';
-    issuerFilter.value = 'all';
+    registrarFilter.value = 'all';
     
     // Trigger filter update
-    filterCertificates();
+    filterDomains();
 }
 
 // Helper function to format date
 function formatDate(dateString) {
-    if (!dateString) return 'N/A';
-    
-    try {
-        const date = new Date(dateString);
-        // Check if date is valid
-        if (isNaN(date.getTime())) {
-            return 'N/A';
-        }
-        
-        const options = { year: 'numeric', month: 'short', day: 'numeric' };
-        return date.toLocaleDateString(undefined, options);
-    } catch (e) {
-        console.error('Error formatting date:', e);
-        return 'N/A';
-    }
+    const options = { year: 'numeric', month: 'short', day: 'numeric' };
+    return new Date(dateString).toLocaleDateString(undefined, options);
 }
 
 // Helper function to format month

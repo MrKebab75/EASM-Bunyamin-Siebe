@@ -30,6 +30,10 @@ def domain_visualization():
 def certificate_visualization():
     return render_template("certificate_visualization.html")
 
+@app.route("/domain-lease-visualization")
+def domain_lease_visualization():
+    return render_template("domain_lease_visualization.html")
+
 @app.route("/api/domains")
 def get_domains():
     try:
@@ -61,6 +65,17 @@ def get_certificates():
         return jsonify(certificates_data)
     except Exception as e:
         app.logger.error(f"Error loading certificates data: {str(e)}")
+        return jsonify({"error": str(e)}), 500
+
+@app.route("/api/domain_lease")
+def get_domain_lease():
+    try:
+        with open("foundData/domainLease.json", "r") as f:
+            domain_lease_data = json.load(f)
+        app.logger.info(f"Loaded {len(domain_lease_data)} domain leases")
+        return jsonify(domain_lease_data)
+    except Exception as e:
+        app.logger.error(f"Error loading domain lease data: {str(e)}")
         return jsonify({"error": str(e)}), 500
 
 if __name__ == "__main__":
