@@ -228,8 +228,8 @@ def main():
     """
     parser = argparse.ArgumentParser(description="Search the dark web using Tor")
     parser.add_argument("search_term", help="Term to search for on the dark web")
-    parser.add_argument("--output", "-o", default="darkweb_results.json", 
-                        help="Output file to save results (default: darkweb_results.json)")
+    parser.add_argument("--output", "-o", default="foundData/darkweb_results.json", 
+                        help="Output file to save results (default: foundData/darkweb_results.json)")
     parser.add_argument("--engines", "-e", nargs="+", 
                         help="Specific search engines to use (default: Ahmia only)")
     parser.add_argument("--all-engines", "-a", action="store_true",
