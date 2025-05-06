@@ -261,6 +261,30 @@ def ping_host(host, verbose=True):
             print(f"[!] Error pinging {host}: {str(e)}")
         return False
 
+def ping_sweep(domains, verbose=True):
+    """
+    Perform a ping sweep of all domains and return only the reachable ones.
+    """
+    reachable_domains = []
+    unreachable_domains = []
+    
+    if verbose:
+        print(f"[*] Starting initial ping sweep of {len(domains)} domains...")
+    
+    for i, domain in enumerate(domains, 1):
+        if verbose and i % 10 == 0:
+            print(f"[*] Ping progress: {i}/{len(domains)} domains checked")
+            
+        if ping_host(domain, verbose=False):  # Use quieter ping
+            reachable_domains.append(domain)
+        else:
+            unreachable_domains.append(domain)
+    
+    if verbose:
+        print(f"[+] Ping sweep complete: {len(reachable_domains)} domains reachable, {len(unreachable_domains)} unreachable")
+        
+    return reachable_domains, unreachable_domains
+
 def read_domains_from_json(json_file):
     """Read domains and subdomains from the all_subdomains.json file."""
     domains = []
@@ -390,6 +414,7 @@ def main():
     parser.add_argument("--discover-ports", action="store_true", help="Discover open ports before scanning")
     parser.add_argument("--max-targets", type=int, help="Maximum number of targets to scan")
     parser.add_argument("--verbose", action="store_true", help="Enable verbose output")
+    parser.add_argument("--skip-ping", action="store_true", help="Skip initial ping sweep (not recommended)")
     args = parser.parse_args()
     
     # Print banner
@@ -403,19 +428,45 @@ def main():
     
     # Load domains and subdomains
     print(f"[*] Loading domains and subdomains from {args.input_json}...")
-    domains = read_domains_from_json(args.input_json)
-    print(f"[+] Loaded {len(domains)} unique domains and subdomains")
+    all_domains = read_domains_from_json(args.input_json)
+    print(f"[+] Loaded {len(all_domains)} unique domains and subdomains")
     
-    if not domains:
+    if not all_domains:
         print("[!] No valid domains found. Please check your input file.")
         return
     
     # Limit targets if specified
-    if args.max_targets and args.max_targets < len(domains):
+    if args.max_targets and args.max_targets < len(all_domains):
         print(f"[*] Limiting scan to the first {args.max_targets} domains")
-        domains = domains[:args.max_targets]
+        all_domains = all_domains[:args.max_targets]
     
-    print(f"[*] Preparing to scan {len(domains)} domains")
+    # Perform initial ping sweep to filter unreachable domains
+    active_domains = []
+    unreachable_domains = []
+    
+    if not args.skip_ping:
+        print("\n[*] Performing initial ping sweep to identify reachable domains...")
+        active_domains, unreachable_domains = ping_sweep(all_domains, verbose=args.verbose)
+        
+        if not active_domains:
+            print("[!] No reachable domains found. Exiting.")
+            # Create empty results with unreachable domains
+            results = [{
+                'domain': domain,
+                'timestamp': datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+                'is_up': False,
+                'ports': {},
+                'vulnerabilities': []
+            } for domain in unreachable_domains]
+            
+            save_results_to_json(results, args.output_json)
+            generate_summary_report(results, args.output_report)
+            return
+    else:
+        active_domains = all_domains
+        print("[!] Initial ping sweep skipped. Proceeding with all domains.")
+    
+    print(f"[*] Preparing to scan {len(active_domains)} reachable domains")
     
     # Parse ports if provided
     ports = None
@@ -432,10 +483,25 @@ def main():
     results = []
     start_time = time.time()
     
-    for i, domain in enumerate(domains, 1):
-        print(f"\n[*] Scanning domain {i}/{len(domains)}: {domain}")
+    # First, add all unreachable domains to results
+    if not args.skip_ping:
+        for domain in unreachable_domains:
+            results.append({
+                'domain': domain,
+                'timestamp': datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+                'is_up': False,
+                'ports': {},
+                'vulnerabilities': []
+            })
+            
+        if results:
+            print(f"[*] Added {len(unreachable_domains)} unreachable domains to results")
+    
+    # Then scan the reachable domains
+    for i, domain in enumerate(active_domains, 1):
+        print(f"\n[*] Scanning domain {i}/{len(active_domains)}: {domain}")
         
-        # Scan the domain
+        # Scan the domain (now we know it's reachable)
         result = scan_domain_for_vulnerabilities(
             domain,
             ports=ports,
@@ -446,26 +512,23 @@ def main():
         results.append(result)
         
         # Print a summary for this domain
-        if result['is_up']:
-            vulns = result['vulnerabilities']
-            if vulns:
-                severity_counts = {}
-                for v in vulns:
-                    severity = v['severity']
-                    if severity not in severity_counts:
-                        severity_counts[severity] = 0
-                    severity_counts[severity] += 1
-                
-                print(f"[+] Found {len(vulns)} vulnerabilities for {domain}:")
-                for severity, count in severity_counts.items():
-                    print(f"    - {severity}: {count}")
-            else:
-                print(f"[*] No vulnerabilities found for {domain}")
+        vulns = result['vulnerabilities']
+        if vulns:
+            severity_counts = {}
+            for v in vulns:
+                severity = v['severity']
+                if severity not in severity_counts:
+                    severity_counts[severity] = 0
+                severity_counts[severity] += 1
+            
+            print(f"[+] Found {len(vulns)} vulnerabilities for {domain}:")
+            for severity, count in severity_counts.items():
+                print(f"    - {severity}: {count}")
         else:
-            print(f"[!] Domain {domain} is not reachable (down or does not exist)")
+            print(f"[*] No vulnerabilities found for {domain}")
         
         # Pause between scans to be nice to the network
-        if i < len(domains):
+        if i < len(active_domains):
             print(f"[*] Pausing before next scan...")
             time.sleep(2)
     
@@ -479,7 +542,7 @@ def main():
     domains_with_vulns = sum(1 for r in results if r['vulnerabilities'])
     
     print(f"\n[+] Scan completed in {int(minutes)}m {int(seconds)}s")
-    print(f"[+] Scanned {len(domains)} domains")
+    print(f"[+] Reviewed {len(all_domains)} domains")
     print(f"[+] {domains_up} domains were reachable")
     print(f"[+] Found vulnerabilities in {domains_with_vulns} domains")
     print(f"[+] Total vulnerabilities found: {total_vulns}")
@@ -494,4 +557,4 @@ def main():
     print("="*80)
 
 if __name__ == "__main__":
-    main() 
+    main()

@@ -38,6 +38,14 @@ def domain_lease_visualization():
 def web_technologies_visualization():
     return render_template("web_technologies_visualization.html")
 
+@app.route("/port-scan-visualization")
+def port_scan_visualization():
+    return render_template("portscan_visualization.html")
+
+@app.route("/darknet-visualization")
+def darknet_visualization():
+    return render_template("darknet_visualization.html")
+
 @app.route("/api/domains")
 def get_domains():
     try:
@@ -91,6 +99,28 @@ def get_web_technologies():
         return jsonify(web_technologies_data)
     except Exception as e:
         app.logger.error(f"Error loading web technologies data: {str(e)}")
+        return jsonify({"error": str(e)}), 500
+
+@app.route("/api/port_services")
+def get_port_services():
+    try:
+        with open("foundData/port_services_scan.json", "r") as f:
+            port_services_data = json.load(f)
+        app.logger.info(f"Loaded {len(port_services_data)} IP addresses with port services")
+        return jsonify(port_services_data)
+    except Exception as e:
+        app.logger.error(f"Error loading port services data: {str(e)}")
+        return jsonify({"error": str(e)}), 500
+
+@app.route("/api/darknet")
+def get_darknet_data():
+    try:
+        with open("foundData/darknet.json", "r") as f:
+            darknet_data = json.load(f)
+        app.logger.info(f"Loaded darknet data with {darknet_data.get('total_results', 0)} results")
+        return jsonify(darknet_data)
+    except Exception as e:
+        app.logger.error(f"Error loading darknet data: {str(e)}")
         return jsonify({"error": str(e)}), 500
 
 if __name__ == "__main__":

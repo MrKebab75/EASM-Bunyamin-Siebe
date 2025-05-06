@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Darknet Mentions Visualization</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.3/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.1/css/dataTables.bootstrap5.min.css">
+    <style>
+        body {
+            background-color: #1a1a2e;
+            color: #e6e6e6;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        .card {
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+            margin-bottom: 20px;
+            border: none;
+            transition: transform 0.3s ease;
+            background-color: #16213e;
+        }
+        .card:hover {
+            transform: translateY(-5px);
+        }
+        .card-header {
+            background-color: #0f3460;
+            color: white;
+            border-radius: 10px 10px 0 0 !important;
+            padding: 15px 20px;
+            font-weight: bold;
+        }
+        .card-body {
+            padding: 20px;
+            color: #e6e6e6;
+        }
+        .nav-pills .nav-link.active {
+            background-color: #e94560;
+        }
+        .nav-pills .nav-link {
+            color: #e94560;
+        }
+        .filter-section {
+            background-color: #16213e;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
+        .stats-card {
+            text-align: center;
+            padding: 15px;
+            background-color: #16213e;
+        }
+        .stats-card h3 {
+            margin-bottom: 5px;
+            font-weight: bold;
+            color: #e94560;
+        }
+        .stats-card p {
+            color: #9ba4b4;
+            margin-bottom: 0;
+        }
+        .loader {
+            border: 5px solid #16213e;
+            border-top: 5px solid #e94560;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            animation: spin 2s linear infinite;
+            margin: 20px auto;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        .search-box {
+            border-radius: 20px;
+            padding-left: 20px;
+            border: 1px solid #ced4da;
+            background-color: #1a1a2e;
+            color: #e6e6e6;
+        }
+        .search-box:focus {
+            background-color: #1a1a2e;
+            color: #e6e6e6;
+        }
+        .result-card {
+            border-left: 4px solid #e94560;
+            margin-bottom: 15px;
+            transition: all 0.3s ease;
+        }
+        .result-card:hover {
+            transform: translateX(5px);
+        }
+        .relevance-badge {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background-color: #e94560;
+            color: white;
+            border-radius: 20px;
+            padding: 5px 10px;
+            font-size: 0.8rem;
+        }
+        .table th {
+            background-color: #0f3460;
+            color: white;
+        }
+        .table {
+            color: #e6e6e6;
+        }
+        .table td {
+            vertical-align: middle;
+        }
+        .darknet-link {
+            color: #e94560;
+            text-decoration: none;
+            transition: all 0.2s ease;
+        }
+        .darknet-link:hover {
+            color: #ff6b81;
+            text-decoration: underline;
+        }
+        .page-link {
+            background-color: #16213e;
+            color: #e6e6e6;
+            border-color: #0f3460;
+        }
+        .page-link:hover {
+            background-color: #0f3460;
+            color: #e6e6e6;
+        }
+        .page-item.active .page-link {
+            background-color: #e94560;
+            border-color: #e94560;
+        }
+        .alert-info {
+            background-color: #16213e;
+            color: #e6e6e6;
+            border-color: #0f3460;
+        }
+        .btn-outline-secondary {
+            color: #e6e6e6;
+            border-color: #e6e6e6;
+        }
+        .btn-outline-secondary:hover {
+            background-color: #e94560;
+            border-color: #e94560;
+        }
+        .form-select {
+            background-color: #1a1a2e;
+            color: #e6e6e6;
+            border-color: #0f3460;
+        }
+        .form-select:focus {
+            background-color: #1a1a2e;
+            color: #e6e6e6;
+        }
+        .chart-container {
+            position: relative;
+            height: 300px;
+        }
+        .header-title {
+            color: #e94560;
+            font-weight: bold;
+        }
+        .engine-badge {
+            background-color: #0f3460;
+            color: white;
+            margin-right: 5px;
+            border-radius: 4px;
+            padding: 3px 8px;
+            font-size: 0.8rem;
+        }
+        .failed-engine {
+            background-color: #3d3762;
+            color: #9ba4b4;
+        }
+    </style>
+</head>
+<body>
+    <div class="container-fluid py-4">
+        <h1 class="text-center mb-4 header-title">Darknet Mentions Analysis</h1>
+        
+        <!-- Stats Row -->
+        <div class="row mb-4">
+            <div class="col-md-3">
+                <div class="card stats-card">
+                    <h3 id="search-term">-</h3>
+                    <p>Search Term</p>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card stats-card">
+                    <h3 id="total-results">0</h3>
+                    <p>Total Results</p>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card stats-card">
+                    <h3 id="engines-searched">0</h3>
+                    <p>Engines Searched</p>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card stats-card">
+                    <h3 id="timestamp">-</h3>
+                    <p>Scan Date</p>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Search Engines Section -->
+        <div class="row mb-4">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header">
+                        Search Engines Status
+                    </div>
+                    <div class="card-body">
+                        <div id="engines-container">
+                            <p class="text-center">
+                                <div class="loader"></div>
+                                <p class="text-center">Loading search engines data...</p>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Filter Section -->
+        <div class="filter-section mb-4">
+            <div class="row align-items-center">
+                <div class="col-md-6">
+                    <input type="text" id="search-input" class="form-control search-box" placeholder="Search within results...">
+                </div>
+                <div class="col-md-3">
+                    <select id="relevance-filter" class="form-select">
+                        <option value="all">All Relevance Scores</option>
+                        <option value="10">Very High (10)</option>
+                        <option value="9">High (9)</option>
+                        <option value="8">Medium (8)</option>
+                        <option value="7">Low (7)</option>
+                        <option value="6">Very Low (≤6)</option>
+                    </select>
+                </div>
+                <div class="col-md-3">
+                    <button id="reset-filters" class="btn btn-outline-secondary w-100">Reset Filters</button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Tabs -->
+        <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
+            <li class="nav-item" role="presentation">
+                <button class="nav-link active" id="pills-results-tab" data-bs-toggle="pill" data-bs-target="#pills-results" type="button" role="tab" aria-controls="pills-results" aria-selected="true">Results</button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="pills-table-tab" data-bs-toggle="pill" data-bs-target="#pills-table" type="button" role="tab" aria-controls="pills-table" aria-selected="false">Table View</button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="pills-chart-tab" data-bs-toggle="pill" data-bs-target="#pills-chart" type="button" role="tab" aria-controls="pills-chart" aria-selected="false">Charts</button>
+            </li>
+        </ul>
+        
+        <!-- Tab Content -->
+        <div class="tab-content" id="pills-tabContent">
+            <!-- Results View -->
+            <div class="tab-pane fade show active" id="pills-results" role="tabpanel" aria-labelledby="pills-results-tab">
+                <div class="card">
+                    <div class="card-header">
+                        Darknet Mentions
+                    </div>
+                    <div class="card-body">
+                        <div id="results-content">
+                            <div class="text-center">
+                                <div class="loader"></div>
+                                <p>Loading darknet data...</p>
+                            </div>
+                        </div>
+                        <div id="pagination-container" class="d-flex justify-content-center mt-4">
+                            <!-- Pagination will be added here -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Table View -->
+            <div class="tab-pane fade" id="pills-table" role="tabpanel" aria-labelledby="pills-table-tab">
+                <div class="card">
+                    <div class="card-header">
+                        Results Table
+                    </div>
+                    <div class="card-body">
+                        <div id="table-loader" class="text-center">
+                            <div class="loader"></div>
+                            <p>Loading table data...</p>
+                        </div>
+                        <div id="table-container" style="display: none;">
+                            <table id="results-table" class="table table-striped table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th>Relevance</th>
+                                        <th>Content</th>
+                                        <th>Onion URL</th>
+                                        <th>Age</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="results-table-body">
+                                    <!-- Will be populated dynamically -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Chart View -->
+            <div class="tab-pane fade" id="pills-chart" role="tabpanel" aria-labelledby="pills-chart-tab">
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="card">
+                            <div class="card-header">
+                                Relevance Score Distribution
+                            </div>
+                            <div class="card-body">
+                                <div class="chart-container">
+                                    <canvas id="relevanceDistributionChart"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="card">
+                            <div class="card-header">
+                                Results Age Distribution
+                            </div>
+                            <div class="card-body">
+                                <div class="chart-container">
+                                    <canvas id="ageDistributionChart"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row mt-4">
+                    <div class="col-md-12">
+                        <div class="card">
+                            <div class="card-header">
+                                Common Terms in Results
+                            </div>
+                            <div class="card-body">
+                                <div class="chart-container">
+                                    <canvas id="wordCloudChart"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Result Details Modal -->
+        <div class="modal fade" id="resultDetailsModal" tabindex="-1" aria-labelledby="resultDetailsModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content bg-dark text-light">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="resultDetailsModalLabel">Result Details</h5>
+                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body" id="resultDetailsModalBody">
+                        <!-- Content will be populated dynamically -->
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.3.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.1/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.1/js/dataTables.bootstrap5.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="/static/js/darknet_visualization.js"></script>
+</body>
+</html> 
