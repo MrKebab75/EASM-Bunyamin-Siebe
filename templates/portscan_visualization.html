@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Port Scan & Vulnerabilities Visualization</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.3/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.1/css/dataTables.bootstrap5.min.css">
+    <style>
+        body {
+            background-color: #f8f9fa;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        .card {
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+            border: none;
+            transition: transform 0.3s ease;
+        }
+        .card:hover {
+            transform: translateY(-5px);
+        }
+        .card-header {
+            background-color: #3b5998;
+            color: white;
+            border-radius: 10px 10px 0 0 !important;
+            padding: 15px 20px;
+            font-weight: bold;
+        }
+        .card-body {
+            padding: 20px;
+        }
+        .nav-pills .nav-link.active {
+            background-color: #3b5998;
+        }
+        .nav-pills .nav-link {
+            color: #3b5998;
+        }
+        .filter-section {
+            background-color: white;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        .stats-card {
+            text-align: center;
+            padding: 15px;
+        }
+        .stats-card h3 {
+            margin-bottom: 5px;
+            font-weight: bold;
+            color: #3b5998;
+        }
+        .stats-card p {
+            color: #6c757d;
+            margin-bottom: 0;
+        }
+        .loader {
+            border: 5px solid #f3f3f3;
+            border-top: 5px solid #3b5998;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            animation: spin 2s linear infinite;
+            margin: 20px auto;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        .badge-critical {
+            background-color: #dc3545;
+        }
+        .badge-high {
+            background-color: #fd7e14;
+        }
+        .badge-medium {
+            background-color: #ffc107;
+        }
+        .badge-low {
+            background-color: #20c997;
+        }
+        .badge-info {
+            background-color: #0dcaf0;
+        }
+        .badge-unknown {
+            background-color: #6c757d;
+        }
+        .table th {
+            background-color: #3b5998;
+            color: white;
+        }
+        .search-box {
+            border-radius: 20px;
+            padding-left: 20px;
+            border: 1px solid #ced4da;
+        }
+        .port-card {
+            border-left: 4px solid;
+        }
+        .port-card.critical {
+            border-left-color: #dc3545;
+        }
+        .port-card.high {
+            border-left-color: #fd7e14;
+        }
+        .port-card.medium {
+            border-left-color: #ffc107;
+        }
+        .port-card.low {
+            border-left-color: #20c997;
+        }
+        .port-card.info {
+            border-left-color: #0dcaf0;
+        }
+        .port-card.unknown {
+            border-left-color: #6c757d;
+        }
+        .tech-badge {
+            margin-right: 5px;
+            margin-bottom: 5px;
+            font-size: 0.8rem;
+            background-color: #e9ecef;
+            color: #495057;
+            border: 1px solid #ced4da;
+        }
+    </style>
+</head>
+<body>
+    <div class="container-fluid py-4">
+        <h1 class="text-center mb-4">Port Scan & Vulnerabilities Dashboard</h1>
+        
+        <!-- Stats Row -->
+        <div class="row mb-4">
+            <div class="col-md-3">
+                <div class="card stats-card">
+                    <h3 id="total-ips">0</h3>
+                    <p>Total IP Addresses</p>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card stats-card">
+                    <h3 id="total-domains">0</h3>
+                    <p>Total Domains</p>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card stats-card">
+                    <h3 id="total-open-ports">0</h3>
+                    <p>Open Ports</p>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card stats-card">
+                    <h3 id="total-vulnerabilities">0</h3>
+                    <p>Vulnerabilities Found</p>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Filter Section -->
+        <div class="filter-section mb-4">
+            <div class="row align-items-center">
+                <div class="col-md-4">
+                    <input type="text" id="search-input" class="form-control search-box" placeholder="Search IPs, domains, services...">
+                </div>
+                <div class="col-md-3">
+                    <select id="port-filter" class="form-select">
+                        <option value="all">All Ports</option>
+                        <option value="22">SSH (22)</option>
+                        <option value="80">HTTP (80)</option>
+                        <option value="443">HTTPS (443)</option>
+                        <option value="21">FTP (21)</option>
+                        <option value="25">SMTP (25)</option>
+                        <option value="3389">RDP (3389)</option>
+                        <!-- Common ports will be added dynamically -->
+                    </select>
+                </div>
+                <div class="col-md-3">
+                    <select id="vulnerability-filter" class="form-select">
+                        <option value="all">All Vulnerabilities</option>
+                        <option value="critical">Critical</option>
+                        <option value="high">High</option>
+                        <option value="medium">Medium</option>
+                        <option value="low">Low</option>
+                        <option value="info">Info</option>
+                        <option value="any">Any Vulnerability</option>
+                        <option value="none">No Vulnerabilities</option>
+                    </select>
+                </div>
+                <div class="col-md-2">
+                    <button id="reset-filters" class="btn btn-outline-secondary w-100">Reset Filters</button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Tabs -->
+        <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
+            <li class="nav-item" role="presentation">
+                <button class="nav-link active" id="pills-ips-tab" data-bs-toggle="pill" data-bs-target="#pills-ips" type="button" role="tab" aria-controls="pills-ips" aria-selected="true">IP List</button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="pills-ports-tab" data-bs-toggle="pill" data-bs-target="#pills-ports" type="button" role="tab" aria-controls="pills-ports" aria-selected="false">Ports View</button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="pills-vulnerabilities-tab" data-bs-toggle="pill" data-bs-target="#pills-vulnerabilities" type="button" role="tab" aria-controls="pills-vulnerabilities" aria-selected="false">Vulnerabilities</button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="pills-technologies-tab" data-bs-toggle="pill" data-bs-target="#pills-technologies" type="button" role="tab" aria-controls="pills-technologies" aria-selected="false">Technologies</button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="pills-chart-tab" data-bs-toggle="pill" data-bs-target="#pills-chart" type="button" role="tab" aria-controls="pills-chart" aria-selected="false">Charts</button>
+            </li>
+        </ul>
+        
+        <!-- Tab Content -->
+        <div class="tab-content" id="pills-tabContent">
+            <!-- IP List View -->
+            <div class="tab-pane fade show active" id="pills-ips" role="tabpanel" aria-labelledby="pills-ips-tab">
+                <div class="card">
+                    <div class="card-header">
+                        IP Addresses & Domains
+                    </div>
+                    <div class="card-body">
+                        <div id="ip-loader" class="loader"></div>
+                        <div id="ip-table-container" style="display: none;">
+                            <table id="ip-table" class="table table-striped table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th>IP Address</th>
+                                        <th>Domains</th>
+                                        <th>Open Ports</th>
+                                        <th>Vulnerabilities</th>
+                                        <th>Severity</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="ip-table-body">
+                                    <!-- Will be populated dynamically -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Ports View -->
+            <div class="tab-pane fade" id="pills-ports" role="tabpanel" aria-labelledby="pills-ports-tab">
+                <div class="card">
+                    <div class="card-header">
+                        Open Ports & Services
+                    </div>
+                    <div class="card-body">
+                        <div id="ports-loader" class="loader"></div>
+                        <div id="ports-container" style="display: none;">
+                            <table id="ports-table" class="table table-striped table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th>Port</th>
+                                        <th>Service</th>
+                                        <th>IP Count</th>
+                                        <th>Version Distribution</th>
+                                        <th>Vulnerabilities</th>
+                                        <th>Top Severity</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="ports-table-body">
+                                    <!-- Will be populated dynamically -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Vulnerabilities View -->
+            <div class="tab-pane fade" id="pills-vulnerabilities" role="tabpanel" aria-labelledby="pills-vulnerabilities-tab">
+                <div class="card">
+                    <div class="card-header">
+                        Vulnerability List
+                    </div>
+                    <div class="card-body">
+                        <div id="vuln-loader" class="loader"></div>
+                        <div id="vuln-container" style="display: none;">
+                            <table id="vuln-table" class="table table-striped table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th>CVE ID</th>
+                                        <th>Severity</th>
+                                        <th>Affected Services</th>
+                                        <th>IP Count</th>
+                                        <th>Description</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="vuln-table-body">
+                                    <!-- Will be populated dynamically -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Technologies View -->
+            <div class="tab-pane fade" id="pills-technologies" role="tabpanel" aria-labelledby="pills-technologies-tab">
+                <div class="card">
+                    <div class="card-header">
+                        Technologies & Frameworks Detected
+                    </div>
+                    <div class="card-body">
+                        <div id="tech-loader" class="loader"></div>
+                        <div id="tech-container" style="display: none;">
+                            <table id="tech-table" class="table table-striped table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th>Technology</th>
+                                        <th>Category</th>
+                                        <th>Domains Count</th>
+                                        <th>Version Distribution</th>
+                                        <th>Confidence</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="tech-table-body">
+                                    <!-- Will be populated dynamically -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Chart View -->
+            <div class="tab-pane fade" id="pills-chart" role="tabpanel" aria-labelledby="pills-chart-tab">
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="card">
+                            <div class="card-header">
+                                Port Distribution
+                            </div>
+                            <div class="card-body">
+                                <canvas id="portDistributionChart"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="card">
+                            <div class="card-header">
+                                Vulnerability Severity Distribution
+                            </div>
+                            <div class="card-body">
+                                <canvas id="vulnSeverityChart"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row mt-4">
+                    <div class="col-md-6">
+                        <div class="card">
+                            <div class="card-header">
+                                Top Vulnerable Services
+                            </div>
+                            <div class="card-body">
+                                <canvas id="vulnServicesChart"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="card">
+                            <div class="card-header">
+                                Technology Distribution
+                            </div>
+                            <div class="card-body">
+                                <canvas id="techDistributionChart"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- IP Details Modal -->
+        <div class="modal fade" id="ipDetailsModal" tabindex="-1" aria-labelledby="ipDetailsModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-xl">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="ipDetailsModalLabel">IP Details</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body" id="ipDetailsModalBody">
+                        <!-- Content will be populated dynamically -->
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Vulnerability Details Modal -->
+        <div class="modal fade" id="vulnDetailsModal" tabindex="-1" aria-labelledby="vulnDetailsModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="vulnDetailsModalLabel">Vulnerability Details</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body" id="vulnDetailsModalBody">
+                        <!-- Content will be populated dynamically -->
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.3.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.1/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.1/js/dataTables.bootstrap5.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="/static/js/portscan_visualization.js"></script>
+</body>
+</html> 

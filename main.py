@@ -34,6 +34,10 @@ def certificate_visualization():
 def domain_lease_visualization():
     return render_template("domain_lease_visualization.html")
 
+@app.route("/web-technologies-visualization")
+def web_technologies_visualization():
+    return render_template("web_technologies_visualization.html")
+
 @app.route("/api/domains")
 def get_domains():
     try:
@@ -76,6 +80,17 @@ def get_domain_lease():
         return jsonify(domain_lease_data)
     except Exception as e:
         app.logger.error(f"Error loading domain lease data: {str(e)}")
+        return jsonify({"error": str(e)}), 500
+
+@app.route("/api/web_technologies")
+def get_web_technologies():
+    try:
+        with open("foundData/web_technologies.json", "r") as f:
+            web_technologies_data = json.load(f)
+        app.logger.info(f"Loaded {len(web_technologies_data)} domains with web technologies")
+        return jsonify(web_technologies_data)
+    except Exception as e:
+        app.logger.error(f"Error loading web technologies data: {str(e)}")
         return jsonify({"error": str(e)}), 500
 
 if __name__ == "__main__":
