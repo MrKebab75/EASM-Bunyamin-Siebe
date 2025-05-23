@@ -979,19 +979,48 @@ def detect_and_save_technologies(domains, output_file, max_domains=None, verbose
 def main():
     # Set up argument parser
     parser = argparse.ArgumentParser(description='Web Technology Detection')
-    parser.add_argument('--input', help='Input file containing domains (one per line)')
+    parser.add_argument('--input', help='Input file containing domains (one per line or JSON)')
+    parser.add_argument('--output-dir', help='Output directory for results')
     args = parser.parse_args()
     
     # Define paths
     script_dir = os.path.dirname(os.path.abspath(__file__))
     base_dir = os.path.dirname(script_dir)
     
+    # Set output directory
+    if args.output_dir:
+        output_dir = args.output_dir
+    else:
+        output_dir = os.path.join(base_dir, "foundData")
+    
     # Load domains from input file
     if args.input:
         print(f"[*] Reading domains from {args.input}")
         try:
             with open(args.input, 'r') as f:
-                domains = [line.strip() for line in f if line.strip()]
+                content = f.read()
+                try:
+                    # Try to parse as JSON first
+                    data = json.loads(content)
+                    domains = []
+                    for item in data:
+                        if isinstance(item, dict):
+                            # Add main domain if present
+                            if 'domain' in item and item['domain'] and item['domain'] != "No names were discovered":
+                                domains.append(item['domain'])
+                            # Add subdomains if present
+                            if 'subdomains' in item and isinstance(item['subdomains'], list):
+                                for subdomain in item['subdomains']:
+                                    if isinstance(subdomain, dict) and 'name' in subdomain:
+                                        domains.append(subdomain['name'])
+                            # Add IP if present
+                            elif 'ip' in item:
+                                domains.append(item['ip'])
+                        elif isinstance(item, str):
+                            domains.append(item)
+                except json.JSONDecodeError:
+                    # If not JSON, treat as plain text
+                    domains = [line.strip() for line in content.splitlines() if line.strip()]
         except Exception as e:
             print(f"[!] Error reading input file: {e}")
             sys.exit(1)
@@ -1055,7 +1084,7 @@ def main():
         print(f"[+] Completed domain {i}/{len(domains)}: {domain}")
         
         # Save results after each domain to prevent data loss
-        output_file = os.path.join(base_dir, "foundData", "web_technologies.json")
+        output_file = os.path.join(output_dir, "web_technologies.json")
         try:
             with open(output_file, 'w') as f:
                 json.dump(results, f, indent=2)

@@ -1,0 +1,272 @@
+Starting complete_scan scan...
+[*] Starting CompleteSecurityScan.py
+[*] Arguments parsed:
+    Input file: /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/uploads/temp_domains.txt
+    Output directory: foundData
+[*] Reading domains from /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/uploads/temp_domains.txt
+[+] Successfully read input file
+[+] Found 1 domains to scan
+[+] Created scan directory: foundData/scan_craftsportswear.com_20250524_003941
+[+] Results will be saved in: foundData/scan_craftsportswear.com_20250524_003941
+[+] Total number of scans to run: 6
+
+[*] Starting scan 1/6: subdom.py
+
+[*] Running subdom.py...
+[*] Full script path: Scripts/subdom.py
+[*] Input file: /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/uploads/temp_domains.txt
+[*] Output directory: foundData/scan_craftsportswear.com_20250524_003941
+[+] Created/verified scan directory: /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/foundData/scan_craftsportswear.com_20250524_003941
+[*] Creating symbolic link from /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/foundData/scan_craftsportswear.com_20250524_003941/foundData to /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/foundData/scan_craftsportswear.com_20250524_003941
+[+] Created symbolic link from /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/foundData/scan_craftsportswear.com_20250524_003941/foundData to /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/foundData/scan_craftsportswear.com_20250524_003941
+[*] Executing command: python3 -u /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/Scripts/subdom.py --input /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/uploads/temp_domains.txt --output-dir /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/foundData/scan_craftsportswear.com_20250524_003941
+[*] Changed working directory to: /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/Scripts
+[*] Process started with PID: 283137
+[*] Using output directory: /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/foundData/scan_craftsportswear.com_20250524_003941
+[+] Loading domains from /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/uploads/temp_domains.txt
+[+] Loaded 1 unique domains from input.
+
+=== Processing domain 1/1: craftsportswear.com ===
+[+] Pinging domain: craftsportswear.com
+[+] Running Amass for craftsportswear.com
+[+] Running Subfinder for craftsportswear.com
+[+] Found 29 unique subdomains for craftsportswear.com.
+[+] Resolving IPs for 29 subdomains...
+[+] IP resolution complete.
+
+[+] All results saved to: /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/foundData/scan_craftsportswear.com_20250524_003941/all_subdomains.json
+
+[+] All domains processed successfully!
+[*] Process completed with return code: 0
+[*] Changed back to original directory: /home/s141422/SecurityProject/EASM-Bunyamin-Siebe
+[*] Removing symbolic link: /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/foundData/scan_craftsportswear.com_20250524_003941/foundData
+[+] Removed symbolic link
+
+[*] Starting scan 2/6: Certificaat.py
+
+[*] Running Certificaat.py...
+[*] Full script path: Scripts/Certificaat.py
+[*] Input file: foundData/scan_craftsportswear.com_20250524_003941/all_subdomains.json
+[*] Output directory: foundData/scan_craftsportswear.com_20250524_003941
+[*] Executing command: python3 -u /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/Scripts/Certificaat.py --input /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/foundData/scan_craftsportswear.com_20250524_003941/all_subdomains.json --output-dir /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/foundData/scan_craftsportswear.com_20250524_003941
+[*] Changed working directory to: /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/Scripts
+[*] Process started with PID: 283803
+Reading domains from /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/foundData/scan_craftsportswear.com_20250524_003941/all_subdomains.json
+Found 30 domains to check
+[1/30] Checking certificate for domain: craftsportswear.com...
+- Status: valid, expires in 140 days
+[2/30] Checking certificate for domain: No names were discovered...
+- Status: error: dns_error
+[3/30] Checking certificate for domain: analytics.craftsportswear.com...
+- Status: error: ssl_error
+[4/30] Checking certificate for domain: analytics2.craftsportswear.com...
+- Status: valid, expires in 31 days
+[5/30] Checking certificate for domain: b2b-acc.craftsportswear.com...
+- Status: valid, expires in 46 days
+[6/30] Checking certificate for domain: b2b-test.craftsportswear.com...
+- Status: error: ssl_error
+[7/30] Checking certificate for domain: b2b.craftsportswear.com...
+- Status: valid, expires in 46 days
+[8/30] Checking certificate for domain: beta.craftsportswear.com...
+- Status: error: dns_error
+[9/30] Checking certificate for domain: generateposter.craftsportswear.com...
+- Status: error: dns_error
+[10/30] Checking certificate for domain: measure.craftsportswear.com...
+- Status: error: ssl_error
+[11/30] Checking certificate for domain: nycstoplight.craftsportswear.com...
+- Status: valid, expires in 57 days
+[12/30] Checking certificate for domain: plm-acc.craftsportswear.com...
+- Status: valid, expires in 46 days
+[13/30] Checking certificate for domain: plm-test.craftsportswear.com...
+- Status: error: ssl_error
+[14/30] Checking certificate for domain: plm.craftsportswear.com...
+- Status: valid, expires in 46 days
+[15/30] Checking certificate for domain: recentia.craftsportswear.com...
+- Status: valid, expires in 15 days (EXPIRING SOON)
+[16/30] Checking certificate for domain: social-run-idre.craftsportswear.com...
+- Status: valid, expires in 59 days
+[17/30] Checking certificate for domain: social-run.craftsportswear.com...
+- Status: valid, expires in 81 days
+[18/30] Checking certificate for domain: thebrand.craftsportswear.com...
+- Status: valid, expires in 81 days
+[19/30] Checking certificate for domain: thehub.craftsportswear.com...
+- Status: valid, expires in 140 days
+[20/30] Checking certificate for domain: ww.craftsportswear.com...
+- Status: error: dns_error
+[21/30] Checking certificate for domain: www.b2b-acc.craftsportswear.com...
+- Status: error: dns_error
+[22/30] Checking certificate for domain: www.b2b-test.craftsportswear.com...
+- Status: error: dns_error
+[23/30] Checking certificate for domain: www.b2b.craftsportswear.com...
+- Status: error: dns_error
+[24/30] Checking certificate for domain: www.craftsportswear.com...
+- Status: valid, expires in 140 days
+[25/30] Checking certificate for domain: www.plm-acc.craftsportswear.com...
+- Status: error: dns_error
+[26/30] Checking certificate for domain: www.plm-test.craftsportswear.com...
+- Status: error: dns_error
+[27/30] Checking certificate for domain: www.plm.craftsportswear.com...
+- Status: error: dns_error
+[28/30] Checking certificate for domain: www.thebrand.craftsportswear.com...
+- Status: error: dns_error
+[29/30] Checking certificate for domain: www.www2.craftsportswear.com...
+- Status: error: dns_error
+[30/30] Checking certificate for domain: www2.craftsportswear.com...
+- Status: error: dns_error
+
+Certificate information for 30 domains saved to /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/foundData/scan_craftsportswear.com_20250524_003941/certificates.json
+[*] Process completed with return code: 0
+[*] Changed back to original directory: /home/s141422/SecurityProject/EASM-Bunyamin-Siebe
+
+[*] Starting scan 3/6: DetectWebTechnologies.py
+
+[*] Running DetectWebTechnologies.py...
+[*] Full script path: Scripts/DetectWebTechnologies.py
+[*] Input file: foundData/scan_craftsportswear.com_20250524_003941/all_subdomains.json
+[*] Output directory: foundData/scan_craftsportswear.com_20250524_003941
+[*] Executing command: python3 -u /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/Scripts/DetectWebTechnologies.py --input /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/foundData/scan_craftsportswear.com_20250524_003941/all_subdomains.json
+[*] Changed working directory to: /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/Scripts
+[*] Process started with PID: 283958
+[+] webtech module found. Web technology detection is enabled.
+[*] Reading domains from /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/foundData/scan_craftsportswear.com_20250524_003941/all_subdomains.json
+[+] Found 1 unique domains
+
+[*] Processing domain 1/1: craftsportswear.com
+[*] Querying WhatRuns website for craftsportswear.com...
+[*] Sending request to WhatRuns website...
+[*] Received response, processing data...
+[+] Successfully parsed WhatRuns data
+[+] WhatRuns detected: Modernizr (Javascript Frameworks)
+[+] WhatRuns detected: RequireJS (Javascript Frameworks)
+[+] WhatRuns detected: jQuery (Javascript Frameworks)
+[+] WhatRuns detected: IIS 8.5 (Web Server)
+[+] WhatRuns detected: ASP.NET 4.0.30319 (Programming Language)
+[+] WhatRuns detected: Windows Server (Operating System)
+[+] WhatRuns detected: Incapsula (CDN)
+[+] WhatRuns detected: Google Tag Manager (Tag Managers)
+[+] WhatRuns found 8 technologies (2 with version info)
+[*] Detecting web technologies on https://craftsportswear.com
+[+] Detected from headers: Vercel Unknown
+[+] Detected technology: Next.js Unknown
+[+] Found 2 technologies on https://craftsportswear.com:
+- Vercel Unknown (Web Server)
+- Next.js Unknown (Web Framework)
+[*] Detecting web technologies on http://craftsportswear.com
+[+] Detected from headers: Vercel Unknown
+[+] Detected technology: Next.js Unknown
+[+] Found 2 technologies on http://craftsportswear.com:
+- Vercel Unknown (Web Server)
+- Next.js Unknown (Web Framework)
+[+] Completed domain 1/1: craftsportswear.com
+[+] Results saved to /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/foundData/web_technologies.json
+
+[+] Scan complete! Processed 1 domains
+[+] Final results saved to /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/foundData/web_technologies.json
+[*] Process completed with return code: 0
+[*] Changed back to original directory: /home/s141422/SecurityProject/EASM-Bunyamin-Siebe
+
+[*] Starting scan 4/6: Domeingeldigheid.py
+
+[*] Running Domeingeldigheid.py...
+[*] Full script path: Scripts/Domeingeldigheid.py
+[*] Input file: foundData/scan_craftsportswear.com_20250524_003941/all_subdomains.json
+[*] Output directory: foundData/scan_craftsportswear.com_20250524_003941
+[*] Executing command: python3 -u /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/Scripts/Domeingeldigheid.py --input /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/foundData/scan_craftsportswear.com_20250524_003941/all_subdomains.json --output-dir /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/foundData/scan_craftsportswear.com_20250524_003941
+[*] Changed working directory to: /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/Scripts
+[*] Process started with PID: 283980
+Error: usage: Domeingeldigheid.py [-h] [--input INPUT]
+Domeingeldigheid.py: error: unrecognized arguments: --output-dir /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/foundData/scan_craftsportswear.com_20250524_003941
+
+[*] Process completed with return code: 2
+[*] Changed back to original directory: /home/s141422/SecurityProject/EASM-Bunyamin-Siebe
+[!] Warning: Domeingeldigheid.py did not complete successfully
+
+[*] Starting scan 5/6: EnhancedCVEScanner.py
+
+[*] Running EnhancedCVEScanner.py...
+[*] Full script path: Scripts/EnhancedCVEScanner.py
+[*] Input file: foundData/scan_craftsportswear.com_20250524_003941/all_subdomains.json
+[*] Output directory: foundData/scan_craftsportswear.com_20250524_003941
+[*] Executing command: python3 -u /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/Scripts/EnhancedCVEScanner.py --input /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/foundData/scan_craftsportswear.com_20250524_003941/all_subdomains.json --output-dir /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/foundData/scan_craftsportswear.com_20250524_003941
+[*] Changed working directory to: /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/Scripts
+[*] Process started with PID: 284007
+Error: usage: EnhancedCVEScanner.py [-h] [--input-json INPUT_JSON] [--input INPUT]
+                             [--output-json OUTPUT_JSON]
+                             [--output-report OUTPUT_REPORT] [--ports PORTS]
+                             [--discover-ports] [--max-targets MAX_TARGETS]
+                             [--verbose] [--skip-ping]
+EnhancedCVEScanner.py: error: unrecognized arguments: --output-dir /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/foundData/scan_craftsportswear.com_20250524_003941
+
+[*] Process completed with return code: 2
+[*] Changed back to original directory: /home/s141422/SecurityProject/EASM-Bunyamin-Siebe
+[!] Warning: EnhancedCVEScanner.py did not complete successfully
+
+[*] Starting scan 6/6: Portscan.py
+
+[*] Running Portscan.py...
+[*] Full script path: Scripts/Portscan.py
+[*] Input file: foundData/scan_craftsportswear.com_20250524_003941/all_subdomains.json
+[*] Output directory: foundData/scan_craftsportswear.com_20250524_003941
+[*] Executing command: python3 -u /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/Scripts/Portscan.py --input /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/foundData/scan_craftsportswear.com_20250524_003941/all_subdomains.json --output-dir /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/foundData/scan_craftsportswear.com_20250524_003941
+[*] Changed working directory to: /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/Scripts
+[*] Process started with PID: 284008
+[*] Reading domains from /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/foundData/scan_craftsportswear.com_20250524_003941/all_subdomains.json
+[+] Found 47 unique domains
+[*] Checking which domains are reachable...
+[*] Testing domain 1/47: ] - Unreachable ✗
+[*] Testing domain 2/47: }, - Unreachable ✗
+[*] Testing domain 3/47: "ip": "51.158.128.80" - Unreachable ✗
+[*] Testing domain 4/47: "subdomain": "thehub.craftsportswear.com", - Unreachable ✗
+[*] Testing domain 5/47: "subdomain": "social-run.craftsportswear.com", - Unreachable ✗
+[*] Testing domain 6/47: "subdomain": "www.b2b-test.craftsportswear.com", - Unreachable ✗
+[*] Testing domain 7/47: "ip": "185.157.223.250" - Unreachable ✗
+[*] Testing domain 8/47: "subdomain": "b2b-test.craftsportswear.com", - Unreachable ✗
+[*] Testing domain 9/47: "ip": "216.239.36.21" - Unreachable ✗
+[*] Testing domain 10/47: "ip": "35.234.76.45" - Unreachable ✗
+[*] Testing domain 11/47: "subdomain": "www.thebrand.craftsportswear.com", - Unreachable ✗
+[*] Testing domain 12/47: "subdomain": "recentia.craftsportswear.com", - Unreachable ✗
+[*] Testing domain 13/47: "subdomain": "www.craftsportswear.com", - Unreachable ✗
+[*] Testing domain 14/47: "subdomain": "www.www2.craftsportswear.com", - Unreachable ✗
+[*] Testing domain 15/47: "ip": "83.143.189.118" - Unreachable ✗
+[*] Testing domain 16/47: "subdomain": "measure.craftsportswear.com", - Unreachable ✗
+[*] Testing domain 17/47: "subdomain": "www2.craftsportswear.com", - Unreachable ✗
+[*] Testing domain 18/47: "ip": "45.60.34.237" - Unreachable ✗
+[*] Testing domain 19/47: "domain": "craftsportswear.com", - Unreachable ✗
+[*] Testing domain 20/47: "subdomain": "analytics2.craftsportswear.com", - Unreachable ✗
+[*] Testing domain 21/47: "subdomain": "www.b2b-acc.craftsportswear.com", - Unreachable ✗
+[*] Testing domain 22/47: "subdomain": "b2b.craftsportswear.com", - Unreachable ✗
+[*] Testing domain 23/47: "subdomain": "generateposter.craftsportswear.com", - Unreachable ✗
+[*] Testing domain 24/47: "subdomain": "www.plm.craftsportswear.com", - Unreachable ✗
+[*] Testing domain 25/47: "subdomain": "b2b-acc.craftsportswear.com", - Unreachable ✗
+[*] Testing domain 26/47: "subdomain": "www.plm-test.craftsportswear.com", - Unreachable ✗
+[*] Testing domain 27/47: "subdomain": "www.b2b.craftsportswear.com", - Unreachable ✗
+[*] Testing domain 28/47: "subdomain": "No names were discovered", - Unreachable ✗
+[*] Testing domain 29/47: "subdomain": "social-run-idre.craftsportswear.com", - Unreachable ✗
+[*] Testing domain 30/47: "results": [ - Unreachable ✗
+[*] Testing domain 31/47: "subdomain": "beta.craftsportswear.com", - Unreachable ✗
+[*] Testing domain 32/47: "subdomains_found": 29, - Unreachable ✗
+[*] Testing domain 33/47: "subdomain": "analytics.craftsportswear.com", - Unreachable ✗
+[*] Testing domain 34/47: "subdomain": "nycstoplight.craftsportswear.com", - Unreachable ✗
+[*] Testing domain 35/47: "ip": "66.33.60.129" - Unreachable ✗
+[*] Testing domain 36/47: "subdomain": "thebrand.craftsportswear.com", - Unreachable ✗
+[*] Testing domain 37/47: "subdomain": "plm-acc.craftsportswear.com", - Unreachable ✗
+[*] Testing domain 38/47: "subdomain": "plm.craftsportswear.com", - Unreachable ✗
+[*] Testing domain 39/47: } - Unreachable ✗
+[*] Testing domain 40/47: "subdomain": "ww.craftsportswear.com", - Unreachable ✗
+[*] Testing domain 41/47: "subdomain": "plm-test.craftsportswear.com", - Unreachable ✗
+[*] Testing domain 42/47: [ - Unreachable ✗
+[*] Testing domain 43/47: "ip": "91.201.60.25" - Unreachable ✗
+[*] Testing domain 44/47: "ip": "216.239.34.21" - Unreachable ✗
+[*] Testing domain 45/47: "subdomain": "www.plm-acc.craftsportswear.com", - Unreachable ✗
+[*] Testing domain 46/47: "ip": null - Unreachable ✗
+[*] Testing domain 47/47: { - Unreachable ✗
+[+] 0 domains are reachable
+[+] 47 domains are unreachable
+[!] No reachable domains found
+[*] Process completed with return code: 1
+[*] Changed back to original directory: /home/s141422/SecurityProject/EASM-Bunyamin-Siebe
+[!] Warning: Portscan.py did not complete successfully
+
+[+] All scans completed!
+
+Scan completed.
