@@ -1,0 +1,736 @@
+Starting complete_scan scan...
+[*] Starting CompleteSecurityScan.py
+[*] Arguments parsed:
+    Input file: /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/uploads/temp_domains.txt
+    Output directory: foundData
+[*] Reading domains from /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/uploads/temp_domains.txt
+[+] Successfully read input file
+[+] Found 1 domains to scan
+[+] Created scan directory: foundData/scan_craftsportswear.com_20250524_011502
+[+] Results will be saved in: foundData/scan_craftsportswear.com_20250524_011502
+[+] Total number of scans to run: 6
+
+[*] Starting scan 1/6: subdom.py
+
+[*] Running subdom.py...
+[*] Full script path: Scripts/subdom.py
+[*] Input file: /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/uploads/temp_domains.txt
+[*] Output directory: foundData/scan_craftsportswear.com_20250524_011502
+[+] Created/verified scan directory: /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/foundData/scan_craftsportswear.com_20250524_011502
+[*] Creating symbolic link from /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/foundData/scan_craftsportswear.com_20250524_011502/foundData to /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/foundData/scan_craftsportswear.com_20250524_011502
+[+] Created symbolic link from /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/foundData/scan_craftsportswear.com_20250524_011502/foundData to /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/foundData/scan_craftsportswear.com_20250524_011502
+[*] Executing command: python3 -u /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/Scripts/subdom.py --input /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/uploads/temp_domains.txt --output-dir /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/foundData/scan_craftsportswear.com_20250524_011502
+[*] Changed working directory to: /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/Scripts
+[*] Process started with PID: 299656
+[*] Using output directory: /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/foundData/scan_craftsportswear.com_20250524_011502
+[+] Loading domains from /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/uploads/temp_domains.txt
+[+] Loaded 1 unique domains from input.
+
+=== Processing domain 1/1: craftsportswear.com ===
+[+] Pinging domain: craftsportswear.com
+[+] Running Amass for craftsportswear.com
+[+] Running Subfinder for craftsportswear.com
+[+] Found 29 unique subdomains for craftsportswear.com.
+[+] Resolving IPs for 29 subdomains...
+[+] IP resolution complete.
+
+[+] All results saved to: /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/foundData/scan_craftsportswear.com_20250524_011502/all_subdomains.json
+
+[+] All domains processed successfully!
+[*] Process completed with return code: 0
+[*] Changed back to original directory: /home/s141422/SecurityProject/EASM-Bunyamin-Siebe
+[*] Removing symbolic link: /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/foundData/scan_craftsportswear.com_20250524_011502/foundData
+[+] Removed symbolic link
+
+[*] Starting scan 2/6: Certificaat.py
+
+[*] Running Certificaat.py...
+[*] Full script path: Scripts/Certificaat.py
+[*] Input file: foundData/scan_craftsportswear.com_20250524_011502/all_subdomains.json
+[*] Output directory: foundData/scan_craftsportswear.com_20250524_011502
+[*] Executing command: python3 -u /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/Scripts/Certificaat.py --input /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/foundData/scan_craftsportswear.com_20250524_011502/all_subdomains.json --output-dir /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/foundData/scan_craftsportswear.com_20250524_011502
+[*] Changed working directory to: /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/Scripts
+[*] Process started with PID: 300899
+Reading domains from /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/foundData/scan_craftsportswear.com_20250524_011502/all_subdomains.json
+Found 30 domains to check
+[1/30] Checking certificate for domain: craftsportswear.com...
+- Status: valid, expires in 140 days
+[2/30] Checking certificate for domain: analytics.craftsportswear.com...
+- Status: error: ssl_error
+[3/30] Checking certificate for domain: analytics2.craftsportswear.com...
+- Status: valid, expires in 31 days
+[4/30] Checking certificate for domain: b2b-acc.craftsportswear.com...
+- Status: valid, expires in 46 days
+[5/30] Checking certificate for domain: b2b-test.craftsportswear.com...
+- Status: error: ssl_error
+[6/30] Checking certificate for domain: b2b.craftsportswear.com...
+- Status: valid, expires in 46 days
+[7/30] Checking certificate for domain: beta.craftsportswear.com...
+- Status: error: dns_error
+[8/30] Checking certificate for domain: craftsportswear.com...
+- Status: valid, expires in 140 days
+[9/30] Checking certificate for domain: generateposter.craftsportswear.com...
+- Status: error: dns_error
+[10/30] Checking certificate for domain: measure.craftsportswear.com...
+- Status: error: ssl_error
+[11/30] Checking certificate for domain: nycstoplight.craftsportswear.com...
+- Status: valid, expires in 57 days
+[12/30] Checking certificate for domain: plm-acc.craftsportswear.com...
+- Status: valid, expires in 46 days
+[13/30] Checking certificate for domain: plm-test.craftsportswear.com...
+- Status: error: ssl_error
+[14/30] Checking certificate for domain: plm.craftsportswear.com...
+- Status: valid, expires in 46 days
+[15/30] Checking certificate for domain: recentia.craftsportswear.com...
+- Status: valid, expires in 15 days (EXPIRING SOON)
+[16/30] Checking certificate for domain: social-run-idre.craftsportswear.com...
+- Status: valid, expires in 59 days
+[17/30] Checking certificate for domain: social-run.craftsportswear.com...
+- Status: valid, expires in 81 days
+[18/30] Checking certificate for domain: thebrand.craftsportswear.com...
+- Status: valid, expires in 81 days
+[19/30] Checking certificate for domain: thehub.craftsportswear.com...
+- Status: valid, expires in 140 days
+[20/30] Checking certificate for domain: ww.craftsportswear.com...
+- Status: error: dns_error
+[21/30] Checking certificate for domain: www.b2b-acc.craftsportswear.com...
+- Status: error: dns_error
+[22/30] Checking certificate for domain: www.b2b-test.craftsportswear.com...
+- Status: error: dns_error
+[23/30] Checking certificate for domain: www.b2b.craftsportswear.com...
+- Status: error: dns_error
+[24/30] Checking certificate for domain: www.craftsportswear.com...
+- Status: valid, expires in 140 days
+[25/30] Checking certificate for domain: www.plm-acc.craftsportswear.com...
+- Status: error: dns_error
+[26/30] Checking certificate for domain: www.plm-test.craftsportswear.com...
+- Status: error: dns_error
+[27/30] Checking certificate for domain: www.plm.craftsportswear.com...
+- Status: error: dns_error
+[28/30] Checking certificate for domain: www.thebrand.craftsportswear.com...
+- Status: error: dns_error
+[29/30] Checking certificate for domain: www.www2.craftsportswear.com...
+- Status: error: dns_error
+[30/30] Checking certificate for domain: www2.craftsportswear.com...
+- Status: error: dns_error
+
+Certificate information for 30 domains saved to /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/foundData/scan_craftsportswear.com_20250524_011502/certificates.json
+[*] Process completed with return code: 0
+[*] Changed back to original directory: /home/s141422/SecurityProject/EASM-Bunyamin-Siebe
+
+[*] Starting scan 3/6: DetectWebTechnologies.py
+
+[*] Running DetectWebTechnologies.py...
+[*] Full script path: Scripts/DetectWebTechnologies.py
+[*] Input file: foundData/scan_craftsportswear.com_20250524_011502/all_subdomains.json
+[*] Output directory: foundData/scan_craftsportswear.com_20250524_011502
+[*] Executing command: python3 -u /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/Scripts/DetectWebTechnologies.py --input /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/foundData/scan_craftsportswear.com_20250524_011502/all_subdomains.json --output-dir /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/foundData/scan_craftsportswear.com_20250524_011502
+[*] Changed working directory to: /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/Scripts
+[*] Process started with PID: 301069
+[+] webtech module found. Web technology detection is enabled.
+[*] Reading domains from /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/foundData/scan_craftsportswear.com_20250524_011502/all_subdomains.json
+[+] Found 29 unique subdomains
+
+[*] Processing subdomain 1/29: analytics.craftsportswear.com
+[*] Querying WhatRuns website for analytics.craftsportswear.com...
+[*] Sending request to WhatRuns website...
+[*] Received response, processing data...
+[!] Error parsing WhatRuns data: Expecting property name enclosed in double quotes: line 1 column 2 (char 1)
+Cleaned JS string:
+{var m=s[v];if("false"!=m.enabled){var u="https://www.whatruns.com/images/icons/"+m.icon;if(void 0===m.parentElement){void 0!==m.website&&m.website;void 0!==m.siteListUrl&&m.siteListUrl;var f=m.name+" ";void 0!==m.version&&(f+=m.version),d=$("<div>",{"class":"current-tech-info"}).append($("<img>",{"class":"icon","src":u})).append($("<div>",{"class":"tech-name"}).text(f))}else void 0!==m.theme&&(i+=t(m.name)+", "),void 0!==m.plugin&&(c+=t(m.name)+", ");$(a).append($(d))}else 1==p&&$(a).find("div[data-name=""+e+""]").remove()}
+[!] Could not find technologies data in WhatRuns response
+[*] Detecting web technologies on https://analytics.craftsportswear.com
+[!] Error making request to https://analytics.craftsportswear.com: HTTPSConnectionPool(host='analytics.craftsportswear.com', port=443): Max retries exceeded with url: / (Caused by SSLError(SSLEOFError(8, '[SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1000)')))
+[*] Detecting web technologies on http://analytics.craftsportswear.com
+[+] Detected from headers: ghs Unknown
+[+] Found 1 technologies on http://analytics.craftsportswear.com:
+- ghs Unknown (Web Server)
+[+] Completed subdomain 1/29: analytics.craftsportswear.com
+[+] Results saved to /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/foundData/scan_craftsportswear.com_20250524_011502/web_technologies.json
+[*] Processing subdomain 2/29: analytics2.craftsportswear.com
+[*] Querying WhatRuns website for analytics2.craftsportswear.com...
+[*] Sending request to WhatRuns website...
+[*] Received response, processing data...
+[!] Error parsing WhatRuns data: Expecting property name enclosed in double quotes: line 1 column 2 (char 1)
+Cleaned JS string:
+{var m=s[v];if("false"!=m.enabled){var u="https://www.whatruns.com/images/icons/"+m.icon;if(void 0===m.parentElement){void 0!==m.website&&m.website;void 0!==m.siteListUrl&&m.siteListUrl;var f=m.name+" ";void 0!==m.version&&(f+=m.version),d=$("<div>",{"class":"current-tech-info"}).append($("<img>",{"class":"icon","src":u})).append($("<div>",{"class":"tech-name"}).text(f))}else void 0!==m.theme&&(i+=t(m.name)+", "),void 0!==m.plugin&&(c+=t(m.name)+", ");$(a).append($(d))}else 1==p&&$(a).find("div[data-name=""+e+""]").remove()}
+[!] Could not find technologies data in WhatRuns response
+[*] Detecting web technologies on https://analytics2.craftsportswear.com
+[!] Error detecting web technologies on https://analytics2.craftsportswear.com: https://analytics2.craftsportswear.com response use Content-Type "None" but "text/html" is needed
+[*] Detecting web technologies on http://analytics2.craftsportswear.com
+[!] Error detecting web technologies on http://analytics2.craftsportswear.com: http://analytics2.craftsportswear.com response use Content-Type "None" but "text/html" is needed
+[+] Completed subdomain 2/29: analytics2.craftsportswear.com
+[+] Results saved to /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/foundData/scan_craftsportswear.com_20250524_011502/web_technologies.json
+[*] Processing subdomain 3/29: b2b-acc.craftsportswear.com
+[*] Querying WhatRuns website for b2b-acc.craftsportswear.com...
+[*] Sending request to WhatRuns website...
+[*] Received response, processing data...
+[!] Error parsing WhatRuns data: Expecting property name enclosed in double quotes: line 1 column 2 (char 1)
+Cleaned JS string:
+{var m=s[v];if("false"!=m.enabled){var u="https://www.whatruns.com/images/icons/"+m.icon;if(void 0===m.parentElement){void 0!==m.website&&m.website;void 0!==m.siteListUrl&&m.siteListUrl;var f=m.name+" ";void 0!==m.version&&(f+=m.version),d=$("<div>",{"class":"current-tech-info"}).append($("<img>",{"class":"icon","src":u})).append($("<div>",{"class":"tech-name"}).text(f))}else void 0!==m.theme&&(i+=t(m.name)+", "),void 0!==m.plugin&&(c+=t(m.name)+", ");$(a).append($(d))}else 1==p&&$(a).find("div[data-name=""+e+""]").remove()}
+[!] Could not find technologies data in WhatRuns response
+[*] Detecting web technologies on https://b2b-acc.craftsportswear.com
+[+] Detected from headers: nginx Unknown
+[+] Found 1 technologies on https://b2b-acc.craftsportswear.com:
+- nginx Unknown (Web Server)
+[+] Detected technology: Jquery Unknown
+[+] Detected technology: Cloudflare Unknown
+[+] Detected technology: Font awesome Unknown
+[*] Detecting web technologies on http://b2b-acc.craftsportswear.com
+[+] Detected from headers: nginx Unknown
+[+] Found 1 technologies on http://b2b-acc.craftsportswear.com:
+- nginx Unknown (Web Server)
+[+] Detected technology: Jquery Unknown
+[+] Detected technology: Cloudflare Unknown
+[+] Detected technology: Font awesome Unknown
+[+] Completed subdomain 3/29: b2b-acc.craftsportswear.com
+[+] Results saved to /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/foundData/scan_craftsportswear.com_20250524_011502/web_technologies.json
+[*] Processing subdomain 4/29: b2b-test.craftsportswear.com
+[*] Querying WhatRuns website for b2b-test.craftsportswear.com...
+[*] Sending request to WhatRuns website...
+[*] Received response, processing data...
+[!] Error parsing WhatRuns data: Expecting property name enclosed in double quotes: line 1 column 2 (char 1)
+Cleaned JS string:
+{var m=s[v];if("false"!=m.enabled){var u="https://www.whatruns.com/images/icons/"+m.icon;if(void 0===m.parentElement){void 0!==m.website&&m.website;void 0!==m.siteListUrl&&m.siteListUrl;var f=m.name+" ";void 0!==m.version&&(f+=m.version),d=$("<div>",{"class":"current-tech-info"}).append($("<img>",{"class":"icon","src":u})).append($("<div>",{"class":"tech-name"}).text(f))}else void 0!==m.theme&&(i+=t(m.name)+", "),void 0!==m.plugin&&(c+=t(m.name)+", ");$(a).append($(d))}else 1==p&&$(a).find("div[data-name=""+e+""]").remove()}
+[!] Could not find technologies data in WhatRuns response
+[*] Detecting web technologies on https://b2b-test.craftsportswear.com
+[!] Error making request to https://b2b-test.craftsportswear.com: HTTPSConnectionPool(host='b2b-test.craftsportswear.com', port=443): Max retries exceeded with url: / (Caused by SSLError(SSLError(1, '[SSL: TLSV1_UNRECOGNIZED_NAME] tlsv1 unrecognized name (_ssl.c:1000)')))
+[*] Detecting web technologies on http://b2b-test.craftsportswear.com
+[!] Error making request to http://b2b-test.craftsportswear.com: ('Connection aborted.', RemoteDisconnected('Remote end closed connection without response'))
+[+] Completed subdomain 4/29: b2b-test.craftsportswear.com
+[+] Results saved to /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/foundData/scan_craftsportswear.com_20250524_011502/web_technologies.json
+[*] Processing subdomain 5/29: b2b.craftsportswear.com
+[*] Querying WhatRuns website for b2b.craftsportswear.com...
+[*] Sending request to WhatRuns website...
+[*] Received response, processing data...
+[!] Error parsing WhatRuns data: Expecting property name enclosed in double quotes: line 1 column 2 (char 1)
+Cleaned JS string:
+{var m=s[v];if("false"!=m.enabled){var u="https://www.whatruns.com/images/icons/"+m.icon;if(void 0===m.parentElement){void 0!==m.website&&m.website;void 0!==m.siteListUrl&&m.siteListUrl;var f=m.name+" ";void 0!==m.version&&(f+=m.version),d=$("<div>",{"class":"current-tech-info"}).append($("<img>",{"class":"icon","src":u})).append($("<div>",{"class":"tech-name"}).text(f))}else void 0!==m.theme&&(i+=t(m.name)+", "),void 0!==m.plugin&&(c+=t(m.name)+", ");$(a).append($(d))}else 1==p&&$(a).find("div[data-name=""+e+""]").remove()}
+[!] Could not find technologies data in WhatRuns response
+[*] Detecting web technologies on https://b2b.craftsportswear.com
+[+] Detected from headers: nginx Unknown
+[+] Found 1 technologies on https://b2b.craftsportswear.com:
+- nginx Unknown (Web Server)
+[+] Detected technology: Jquery Unknown
+[+] Detected technology: Cloudflare Unknown
+[+] Detected technology: Font awesome Unknown
+[*] Detecting web technologies on http://b2b.craftsportswear.com
+[+] Detected from headers: nginx Unknown
+[+] Found 1 technologies on http://b2b.craftsportswear.com:
+- nginx Unknown (Web Server)
+[+] Detected technology: Jquery Unknown
+[+] Detected technology: Cloudflare Unknown
+[+] Detected technology: Font awesome Unknown
+[+] Completed subdomain 5/29: b2b.craftsportswear.com
+[+] Results saved to /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/foundData/scan_craftsportswear.com_20250524_011502/web_technologies.json
+[*] Processing subdomain 6/29: beta.craftsportswear.com
+[*] Querying WhatRuns website for beta.craftsportswear.com...
+[*] Sending request to WhatRuns website...
+[*] Received response, processing data...
+[!] Error parsing WhatRuns data: Expecting property name enclosed in double quotes: line 1 column 2 (char 1)
+Cleaned JS string:
+{var m=s[v];if("false"!=m.enabled){var u="https://www.whatruns.com/images/icons/"+m.icon;if(void 0===m.parentElement){void 0!==m.website&&m.website;void 0!==m.siteListUrl&&m.siteListUrl;var f=m.name+" ";void 0!==m.version&&(f+=m.version),d=$("<div>",{"class":"current-tech-info"}).append($("<img>",{"class":"icon","src":u})).append($("<div>",{"class":"tech-name"}).text(f))}else void 0!==m.theme&&(i+=t(m.name)+", "),void 0!==m.plugin&&(c+=t(m.name)+", ");$(a).append($(d))}else 1==p&&$(a).find("div[data-name=""+e+""]").remove()}
+[!] Could not find technologies data in WhatRuns response
+[*] Detecting web technologies on https://beta.craftsportswear.com
+[!] Error making request to https://beta.craftsportswear.com: HTTPSConnectionPool(host='beta.craftsportswear.com', port=443): Max retries exceeded with url: / (Caused by NameResolutionError("<urllib3.connection.HTTPSConnection object at 0x7f2f21c3f170>: Failed to resolve 'beta.craftsportswear.com' ([Errno -2] Name or service not known)"))
+[*] Detecting web technologies on http://beta.craftsportswear.com
+[!] Error making request to http://beta.craftsportswear.com: HTTPConnectionPool(host='beta.craftsportswear.com', port=80): Max retries exceeded with url: / (Caused by NameResolutionError("<urllib3.connection.HTTPConnection object at 0x7f2f21857140>: Failed to resolve 'beta.craftsportswear.com' ([Errno -2] Name or service not known)"))
+[+] Completed subdomain 6/29: beta.craftsportswear.com
+[+] Results saved to /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/foundData/scan_craftsportswear.com_20250524_011502/web_technologies.json
+[*] Processing subdomain 7/29: craftsportswear.com
+[*] Querying WhatRuns website for craftsportswear.com...
+[*] Sending request to WhatRuns website...
+[*] Received response, processing data...
+[+] Successfully parsed WhatRuns data
+[+] WhatRuns detected: Modernizr (Javascript Frameworks)
+[+] WhatRuns detected: RequireJS (Javascript Frameworks)
+[+] WhatRuns detected: jQuery (Javascript Frameworks)
+[+] WhatRuns detected: IIS 8.5 (Web Server)
+[+] WhatRuns detected: ASP.NET 4.0.30319 (Programming Language)
+[+] WhatRuns detected: Windows Server (Operating System)
+[+] WhatRuns detected: Incapsula (CDN)
+[+] WhatRuns detected: Google Tag Manager (Tag Managers)
+[+] WhatRuns found 8 technologies (2 with version info)
+[*] Detecting web technologies on https://craftsportswear.com
+[+] Detected from headers: Vercel Unknown
+[+] Detected technology: Next.js Unknown
+[+] Found 2 technologies on https://craftsportswear.com:
+- Vercel Unknown (Web Server)
+- Next.js Unknown (Web Framework)
+[*] Detecting web technologies on http://craftsportswear.com
+[+] Detected from headers: Vercel Unknown
+[+] Detected technology: Next.js Unknown
+[+] Found 2 technologies on http://craftsportswear.com:
+- Vercel Unknown (Web Server)
+- Next.js Unknown (Web Framework)
+[+] Completed subdomain 7/29: craftsportswear.com
+[+] Results saved to /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/foundData/scan_craftsportswear.com_20250524_011502/web_technologies.json
+[*] Processing subdomain 8/29: generateposter.craftsportswear.com
+[*] Querying WhatRuns website for generateposter.craftsportswear.com...
+[*] Sending request to WhatRuns website...
+[*] Received response, processing data...
+[!] Error parsing WhatRuns data: Expecting property name enclosed in double quotes: line 1 column 2 (char 1)
+Cleaned JS string:
+{var m=s[v];if("false"!=m.enabled){var u="https://www.whatruns.com/images/icons/"+m.icon;if(void 0===m.parentElement){void 0!==m.website&&m.website;void 0!==m.siteListUrl&&m.siteListUrl;var f=m.name+" ";void 0!==m.version&&(f+=m.version),d=$("<div>",{"class":"current-tech-info"}).append($("<img>",{"class":"icon","src":u})).append($("<div>",{"class":"tech-name"}).text(f))}else void 0!==m.theme&&(i+=t(m.name)+", "),void 0!==m.plugin&&(c+=t(m.name)+", ");$(a).append($(d))}else 1==p&&$(a).find("div[data-name=""+e+""]").remove()}
+[!] Could not find technologies data in WhatRuns response
+[*] Detecting web technologies on https://generateposter.craftsportswear.com
+[!] Error making request to https://generateposter.craftsportswear.com: HTTPSConnectionPool(host='generateposter.craftsportswear.com', port=443): Max retries exceeded with url: / (Caused by NameResolutionError("<urllib3.connection.HTTPSConnection object at 0x7f2f2200afc0>: Failed to resolve 'generateposter.craftsportswear.com' ([Errno -2] Name or service not known)"))
+[*] Detecting web technologies on http://generateposter.craftsportswear.com
+[!] Error making request to http://generateposter.craftsportswear.com: HTTPConnectionPool(host='generateposter.craftsportswear.com', port=80): Max retries exceeded with url: / (Caused by NameResolutionError("<urllib3.connection.HTTPConnection object at 0x7f2f21ae7110>: Failed to resolve 'generateposter.craftsportswear.com' ([Errno -2] Name or service not known)"))
+[+] Completed subdomain 8/29: generateposter.craftsportswear.com
+[+] Results saved to /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/foundData/scan_craftsportswear.com_20250524_011502/web_technologies.json
+[*] Processing subdomain 9/29: measure.craftsportswear.com
+[*] Querying WhatRuns website for measure.craftsportswear.com...
+[*] Sending request to WhatRuns website...
+[*] Received response, processing data...
+[!] Error parsing WhatRuns data: Expecting property name enclosed in double quotes: line 1 column 2 (char 1)
+Cleaned JS string:
+{var m=s[v];if("false"!=m.enabled){var u="https://www.whatruns.com/images/icons/"+m.icon;if(void 0===m.parentElement){void 0!==m.website&&m.website;void 0!==m.siteListUrl&&m.siteListUrl;var f=m.name+" ";void 0!==m.version&&(f+=m.version),d=$("<div>",{"class":"current-tech-info"}).append($("<img>",{"class":"icon","src":u})).append($("<div>",{"class":"tech-name"}).text(f))}else void 0!==m.theme&&(i+=t(m.name)+", "),void 0!==m.plugin&&(c+=t(m.name)+", ");$(a).append($(d))}else 1==p&&$(a).find("div[data-name=""+e+""]").remove()}
+[!] Could not find technologies data in WhatRuns response
+[*] Detecting web technologies on https://measure.craftsportswear.com
+[!] Error making request to https://measure.craftsportswear.com: HTTPSConnectionPool(host='measure.craftsportswear.com', port=443): Max retries exceeded with url: / (Caused by SSLError(SSLEOFError(8, '[SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1000)')))
+[*] Detecting web technologies on http://measure.craftsportswear.com
+[+] Detected from headers: ghs Unknown
+[+] Found 1 technologies on http://measure.craftsportswear.com:
+- ghs Unknown (Web Server)
+[+] Completed subdomain 9/29: measure.craftsportswear.com
+[+] Results saved to /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/foundData/scan_craftsportswear.com_20250524_011502/web_technologies.json
+[*] Processing subdomain 10/29: nycstoplight.craftsportswear.com
+[*] Querying WhatRuns website for nycstoplight.craftsportswear.com...
+[*] Sending request to WhatRuns website...
+[*] Received response, processing data...
+[!] Error parsing WhatRuns data: Expecting property name enclosed in double quotes: line 1 column 2 (char 1)
+Cleaned JS string:
+{var m=s[v];if("false"!=m.enabled){var u="https://www.whatruns.com/images/icons/"+m.icon;if(void 0===m.parentElement){void 0!==m.website&&m.website;void 0!==m.siteListUrl&&m.siteListUrl;var f=m.name+" ";void 0!==m.version&&(f+=m.version),d=$("<div>",{"class":"current-tech-info"}).append($("<img>",{"class":"icon","src":u})).append($("<div>",{"class":"tech-name"}).text(f))}else void 0!==m.theme&&(i+=t(m.name)+", "),void 0!==m.plugin&&(c+=t(m.name)+", ");$(a).append($(d))}else 1==p&&$(a).find("div[data-name=""+e+""]").remove()}
+[!] Could not find technologies data in WhatRuns response
+[*] Detecting web technologies on https://nycstoplight.craftsportswear.com
+[*] No technologies detected on https://nycstoplight.craftsportswear.com
+[*] Detecting web technologies on http://nycstoplight.craftsportswear.com
+[*] No technologies detected on http://nycstoplight.craftsportswear.com
+[+] Completed subdomain 10/29: nycstoplight.craftsportswear.com
+[+] Results saved to /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/foundData/scan_craftsportswear.com_20250524_011502/web_technologies.json
+[*] Processing subdomain 11/29: plm-acc.craftsportswear.com
+[*] Querying WhatRuns website for plm-acc.craftsportswear.com...
+[*] Sending request to WhatRuns website...
+[*] Received response, processing data...
+[!] Error parsing WhatRuns data: Expecting property name enclosed in double quotes: line 1 column 2 (char 1)
+Cleaned JS string:
+{var m=s[v];if("false"!=m.enabled){var u="https://www.whatruns.com/images/icons/"+m.icon;if(void 0===m.parentElement){void 0!==m.website&&m.website;void 0!==m.siteListUrl&&m.siteListUrl;var f=m.name+" ";void 0!==m.version&&(f+=m.version),d=$("<div>",{"class":"current-tech-info"}).append($("<img>",{"class":"icon","src":u})).append($("<div>",{"class":"tech-name"}).text(f))}else void 0!==m.theme&&(i+=t(m.name)+", "),void 0!==m.plugin&&(c+=t(m.name)+", ");$(a).append($(d))}else 1==p&&$(a).find("div[data-name=""+e+""]").remove()}
+[!] Could not find technologies data in WhatRuns response
+[*] Detecting web technologies on https://plm-acc.craftsportswear.com
+[+] Detected from headers: nginx Unknown
+[+] Found 1 technologies on https://plm-acc.craftsportswear.com:
+- nginx Unknown (Web Server)
+[+] Detected technology: Jquery Unknown
+[*] Detecting web technologies on http://plm-acc.craftsportswear.com
+[+] Detected from headers: nginx Unknown
+[+] Found 1 technologies on http://plm-acc.craftsportswear.com:
+- nginx Unknown (Web Server)
+[+] Detected technology: Jquery Unknown
+[+] Completed subdomain 11/29: plm-acc.craftsportswear.com
+[+] Results saved to /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/foundData/scan_craftsportswear.com_20250524_011502/web_technologies.json
+[*] Processing subdomain 12/29: plm-test.craftsportswear.com
+[*] Querying WhatRuns website for plm-test.craftsportswear.com...
+[*] Sending request to WhatRuns website...
+[*] Received response, processing data...
+[!] Error parsing WhatRuns data: Expecting property name enclosed in double quotes: line 1 column 2 (char 1)
+Cleaned JS string:
+{var m=s[v];if("false"!=m.enabled){var u="https://www.whatruns.com/images/icons/"+m.icon;if(void 0===m.parentElement){void 0!==m.website&&m.website;void 0!==m.siteListUrl&&m.siteListUrl;var f=m.name+" ";void 0!==m.version&&(f+=m.version),d=$("<div>",{"class":"current-tech-info"}).append($("<img>",{"class":"icon","src":u})).append($("<div>",{"class":"tech-name"}).text(f))}else void 0!==m.theme&&(i+=t(m.name)+", "),void 0!==m.plugin&&(c+=t(m.name)+", ");$(a).append($(d))}else 1==p&&$(a).find("div[data-name=""+e+""]").remove()}
+[!] Could not find technologies data in WhatRuns response
+[*] Detecting web technologies on https://plm-test.craftsportswear.com
+[!] Error making request to https://plm-test.craftsportswear.com: HTTPSConnectionPool(host='plm-test.craftsportswear.com', port=443): Max retries exceeded with url: / (Caused by SSLError(SSLError(1, '[SSL: TLSV1_UNRECOGNIZED_NAME] tlsv1 unrecognized name (_ssl.c:1000)')))
+[*] Detecting web technologies on http://plm-test.craftsportswear.com
+[!] Error making request to http://plm-test.craftsportswear.com: ('Connection aborted.', RemoteDisconnected('Remote end closed connection without response'))
+[+] Completed subdomain 12/29: plm-test.craftsportswear.com
+[+] Results saved to /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/foundData/scan_craftsportswear.com_20250524_011502/web_technologies.json
+[*] Processing subdomain 13/29: plm.craftsportswear.com
+[*] Querying WhatRuns website for plm.craftsportswear.com...
+[*] Sending request to WhatRuns website...
+[*] Received response, processing data...
+[!] Error parsing WhatRuns data: Expecting property name enclosed in double quotes: line 1 column 2 (char 1)
+Cleaned JS string:
+{var m=s[v];if("false"!=m.enabled){var u="https://www.whatruns.com/images/icons/"+m.icon;if(void 0===m.parentElement){void 0!==m.website&&m.website;void 0!==m.siteListUrl&&m.siteListUrl;var f=m.name+" ";void 0!==m.version&&(f+=m.version),d=$("<div>",{"class":"current-tech-info"}).append($("<img>",{"class":"icon","src":u})).append($("<div>",{"class":"tech-name"}).text(f))}else void 0!==m.theme&&(i+=t(m.name)+", "),void 0!==m.plugin&&(c+=t(m.name)+", ");$(a).append($(d))}else 1==p&&$(a).find("div[data-name=""+e+""]").remove()}
+[!] Could not find technologies data in WhatRuns response
+[*] Detecting web technologies on https://plm.craftsportswear.com
+[+] Detected from headers: nginx Unknown
+[+] Found 1 technologies on https://plm.craftsportswear.com:
+- nginx Unknown (Web Server)
+[+] Detected technology: Jquery Unknown
+[*] Detecting web technologies on http://plm.craftsportswear.com
+[+] Detected from headers: nginx Unknown
+[+] Found 1 technologies on http://plm.craftsportswear.com:
+- nginx Unknown (Web Server)
+[+] Detected technology: Jquery Unknown
+[+] Completed subdomain 13/29: plm.craftsportswear.com
+[+] Results saved to /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/foundData/scan_craftsportswear.com_20250524_011502/web_technologies.json
+[*] Processing subdomain 14/29: recentia.craftsportswear.com
+[*] Querying WhatRuns website for recentia.craftsportswear.com...
+[*] Sending request to WhatRuns website...
+[*] Received response, processing data...
+[!] Error parsing WhatRuns data: Expecting property name enclosed in double quotes: line 1 column 2 (char 1)
+Cleaned JS string:
+{var m=s[v];if("false"!=m.enabled){var u="https://www.whatruns.com/images/icons/"+m.icon;if(void 0===m.parentElement){void 0!==m.website&&m.website;void 0!==m.siteListUrl&&m.siteListUrl;var f=m.name+" ";void 0!==m.version&&(f+=m.version),d=$("<div>",{"class":"current-tech-info"}).append($("<img>",{"class":"icon","src":u})).append($("<div>",{"class":"tech-name"}).text(f))}else void 0!==m.theme&&(i+=t(m.name)+", "),void 0!==m.plugin&&(c+=t(m.name)+", ");$(a).append($(d))}else 1==p&&$(a).find("div[data-name=""+e+""]").remove()}
+[!] Could not find technologies data in WhatRuns response
+[*] Detecting web technologies on https://recentia.craftsportswear.com
+[+] Detected from headers: Vercel Unknown
+[+] Detected technology: Next.js Unknown
+[+] Found 2 technologies on https://recentia.craftsportswear.com:
+- Vercel Unknown (Web Server)
+- Next.js Unknown (Web Framework)
+[*] Detecting web technologies on http://recentia.craftsportswear.com
+[+] Detected from headers: Vercel Unknown
+[+] Detected technology: Next.js Unknown
+[+] Found 2 technologies on http://recentia.craftsportswear.com:
+- Vercel Unknown (Web Server)
+- Next.js Unknown (Web Framework)
+[+] Completed subdomain 14/29: recentia.craftsportswear.com
+[+] Results saved to /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/foundData/scan_craftsportswear.com_20250524_011502/web_technologies.json
+[*] Processing subdomain 15/29: social-run-idre.craftsportswear.com
+[*] Querying WhatRuns website for social-run-idre.craftsportswear.com...
+[*] Sending request to WhatRuns website...
+[*] Received response, processing data...
+[!] Error parsing WhatRuns data: Expecting property name enclosed in double quotes: line 1 column 2 (char 1)
+Cleaned JS string:
+{var m=s[v];if("false"!=m.enabled){var u="https://www.whatruns.com/images/icons/"+m.icon;if(void 0===m.parentElement){void 0!==m.website&&m.website;void 0!==m.siteListUrl&&m.siteListUrl;var f=m.name+" ";void 0!==m.version&&(f+=m.version),d=$("<div>",{"class":"current-tech-info"}).append($("<img>",{"class":"icon","src":u})).append($("<div>",{"class":"tech-name"}).text(f))}else void 0!==m.theme&&(i+=t(m.name)+", "),void 0!==m.plugin&&(c+=t(m.name)+", ");$(a).append($(d))}else 1==p&&$(a).find("div[data-name=""+e+""]").remove()}
+[!] Could not find technologies data in WhatRuns response
+[*] Detecting web technologies on https://social-run-idre.craftsportswear.com
+[+] Detected from headers: Vercel Unknown
+[+] Found 1 technologies on https://social-run-idre.craftsportswear.com:
+- Vercel Unknown (Web Server)
+[*] Detecting web technologies on http://social-run-idre.craftsportswear.com
+[+] Detected from headers: Vercel Unknown
+[+] Found 1 technologies on http://social-run-idre.craftsportswear.com:
+- Vercel Unknown (Web Server)
+[+] Completed subdomain 15/29: social-run-idre.craftsportswear.com
+[+] Results saved to /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/foundData/scan_craftsportswear.com_20250524_011502/web_technologies.json
+[*] Processing subdomain 16/29: social-run.craftsportswear.com
+[*] Querying WhatRuns website for social-run.craftsportswear.com...
+[*] Sending request to WhatRuns website...
+[*] Received response, processing data...
+[!] Error parsing WhatRuns data: Expecting property name enclosed in double quotes: line 1 column 2 (char 1)
+Cleaned JS string:
+{var m=s[v];if("false"!=m.enabled){var u="https://www.whatruns.com/images/icons/"+m.icon;if(void 0===m.parentElement){void 0!==m.website&&m.website;void 0!==m.siteListUrl&&m.siteListUrl;var f=m.name+" ";void 0!==m.version&&(f+=m.version),d=$("<div>",{"class":"current-tech-info"}).append($("<img>",{"class":"icon","src":u})).append($("<div>",{"class":"tech-name"}).text(f))}else void 0!==m.theme&&(i+=t(m.name)+", "),void 0!==m.plugin&&(c+=t(m.name)+", ");$(a).append($(d))}else 1==p&&$(a).find("div[data-name=""+e+""]").remove()}
+[!] Could not find technologies data in WhatRuns response
+[*] Detecting web technologies on https://social-run.craftsportswear.com
+[*] No technologies detected on https://social-run.craftsportswear.com
+[*] Detecting web technologies on http://social-run.craftsportswear.com
+[*] No technologies detected on http://social-run.craftsportswear.com
+[+] Completed subdomain 16/29: social-run.craftsportswear.com
+[+] Results saved to /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/foundData/scan_craftsportswear.com_20250524_011502/web_technologies.json
+[*] Processing subdomain 17/29: thebrand.craftsportswear.com
+[*] Querying WhatRuns website for thebrand.craftsportswear.com...
+[*] Sending request to WhatRuns website...
+[*] Received response, processing data...
+[!] Error parsing WhatRuns data: Expecting property name enclosed in double quotes: line 1 column 2 (char 1)
+Cleaned JS string:
+{var m=s[v];if("false"!=m.enabled){var u="https://www.whatruns.com/images/icons/"+m.icon;if(void 0===m.parentElement){void 0!==m.website&&m.website;void 0!==m.siteListUrl&&m.siteListUrl;var f=m.name+" ";void 0!==m.version&&(f+=m.version),d=$("<div>",{"class":"current-tech-info"}).append($("<img>",{"class":"icon","src":u})).append($("<div>",{"class":"tech-name"}).text(f))}else void 0!==m.theme&&(i+=t(m.name)+", "),void 0!==m.plugin&&(c+=t(m.name)+", ");$(a).append($(d))}else 1==p&&$(a).find("div[data-name=""+e+""]").remove()}
+[!] Could not find technologies data in WhatRuns response
+[*] Detecting web technologies on https://thebrand.craftsportswear.com
+[+] Detected from headers: LiteSpeed Unknown
+[+] Detected technology: PHP 7.3.33
+[+] Found 2 technologies on https://thebrand.craftsportswear.com:
+- LiteSpeed Unknown (Web Server)
+- PHP 7.3.33 (Web Framework)
+[*] Detecting web technologies on http://thebrand.craftsportswear.com
+[+] Detected from headers: LiteSpeed Unknown
+[+] Detected technology: PHP 7.3.33
+[+] Found 2 technologies on http://thebrand.craftsportswear.com:
+- LiteSpeed Unknown (Web Server)
+- PHP 7.3.33 (Web Framework)
+[+] Completed subdomain 17/29: thebrand.craftsportswear.com
+[+] Results saved to /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/foundData/scan_craftsportswear.com_20250524_011502/web_technologies.json
+[*] Processing subdomain 18/29: thehub.craftsportswear.com
+[*] Querying WhatRuns website for thehub.craftsportswear.com...
+[*] Sending request to WhatRuns website...
+[*] Received response, processing data...
+[!] Error parsing WhatRuns data: Expecting property name enclosed in double quotes: line 1 column 2 (char 1)
+Cleaned JS string:
+{var m=s[v];if("false"!=m.enabled){var u="https://www.whatruns.com/images/icons/"+m.icon;if(void 0===m.parentElement){void 0!==m.website&&m.website;void 0!==m.siteListUrl&&m.siteListUrl;var f=m.name+" ";void 0!==m.version&&(f+=m.version),d=$("<div>",{"class":"current-tech-info"}).append($("<img>",{"class":"icon","src":u})).append($("<div>",{"class":"tech-name"}).text(f))}else void 0!==m.theme&&(i+=t(m.name)+", "),void 0!==m.plugin&&(c+=t(m.name)+", ");$(a).append($(d))}else 1==p&&$(a).find("div[data-name=""+e+""]").remove()}
+[!] Could not find technologies data in WhatRuns response
+[*] Detecting web technologies on https://thehub.craftsportswear.com
+[+] Found 1 technologies on https://thehub.craftsportswear.com:
+- React Unknown (JavaScript Framework)
+[*] Detecting web technologies on http://thehub.craftsportswear.com
+[+] Found 1 technologies on http://thehub.craftsportswear.com:
+- React Unknown (JavaScript Framework)
+[+] Completed subdomain 18/29: thehub.craftsportswear.com
+[+] Results saved to /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/foundData/scan_craftsportswear.com_20250524_011502/web_technologies.json
+[*] Processing subdomain 19/29: ww.craftsportswear.com
+[*] Querying WhatRuns website for ww.craftsportswear.com...
+[*] Sending request to WhatRuns website...
+[*] Received response, processing data...
+[!] Error parsing WhatRuns data: Expecting property name enclosed in double quotes: line 1 column 2 (char 1)
+Cleaned JS string:
+{var m=s[v];if("false"!=m.enabled){var u="https://www.whatruns.com/images/icons/"+m.icon;if(void 0===m.parentElement){void 0!==m.website&&m.website;void 0!==m.siteListUrl&&m.siteListUrl;var f=m.name+" ";void 0!==m.version&&(f+=m.version),d=$("<div>",{"class":"current-tech-info"}).append($("<img>",{"class":"icon","src":u})).append($("<div>",{"class":"tech-name"}).text(f))}else void 0!==m.theme&&(i+=t(m.name)+", "),void 0!==m.plugin&&(c+=t(m.name)+", ");$(a).append($(d))}else 1==p&&$(a).find("div[data-name=""+e+""]").remove()}
+[!] Could not find technologies data in WhatRuns response
+[*] Detecting web technologies on https://ww.craftsportswear.com
+[!] Error making request to https://ww.craftsportswear.com: HTTPSConnectionPool(host='ww.craftsportswear.com', port=443): Max retries exceeded with url: / (Caused by NameResolutionError("<urllib3.connection.HTTPSConnection object at 0x7f2f21f7e6f0>: Failed to resolve 'ww.craftsportswear.com' ([Errno -2] Name or service not known)"))
+[*] Detecting web technologies on http://ww.craftsportswear.com
+[!] Error making request to http://ww.craftsportswear.com: HTTPConnectionPool(host='ww.craftsportswear.com', port=80): Max retries exceeded with url: / (Caused by NameResolutionError("<urllib3.connection.HTTPConnection object at 0x7f2f221b2f00>: Failed to resolve 'ww.craftsportswear.com' ([Errno -2] Name or service not known)"))
+[+] Completed subdomain 19/29: ww.craftsportswear.com
+[+] Results saved to /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/foundData/scan_craftsportswear.com_20250524_011502/web_technologies.json
+[*] Processing subdomain 20/29: www.b2b-acc.craftsportswear.com
+[*] Querying WhatRuns website for www.b2b-acc.craftsportswear.com...
+[*] Sending request to WhatRuns website...
+[*] Received response, processing data...
+[!] Error parsing WhatRuns data: Expecting property name enclosed in double quotes: line 1 column 2 (char 1)
+Cleaned JS string:
+{var m=s[v];if("false"!=m.enabled){var u="https://www.whatruns.com/images/icons/"+m.icon;if(void 0===m.parentElement){void 0!==m.website&&m.website;void 0!==m.siteListUrl&&m.siteListUrl;var f=m.name+" ";void 0!==m.version&&(f+=m.version),d=$("<div>",{"class":"current-tech-info"}).append($("<img>",{"class":"icon","src":u})).append($("<div>",{"class":"tech-name"}).text(f))}else void 0!==m.theme&&(i+=t(m.name)+", "),void 0!==m.plugin&&(c+=t(m.name)+", ");$(a).append($(d))}else 1==p&&$(a).find("div[data-name=""+e+""]").remove()}
+[!] Could not find technologies data in WhatRuns response
+[*] Detecting web technologies on https://www.b2b-acc.craftsportswear.com
+[!] Error making request to https://www.b2b-acc.craftsportswear.com: HTTPSConnectionPool(host='www.b2b-acc.craftsportswear.com', port=443): Max retries exceeded with url: / (Caused by NameResolutionError("<urllib3.connection.HTTPSConnection object at 0x7f2f21f7f950>: Failed to resolve 'www.b2b-acc.craftsportswear.com' ([Errno -2] Name or service not known)"))
+[*] Detecting web technologies on http://www.b2b-acc.craftsportswear.com
+[!] Error making request to http://www.b2b-acc.craftsportswear.com: HTTPConnectionPool(host='www.b2b-acc.craftsportswear.com', port=80): Max retries exceeded with url: / (Caused by NameResolutionError("<urllib3.connection.HTTPConnection object at 0x7f2f221b13a0>: Failed to resolve 'www.b2b-acc.craftsportswear.com' ([Errno -2] Name or service not known)"))
+[+] Completed subdomain 20/29: www.b2b-acc.craftsportswear.com
+[+] Results saved to /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/foundData/scan_craftsportswear.com_20250524_011502/web_technologies.json
+[*] Processing subdomain 21/29: www.b2b-test.craftsportswear.com
+[*] Querying WhatRuns website for www.b2b-test.craftsportswear.com...
+[*] Sending request to WhatRuns website...
+[*] Received response, processing data...
+[!] Error parsing WhatRuns data: Expecting property name enclosed in double quotes: line 1 column 2 (char 1)
+Cleaned JS string:
+{var m=s[v];if("false"!=m.enabled){var u="https://www.whatruns.com/images/icons/"+m.icon;if(void 0===m.parentElement){void 0!==m.website&&m.website;void 0!==m.siteListUrl&&m.siteListUrl;var f=m.name+" ";void 0!==m.version&&(f+=m.version),d=$("<div>",{"class":"current-tech-info"}).append($("<img>",{"class":"icon","src":u})).append($("<div>",{"class":"tech-name"}).text(f))}else void 0!==m.theme&&(i+=t(m.name)+", "),void 0!==m.plugin&&(c+=t(m.name)+", ");$(a).append($(d))}else 1==p&&$(a).find("div[data-name=""+e+""]").remove()}
+[!] Could not find technologies data in WhatRuns response
+[*] Detecting web technologies on https://www.b2b-test.craftsportswear.com
+[!] Error making request to https://www.b2b-test.craftsportswear.com: HTTPSConnectionPool(host='www.b2b-test.craftsportswear.com', port=443): Max retries exceeded with url: / (Caused by NameResolutionError("<urllib3.connection.HTTPSConnection object at 0x7f2f21f7d3a0>: Failed to resolve 'www.b2b-test.craftsportswear.com' ([Errno -2] Name or service not known)"))
+[*] Detecting web technologies on http://www.b2b-test.craftsportswear.com
+[!] Error making request to http://www.b2b-test.craftsportswear.com: HTTPConnectionPool(host='www.b2b-test.craftsportswear.com', port=80): Max retries exceeded with url: / (Caused by NameResolutionError("<urllib3.connection.HTTPConnection object at 0x7f2f21f7da60>: Failed to resolve 'www.b2b-test.craftsportswear.com' ([Errno -2] Name or service not known)"))
+[+] Completed subdomain 21/29: www.b2b-test.craftsportswear.com
+[+] Results saved to /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/foundData/scan_craftsportswear.com_20250524_011502/web_technologies.json
+[*] Processing subdomain 22/29: www.b2b.craftsportswear.com
+[*] Querying WhatRuns website for www.b2b.craftsportswear.com...
+[*] Sending request to WhatRuns website...
+[*] Received response, processing data...
+[!] Error parsing WhatRuns data: Expecting property name enclosed in double quotes: line 1 column 2 (char 1)
+Cleaned JS string:
+{var m=s[v];if("false"!=m.enabled){var u="https://www.whatruns.com/images/icons/"+m.icon;if(void 0===m.parentElement){void 0!==m.website&&m.website;void 0!==m.siteListUrl&&m.siteListUrl;var f=m.name+" ";void 0!==m.version&&(f+=m.version),d=$("<div>",{"class":"current-tech-info"}).append($("<img>",{"class":"icon","src":u})).append($("<div>",{"class":"tech-name"}).text(f))}else void 0!==m.theme&&(i+=t(m.name)+", "),void 0!==m.plugin&&(c+=t(m.name)+", ");$(a).append($(d))}else 1==p&&$(a).find("div[data-name=""+e+""]").remove()}
+[!] Could not find technologies data in WhatRuns response
+[*] Detecting web technologies on https://www.b2b.craftsportswear.com
+[!] Error making request to https://www.b2b.craftsportswear.com: HTTPSConnectionPool(host='www.b2b.craftsportswear.com', port=443): Max retries exceeded with url: / (Caused by NameResolutionError("<urllib3.connection.HTTPSConnection object at 0x7f2f21f7c860>: Failed to resolve 'www.b2b.craftsportswear.com' ([Errno -2] Name or service not known)"))
+[*] Detecting web technologies on http://www.b2b.craftsportswear.com
+[!] Error making request to http://www.b2b.craftsportswear.com: HTTPConnectionPool(host='www.b2b.craftsportswear.com', port=80): Max retries exceeded with url: / (Caused by NameResolutionError("<urllib3.connection.HTTPConnection object at 0x7f2f21f7e270>: Failed to resolve 'www.b2b.craftsportswear.com' ([Errno -2] Name or service not known)"))
+[+] Completed subdomain 22/29: www.b2b.craftsportswear.com
+[+] Results saved to /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/foundData/scan_craftsportswear.com_20250524_011502/web_technologies.json
+[*] Processing subdomain 23/29: www.craftsportswear.com
+[*] Querying WhatRuns website for www.craftsportswear.com...
+[*] Sending request to WhatRuns website...
+[*] Received response, processing data...
+[!] Error parsing WhatRuns data: Expecting property name enclosed in double quotes: line 1 column 2 (char 1)
+Cleaned JS string:
+{var m=s[v];if("false"!=m.enabled){var u="https://www.whatruns.com/images/icons/"+m.icon;if(void 0===m.parentElement){void 0!==m.website&&m.website;void 0!==m.siteListUrl&&m.siteListUrl;var f=m.name+" ";void 0!==m.version&&(f+=m.version),d=$("<div>",{"class":"current-tech-info"}).append($("<img>",{"class":"icon","src":u})).append($("<div>",{"class":"tech-name"}).text(f))}else void 0!==m.theme&&(i+=t(m.name)+", "),void 0!==m.plugin&&(c+=t(m.name)+", ");$(a).append($(d))}else 1==p&&$(a).find("div[data-name=""+e+""]").remove()}
+[!] Could not find technologies data in WhatRuns response
+[*] Detecting web technologies on https://www.craftsportswear.com
+[+] Detected from headers: Vercel Unknown
+[+] Detected technology: Next.js Unknown
+[+] Found 2 technologies on https://www.craftsportswear.com:
+- Vercel Unknown (Web Server)
+- Next.js Unknown (Web Framework)
+[*] Detecting web technologies on http://www.craftsportswear.com
+[+] Detected from headers: Vercel Unknown
+[+] Detected technology: Next.js Unknown
+[+] Found 2 technologies on http://www.craftsportswear.com:
+- Vercel Unknown (Web Server)
+- Next.js Unknown (Web Framework)
+[+] Completed subdomain 23/29: www.craftsportswear.com
+[+] Results saved to /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/foundData/scan_craftsportswear.com_20250524_011502/web_technologies.json
+[*] Processing subdomain 24/29: www.plm-acc.craftsportswear.com
+[*] Querying WhatRuns website for www.plm-acc.craftsportswear.com...
+[*] Sending request to WhatRuns website...
+[*] Received response, processing data...
+[!] Error parsing WhatRuns data: Expecting property name enclosed in double quotes: line 1 column 2 (char 1)
+Cleaned JS string:
+{var m=s[v];if("false"!=m.enabled){var u="https://www.whatruns.com/images/icons/"+m.icon;if(void 0===m.parentElement){void 0!==m.website&&m.website;void 0!==m.siteListUrl&&m.siteListUrl;var f=m.name+" ";void 0!==m.version&&(f+=m.version),d=$("<div>",{"class":"current-tech-info"}).append($("<img>",{"class":"icon","src":u})).append($("<div>",{"class":"tech-name"}).text(f))}else void 0!==m.theme&&(i+=t(m.name)+", "),void 0!==m.plugin&&(c+=t(m.name)+", ");$(a).append($(d))}else 1==p&&$(a).find("div[data-name=""+e+""]").remove()}
+[!] Could not find technologies data in WhatRuns response
+[*] Detecting web technologies on https://www.plm-acc.craftsportswear.com
+[!] Error making request to https://www.plm-acc.craftsportswear.com: HTTPSConnectionPool(host='www.plm-acc.craftsportswear.com', port=443): Max retries exceeded with url: / (Caused by NameResolutionError("<urllib3.connection.HTTPSConnection object at 0x7f2f21c93e00>: Failed to resolve 'www.plm-acc.craftsportswear.com' ([Errno -2] Name or service not known)"))
+[*] Detecting web technologies on http://www.plm-acc.craftsportswear.com
+[!] Error making request to http://www.plm-acc.craftsportswear.com: HTTPConnectionPool(host='www.plm-acc.craftsportswear.com', port=80): Max retries exceeded with url: / (Caused by NameResolutionError("<urllib3.connection.HTTPConnection object at 0x7f2f2213ef30>: Failed to resolve 'www.plm-acc.craftsportswear.com' ([Errno -2] Name or service not known)"))
+[+] Completed subdomain 24/29: www.plm-acc.craftsportswear.com
+[+] Results saved to /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/foundData/scan_craftsportswear.com_20250524_011502/web_technologies.json
+[*] Processing subdomain 25/29: www.plm-test.craftsportswear.com
+[*] Querying WhatRuns website for www.plm-test.craftsportswear.com...
+[*] Sending request to WhatRuns website...
+[*] Received response, processing data...
+[!] Error parsing WhatRuns data: Expecting property name enclosed in double quotes: line 1 column 2 (char 1)
+Cleaned JS string:
+{var m=s[v];if("false"!=m.enabled){var u="https://www.whatruns.com/images/icons/"+m.icon;if(void 0===m.parentElement){void 0!==m.website&&m.website;void 0!==m.siteListUrl&&m.siteListUrl;var f=m.name+" ";void 0!==m.version&&(f+=m.version),d=$("<div>",{"class":"current-tech-info"}).append($("<img>",{"class":"icon","src":u})).append($("<div>",{"class":"tech-name"}).text(f))}else void 0!==m.theme&&(i+=t(m.name)+", "),void 0!==m.plugin&&(c+=t(m.name)+", ");$(a).append($(d))}else 1==p&&$(a).find("div[data-name=""+e+""]").remove()}
+[!] Could not find technologies data in WhatRuns response
+[*] Detecting web technologies on https://www.plm-test.craftsportswear.com
+[!] Error making request to https://www.plm-test.craftsportswear.com: HTTPSConnectionPool(host='www.plm-test.craftsportswear.com', port=443): Max retries exceeded with url: / (Caused by NameResolutionError("<urllib3.connection.HTTPSConnection object at 0x7f2f21c92630>: Failed to resolve 'www.plm-test.craftsportswear.com' ([Errno -2] Name or service not known)"))
+[*] Detecting web technologies on http://www.plm-test.craftsportswear.com
+[!] Error making request to http://www.plm-test.craftsportswear.com: HTTPConnectionPool(host='www.plm-test.craftsportswear.com', port=80): Max retries exceeded with url: / (Caused by NameResolutionError("<urllib3.connection.HTTPConnection object at 0x7f2f2213c980>: Failed to resolve 'www.plm-test.craftsportswear.com' ([Errno -2] Name or service not known)"))
+[+] Completed subdomain 25/29: www.plm-test.craftsportswear.com
+[+] Results saved to /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/foundData/scan_craftsportswear.com_20250524_011502/web_technologies.json
+[*] Processing subdomain 26/29: www.plm.craftsportswear.com
+[*] Querying WhatRuns website for www.plm.craftsportswear.com...
+[*] Sending request to WhatRuns website...
+[*] Received response, processing data...
+[!] Error parsing WhatRuns data: Expecting property name enclosed in double quotes: line 1 column 2 (char 1)
+Cleaned JS string:
+{var m=s[v];if("false"!=m.enabled){var u="https://www.whatruns.com/images/icons/"+m.icon;if(void 0===m.parentElement){void 0!==m.website&&m.website;void 0!==m.siteListUrl&&m.siteListUrl;var f=m.name+" ";void 0!==m.version&&(f+=m.version),d=$("<div>",{"class":"current-tech-info"}).append($("<img>",{"class":"icon","src":u})).append($("<div>",{"class":"tech-name"}).text(f))}else void 0!==m.theme&&(i+=t(m.name)+", "),void 0!==m.plugin&&(c+=t(m.name)+", ");$(a).append($(d))}else 1==p&&$(a).find("div[data-name=""+e+""]").remove()}
+[!] Could not find technologies data in WhatRuns response
+[*] Detecting web technologies on https://www.plm.craftsportswear.com
+[!] Error making request to https://www.plm.craftsportswear.com: HTTPSConnectionPool(host='www.plm.craftsportswear.com', port=443): Max retries exceeded with url: / (Caused by NameResolutionError("<urllib3.connection.HTTPSConnection object at 0x7f2f21c934a0>: Failed to resolve 'www.plm.craftsportswear.com' ([Errno -2] Name or service not known)"))
+[*] Detecting web technologies on http://www.plm.craftsportswear.com
+[!] Error making request to http://www.plm.craftsportswear.com: HTTPConnectionPool(host='www.plm.craftsportswear.com', port=80): Max retries exceeded with url: / (Caused by NameResolutionError("<urllib3.connection.HTTPConnection object at 0x7f2f2213cc50>: Failed to resolve 'www.plm.craftsportswear.com' ([Errno -2] Name or service not known)"))
+[+] Completed subdomain 26/29: www.plm.craftsportswear.com
+[+] Results saved to /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/foundData/scan_craftsportswear.com_20250524_011502/web_technologies.json
+[*] Processing subdomain 27/29: www.thebrand.craftsportswear.com
+[*] Querying WhatRuns website for www.thebrand.craftsportswear.com...
+[*] Sending request to WhatRuns website...
+[*] Received response, processing data...
+[!] Error parsing WhatRuns data: Expecting property name enclosed in double quotes: line 1 column 2 (char 1)
+Cleaned JS string:
+{var m=s[v];if("false"!=m.enabled){var u="https://www.whatruns.com/images/icons/"+m.icon;if(void 0===m.parentElement){void 0!==m.website&&m.website;void 0!==m.siteListUrl&&m.siteListUrl;var f=m.name+" ";void 0!==m.version&&(f+=m.version),d=$("<div>",{"class":"current-tech-info"}).append($("<img>",{"class":"icon","src":u})).append($("<div>",{"class":"tech-name"}).text(f))}else void 0!==m.theme&&(i+=t(m.name)+", "),void 0!==m.plugin&&(c+=t(m.name)+", ");$(a).append($(d))}else 1==p&&$(a).find("div[data-name=""+e+""]").remove()}
+[!] Could not find technologies data in WhatRuns response
+[*] Detecting web technologies on https://www.thebrand.craftsportswear.com
+[!] Error making request to https://www.thebrand.craftsportswear.com: HTTPSConnectionPool(host='www.thebrand.craftsportswear.com', port=443): Max retries exceeded with url: / (Caused by NameResolutionError("<urllib3.connection.HTTPSConnection object at 0x7f2f21c93830>: Failed to resolve 'www.thebrand.craftsportswear.com' ([Errno -2] Name or service not known)"))
+[*] Detecting web technologies on http://www.thebrand.craftsportswear.com
+[!] Error making request to http://www.thebrand.craftsportswear.com: HTTPConnectionPool(host='www.thebrand.craftsportswear.com', port=80): Max retries exceeded with url: / (Caused by NameResolutionError("<urllib3.connection.HTTPConnection object at 0x7f2f21c90980>: Failed to resolve 'www.thebrand.craftsportswear.com' ([Errno -2] Name or service not known)"))
+[+] Completed subdomain 27/29: www.thebrand.craftsportswear.com
+[+] Results saved to /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/foundData/scan_craftsportswear.com_20250524_011502/web_technologies.json
+[*] Processing subdomain 28/29: www.www2.craftsportswear.com
+[*] Querying WhatRuns website for www.www2.craftsportswear.com...
+[*] Sending request to WhatRuns website...
+[*] Received response, processing data...
+[!] Error parsing WhatRuns data: Expecting property name enclosed in double quotes: line 1 column 2 (char 1)
+Cleaned JS string:
+{var m=s[v];if("false"!=m.enabled){var u="https://www.whatruns.com/images/icons/"+m.icon;if(void 0===m.parentElement){void 0!==m.website&&m.website;void 0!==m.siteListUrl&&m.siteListUrl;var f=m.name+" ";void 0!==m.version&&(f+=m.version),d=$("<div>",{"class":"current-tech-info"}).append($("<img>",{"class":"icon","src":u})).append($("<div>",{"class":"tech-name"}).text(f))}else void 0!==m.theme&&(i+=t(m.name)+", "),void 0!==m.plugin&&(c+=t(m.name)+", ");$(a).append($(d))}else 1==p&&$(a).find("div[data-name=""+e+""]").remove()}
+[!] Could not find technologies data in WhatRuns response
+[*] Detecting web technologies on https://www.www2.craftsportswear.com
+[!] Error making request to https://www.www2.craftsportswear.com: HTTPSConnectionPool(host='www.www2.craftsportswear.com', port=443): Max retries exceeded with url: / (Caused by NameResolutionError("<urllib3.connection.HTTPSConnection object at 0x7f2f21c939e0>: Failed to resolve 'www.www2.craftsportswear.com' ([Errno -2] Name or service not known)"))
+[*] Detecting web technologies on http://www.www2.craftsportswear.com
+[!] Error making request to http://www.www2.craftsportswear.com: HTTPConnectionPool(host='www.www2.craftsportswear.com', port=80): Max retries exceeded with url: / (Caused by NameResolutionError("<urllib3.connection.HTTPConnection object at 0x7f2f21c93290>: Failed to resolve 'www.www2.craftsportswear.com' ([Errno -2] Name or service not known)"))
+[+] Completed subdomain 28/29: www.www2.craftsportswear.com
+[+] Results saved to /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/foundData/scan_craftsportswear.com_20250524_011502/web_technologies.json
+[*] Processing subdomain 29/29: www2.craftsportswear.com
+[*] Querying WhatRuns website for www2.craftsportswear.com...
+[*] Sending request to WhatRuns website...
+[*] Received response, processing data...
+[!] Error parsing WhatRuns data: Expecting property name enclosed in double quotes: line 1 column 2 (char 1)
+Cleaned JS string:
+{var m=s[v];if("false"!=m.enabled){var u="https://www.whatruns.com/images/icons/"+m.icon;if(void 0===m.parentElement){void 0!==m.website&&m.website;void 0!==m.siteListUrl&&m.siteListUrl;var f=m.name+" ";void 0!==m.version&&(f+=m.version),d=$("<div>",{"class":"current-tech-info"}).append($("<img>",{"class":"icon","src":u})).append($("<div>",{"class":"tech-name"}).text(f))}else void 0!==m.theme&&(i+=t(m.name)+", "),void 0!==m.plugin&&(c+=t(m.name)+", ");$(a).append($(d))}else 1==p&&$(a).find("div[data-name=""+e+""]").remove()}
+[!] Could not find technologies data in WhatRuns response
+[*] Detecting web technologies on https://www2.craftsportswear.com
+[!] Error making request to https://www2.craftsportswear.com: HTTPSConnectionPool(host='www2.craftsportswear.com', port=443): Max retries exceeded with url: / (Caused by NameResolutionError("<urllib3.connection.HTTPSConnection object at 0x7f2f21c90f80>: Failed to resolve 'www2.craftsportswear.com' ([Errno -2] Name or service not known)"))
+[*] Detecting web technologies on http://www2.craftsportswear.com
+[!] Error making request to http://www2.craftsportswear.com: HTTPConnectionPool(host='www2.craftsportswear.com', port=80): Max retries exceeded with url: / (Caused by NameResolutionError("<urllib3.connection.HTTPConnection object at 0x7f2f21c92d50>: Failed to resolve 'www2.craftsportswear.com' ([Errno -2] Name or service not known)"))
+[+] Completed subdomain 29/29: www2.craftsportswear.com
+[+] Results saved to /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/foundData/scan_craftsportswear.com_20250524_011502/web_technologies.json
+
+[+] Scan complete! Processed 29 subdomains
+[+] Final results saved to /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/foundData/scan_craftsportswear.com_20250524_011502/web_technologies.json
+[*] Process completed with return code: 0
+[*] Changed back to original directory: /home/s141422/SecurityProject/EASM-Bunyamin-Siebe
+
+[*] Starting scan 4/6: Domeingeldigheid.py
+
+[*] Running Domeingeldigheid.py...
+[*] Full script path: Scripts/Domeingeldigheid.py
+[*] Input file: foundData/scan_craftsportswear.com_20250524_011502/all_subdomains.json
+[*] Output directory: foundData/scan_craftsportswear.com_20250524_011502
+[*] Executing command: python3 -u /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/Scripts/Domeingeldigheid.py --input /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/foundData/scan_craftsportswear.com_20250524_011502/all_subdomains.json --output-dir /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/foundData/scan_craftsportswear.com_20250524_011502
+[*] Changed working directory to: /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/Scripts
+[*] Process started with PID: 301342
+[*] Reading domains from /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/foundData/scan_craftsportswear.com_20250524_011502/all_subdomains.json
+[+] Found 1 unique domains
+
+Domain Lease Information:
+--------------------------------------------------
+Domain: craftsportswear.com
+Status: valid
+--------------------------------------------------
+
+[+] Results saved to /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/foundData/scan_craftsportswear.com_20250524_011502/domainLease.json
+[*] Process completed with return code: 0
+[*] Changed back to original directory: /home/s141422/SecurityProject/EASM-Bunyamin-Siebe
+
+[*] Starting scan 5/6: EnhancedCVEScanner.py
+
+[*] Running EnhancedCVEScanner.py...
+[*] Full script path: Scripts/EnhancedCVEScanner.py
+[*] Input file: foundData/scan_craftsportswear.com_20250524_011502/all_subdomains.json
+[*] Output directory: foundData/scan_craftsportswear.com_20250524_011502
+[*] Executing command: python3 -u /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/Scripts/EnhancedCVEScanner.py --input /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/foundData/scan_craftsportswear.com_20250524_011502/all_subdomains.json --output-dir /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/foundData/scan_craftsportswear.com_20250524_011502
+[*] Changed working directory to: /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/Scripts
+[*] Process started with PID: 301359
+Error: usage: EnhancedCVEScanner.py [-h] [--input-json INPUT_JSON] [--input INPUT]
+                             [--output-json OUTPUT_JSON]
+                             [--output-report OUTPUT_REPORT] [--ports PORTS]
+                             [--discover-ports] [--max-targets MAX_TARGETS]
+                             [--verbose] [--skip-ping]
+EnhancedCVEScanner.py: error: unrecognized arguments: --output-dir /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/foundData/scan_craftsportswear.com_20250524_011502
+
+[*] Process completed with return code: 2
+[*] Changed back to original directory: /home/s141422/SecurityProject/EASM-Bunyamin-Siebe
+[!] Warning: EnhancedCVEScanner.py did not complete successfully
+
+[*] Starting scan 6/6: Portscan.py
+
+[*] Running Portscan.py...
+[*] Full script path: Scripts/Portscan.py
+[*] Input file: foundData/scan_craftsportswear.com_20250524_011502/all_subdomains.json
+[*] Output directory: foundData/scan_craftsportswear.com_20250524_011502
+[*] Executing command: python3 -u /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/Scripts/Portscan.py --input /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/foundData/scan_craftsportswear.com_20250524_011502/all_subdomains.json --output-dir /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/foundData/scan_craftsportswear.com_20250524_011502
+[*] Changed working directory to: /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/Scripts
+[*] Process started with PID: 301372
+[*] Reading domains from /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/foundData/scan_craftsportswear.com_20250524_011502/all_subdomains.json
+[+] Found 47 unique domains
+[*] Checking which domains are reachable...
+[*] Testing domain 1/47: "subdomain": "analytics2.craftsportswear.com", - Unreachable ✗
+[*] Testing domain 2/47: "subdomain": "www.b2b-acc.craftsportswear.com", - Unreachable ✗
+[*] Testing domain 3/47: "domain": "craftsportswear.com", - Unreachable ✗
+[*] Testing domain 4/47: "ip": "216.239.32.21" - Unreachable ✗
+[*] Testing domain 5/47: "results": [ - Unreachable ✗
+[*] Testing domain 6/47: "ip": "216.239.38.21" - Unreachable ✗
+[*] Testing domain 7/47: "subdomain": "b2b-test.craftsportswear.com", - Unreachable ✗
+[*] Testing domain 8/47: ] - Unreachable ✗
+[*] Testing domain 9/47: "subdomain": "craftsportswear.com", - Unreachable ✗
+[*] Testing domain 10/47: "subdomain": "plm.craftsportswear.com", - Unreachable ✗
+[*] Testing domain 11/47: "subdomain": "b2b-acc.craftsportswear.com", - Unreachable ✗
+[*] Testing domain 12/47: "subdomain": "social-run-idre.craftsportswear.com", - Unreachable ✗
+[*] Testing domain 13/47: "subdomain": "analytics.craftsportswear.com", - Unreachable ✗
+[*] Testing domain 14/47: "subdomain": "www.plm.craftsportswear.com", - Unreachable ✗
+[*] Testing domain 15/47: "subdomain": "www.www2.craftsportswear.com", - Unreachable ✗
+[*] Testing domain 16/47: "subdomain": "thebrand.craftsportswear.com", - Unreachable ✗
+[*] Testing domain 17/47: "subdomain": "www.craftsportswear.com", - Unreachable ✗
+[*] Testing domain 18/47: "subdomain": "thehub.craftsportswear.com", - Unreachable ✗
+[*] Testing domain 19/47: "subdomain": "ww.craftsportswear.com", - Unreachable ✗
+[*] Testing domain 20/47: "subdomain": "www.b2b.craftsportswear.com", - Unreachable ✗
+[*] Testing domain 21/47: "subdomain": "recentia.craftsportswear.com", - Unreachable ✗
+[*] Testing domain 22/47: } - Unreachable ✗
+[*] Testing domain 23/47: }, - Unreachable ✗
+[*] Testing domain 24/47: "subdomain": "www.b2b-test.craftsportswear.com", - Unreachable ✗
+[*] Testing domain 25/47: "ip": "83.143.189.118" - Unreachable ✗
+[*] Testing domain 26/47: "subdomain": "www2.craftsportswear.com", - Unreachable ✗
+[*] Testing domain 27/47: "ip": "45.60.34.237" - Unreachable ✗
+[*] Testing domain 28/47: [ - Unreachable ✗
+[*] Testing domain 29/47: "ip": "51.158.128.80" - Unreachable ✗
+[*] Testing domain 30/47: "subdomain": "generateposter.craftsportswear.com", - Unreachable ✗
+[*] Testing domain 31/47: "ip": "185.157.223.250" - Unreachable ✗
+[*] Testing domain 32/47: "subdomain": "plm-acc.craftsportswear.com", - Unreachable ✗
+[*] Testing domain 33/47: "subdomain": "plm-test.craftsportswear.com", - Unreachable ✗
+[*] Testing domain 34/47: "subdomain": "nycstoplight.craftsportswear.com", - Unreachable ✗
+[*] Testing domain 35/47: "subdomain": "www.plm-acc.craftsportswear.com", - Unreachable ✗
+[*] Testing domain 36/47: { - Unreachable ✗
+[*] Testing domain 37/47: "ip": "35.234.76.45" - Unreachable ✗
+[*] Testing domain 38/47: "subdomain": "www.plm-test.craftsportswear.com", - Unreachable ✗
+[*] Testing domain 39/47: "ip": null - Unreachable ✗
+[*] Testing domain 40/47: "subdomain": "measure.craftsportswear.com", - Unreachable ✗
+[*] Testing domain 41/47: "ip": "91.201.60.25" - Unreachable ✗
+[*] Testing domain 42/47: "subdomains_found": 29, - Unreachable ✗
+[*] Testing domain 43/47: "subdomain": "beta.craftsportswear.com", - Unreachable ✗
+[*] Testing domain 44/47: "subdomain": "www.thebrand.craftsportswear.com", - Unreachable ✗
+[*] Testing domain 45/47: "ip": "66.33.60.129" - Unreachable ✗
+[*] Testing domain 46/47: "subdomain": "social-run.craftsportswear.com", - Unreachable ✗
+[*] Testing domain 47/47: "subdomain": "b2b.craftsportswear.com", - Unreachable ✗
+[+] 0 domains are reachable
+[+] 47 domains are unreachable
+[!] No reachable domains found
+[*] Process completed with return code: 1
+[*] Changed back to original directory: /home/s141422/SecurityProject/EASM-Bunyamin-Siebe
+[!] Warning: Portscan.py did not complete successfully
+
+[+] All scans completed!
+
+Scan completed.

@@ -1004,20 +1004,13 @@ def main():
                     data = json.loads(content)
                     domains = []
                     for item in data:
-                        if isinstance(item, dict):
-                            # Add main domain if present
-                            if 'domain' in item and item['domain'] and item['domain'] != "No names were discovered":
-                                domains.append(item['domain'])
-                            # Add subdomains if present
-                            if 'subdomains' in item and isinstance(item['subdomains'], list):
-                                for subdomain in item['subdomains']:
-                                    if isinstance(subdomain, dict) and 'name' in subdomain:
-                                        domains.append(subdomain['name'])
-                            # Add IP if present
-                            elif 'ip' in item:
-                                domains.append(item['ip'])
-                        elif isinstance(item, str):
-                            domains.append(item)
+                        if isinstance(item, dict) and 'results' in item:
+                            # Process subdomains from the results array
+                            for result in item['results']:
+                                if isinstance(result, dict) and 'subdomain' in result:
+                                    subdomain = result['subdomain']
+                                    if subdomain and subdomain != "No names were discovered":
+                                        domains.append(subdomain)
                 except json.JSONDecodeError:
                     # If not JSON, treat as plain text
                     domains = [line.strip() for line in content.splitlines() if line.strip()]
@@ -1030,14 +1023,14 @@ def main():
     
     # Remove duplicates and sort
     domains = sorted(list(set(domains)))
-    print(f"[+] Found {len(domains)} unique domains\n")
+    print(f"[+] Found {len(domains)} unique subdomains\n")
     
-    # Initialize results list
-    results = []
+    # Initialize results dictionary
+    results = {}
     
     # Process each domain
     for i, domain in enumerate(domains, 1):
-        print(f"[*] Processing domain {i}/{len(domains)}: {domain}")
+        print(f"[*] Processing subdomain {i}/{len(domains)}: {domain}")
         try:
             # Try WhatRuns first
             whatruns_techs = detect_technologies_with_whatruns(domain, verbose=True)
@@ -1061,27 +1054,23 @@ def main():
                         all_techs.append(tech)
             
             if all_techs:
-                result = {
-                    "domain": domain,
+                results[domain] = {
                     "status": "success",
                     "technologies": all_techs
                 }
             else:
-                result = {
-                    "domain": domain,
+                results[domain] = {
                     "status": "error",
                     "error": "No technologies detected"
                 }
                 
         except Exception as e:
-            result = {
-                "domain": domain,
+            results[domain] = {
                 "status": "error",
                 "error": str(e)
             }
         
-        results.append(result)
-        print(f"[+] Completed domain {i}/{len(domains)}: {domain}")
+        print(f"[+] Completed subdomain {i}/{len(domains)}: {domain}")
         
         # Save results after each domain to prevent data loss
         output_file = os.path.join(output_dir, "web_technologies.json")
@@ -1092,7 +1081,7 @@ def main():
         except Exception as e:
             print(f"[!] Error saving results: {e}")
     
-    print(f"\n[+] Scan complete! Processed {len(domains)} domains")
+    print(f"\n[+] Scan complete! Processed {len(domains)} subdomains")
     print(f"[+] Final results saved to {output_file}")
 
 if __name__ == "__main__":

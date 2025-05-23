@@ -58,8 +58,8 @@ def run_script(script_path, input_file, output_dir):
             except Exception as e:
                 print(f"[!] Error creating symbolic link: {e}")
                 return False
-        # Add output directory parameter for scripts that accept it
-        elif os.path.basename(script_path) not in ["DetectWebTechnologies.py"]:
+        # Add output directory parameter for all scripts that accept it
+        else:
             cmd.extend(["--output-dir", output_dir])
             
         print(f"[*] Executing command: {' '.join(cmd)}", flush=True)
