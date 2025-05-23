@@ -121,12 +121,16 @@ def index():
                     f.write(f"{domain}\n")
             print(f"[+] Created temporary file at: {temp_file}")
             
-            # Verify the file was created
+            # Verify the file was created and has content
             if os.path.exists(temp_file):
                 print(f"[+] Verified temporary file exists at: {temp_file}")
                 print(f"[+] File contents:")
                 with open(temp_file, 'r') as f:
-                    print(f.read())
+                    content = f.read()
+                    print(content)
+                    if not content.strip():
+                        print("[!] Warning: Temporary file is empty")
+                        return redirect(url_for("index"))
             else:
                 print(f"[!] Temporary file was not created at: {temp_file}")
                 return redirect(url_for("index"))
@@ -159,14 +163,9 @@ def index():
             
         except Exception as e:
             print(f"[!] Error starting scan: {e}")
+            if os.path.exists(temp_file):
+                os.remove(temp_file)
             return redirect(url_for("index"))
-        finally:
-            # Clean up the temporary file
-            try:
-                if os.path.exists(temp_file):
-                    os.remove(temp_file)
-            except Exception as e:
-                print(f"[!] Error cleaning up temp file: {e}")
     
     return render_template("index.html", scripts=scripts)
 
@@ -207,26 +206,49 @@ def update_output(output_id):
         return "Error reading output file", 500
 
 # Add a background task to update the output file
-def update_output_file(script_name, input_file, output_file):
+def update_output_file(script_name, input_file, output_file, process=None):
     try:
         print(f"[*] Starting background task for {script_name}")
         print(f"[*] Using input file: {input_file}")
         print(f"[*] Writing output to: {output_file}")
+        
+        # Create output directory if it doesn't exist
+        output_dir = os.path.dirname(output_file)
+        os.makedirs(output_dir, exist_ok=True)
         
         # Write initial message
         with open(output_file, 'w') as f:
             f.write(f"Starting {script_name} scan...\n")
             f.flush()
         
-        # Run the script
-        process = subprocess.Popen(
-            ["python", "-u", scripts[script_name], "--input", input_file],
-            stdout=subprocess.PIPE,
-            stderr=subprocess.PIPE,
-            text=True,
-            bufsize=1,
-            universal_newlines=True
-        )
+        # Determine if this is a complete scan or individual tool
+        is_complete_scan = script_name == "complete_scan"
+        
+        # If process is not provided, create one
+        if process is None:
+            # Prepare the command
+            if is_complete_scan:
+                # For complete scan, use foundData as output directory
+                cmd = ["python3", "-u", scripts[script_name], "--input", input_file, "--output-dir", "foundData"]
+                print(f"[*] Running complete scan with output to foundData directory")
+            else:
+                # For individual tools, just use the input file
+                cmd = ["python3", "-u", scripts[script_name], "--input", input_file]
+                print(f"[*] Running individual tool scan")
+            
+            print(f"[*] Executing command: {' '.join(cmd)}")
+            
+            # Run the script
+            process = subprocess.Popen(
+                cmd,
+                stdout=subprocess.PIPE,
+                stderr=subprocess.PIPE,
+                text=True,
+                bufsize=1,
+                universal_newlines=True
+            )
+        
+        print(f"[*] Process started with PID: {process.pid}", flush=True)
         
         # Read output in real-time
         while True:
@@ -267,6 +289,15 @@ def update_output_file(script_name, input_file, output_file):
                 f.flush()
         except Exception as write_error:
             print(f"[!] Error writing error message: {write_error}")
+    finally:
+        # Only clean up the temporary file after the process has completed
+        if process and process.poll() is not None:
+            if os.path.exists(input_file):
+                try:
+                    os.remove(input_file)
+                    print(f"[+] Cleaned up temporary file: {input_file}")
+                except Exception as e:
+                    print(f"[!] Error cleaning up temporary file: {e}")
 
 @app.route("/download-output/<output_id>")
 def download_output(output_id):
@@ -415,28 +446,21 @@ def run_script(script_name):
         output_id = str(uuid.uuid4())
         output_file = os.path.join(TEMP_OUTPUT_FOLDER, f"{output_id}.txt")
         
-        # Start the script process
-        process = subprocess.Popen(
-            ["python", "-u", scripts[script_name], "--input", temp_file],
-            stdout=subprocess.PIPE,
-            stderr=subprocess.PIPE,
-            text=True,
-            bufsize=1,
-            universal_newlines=True
+        # Start the background task
+        thread = threading.Thread(
+            target=update_output_file,
+            args=(script_name, temp_file, output_file)
         )
-        
-        # Write initial output
-        with open(output_file, 'w') as f:
-            f.write(f"Starting {script_name}...\n")
+        thread.daemon = True
+        thread.start()
         
         # Redirect to display page immediately
         return redirect(url_for('display_output', output_id=output_id))
     except Exception as e:
-        return redirect(url_for("index"))
-    finally:
-        # Clean up the temporary file
+        # Clean up the temporary file if there's an error
         if os.path.exists(temp_file):
             os.remove(temp_file)
+        return redirect(url_for("index"))
 
 if __name__ == "__main__":
     app.run(debug=True)

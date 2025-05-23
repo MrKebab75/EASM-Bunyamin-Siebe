@@ -1,7 +1,0 @@
-[*] Reading domains from uploads/temp_domains.txt
-[+] Found 1 unique domains
-[*] Checking which domains are reachable...
-[*] Testing domain 1/1: nwg.se - Unreachable ✗
-[+] 0 domains are reachable
-[+] 1 domains are unreachable
-[!] No reachable domains found

@@ -1,0 +1,35 @@
+[*] No vulnerabilities found for nwg.se
+
+[+] Scan completed in 3m 17s
+[+] Reviewed 1 domains
+[+] 1 domains were reachable
+[+] Found vulnerabilities in 0 domains
+[+] Total vulnerabilities found: 0
+[+] Results saved to foundData/vulnerability_scan.json
+[+] Summary report saved to foundData/vulnerability_report.txt
+
+[+] Scan complete! Results saved to:
+- JSON data: foundData/vulnerability_scan.json
+- Summary report: foundData/vulnerability_report.txt
+================================================================================
+[*] Process completed with return code: 0
+
+[*] Starting scan 6/6: Portscan.py
+
+[*] Running Portscan.py...
+[*] Full script path: Scripts/Portscan.py
+[*] Input file: /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/uploads/temp_domains.txt
+[*] Output directory: foundData
+[*] Executing command: python3 -u Scripts/Portscan.py --input /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/uploads/temp_domains.txt --output-dir foundData
+[*] Process started with PID: 206771
+[*] Reading domains from /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/uploads/temp_domains.txt
+[+] Found 1 unique domains
+[*] Checking which domains are reachable...
+[*] Testing domain 1/1: nwg.se - Reachable ✓
+[+] 1 domains are reachable
+[+] 0 domains are unreachable
+
+[!] Starting port scan for 1 reachable domains
+
+[+] Scanning domain 1/1: nwg.se
+[+] Performing nmap scan on nwg.se...

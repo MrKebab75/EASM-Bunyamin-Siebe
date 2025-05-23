@@ -1,9 +1,0 @@
-
-Errors: Traceback (most recent call last):
-  File "/home/s141422/SecurityProject/EASM-Bunyamin-Siebe/Scripts/CompleteSecurityScan.py", line 111, in <module>
-    main() 
-    ^^^^^^
-  File "/home/s141422/SecurityProject/EASM-Bunyamin-Siebe/Scripts/CompleteSecurityScan.py", line 59, in main
-    with open(args.input, 'r') as f:
-         ^^^^^^^^^^^^^^^^^^^^^
-FileNotFoundError: [Errno 2] No such file or directory: 'uploads/temp_domains.txt'

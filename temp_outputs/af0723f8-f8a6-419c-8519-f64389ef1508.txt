@@ -1,4 +1,0 @@
-Starting complete_scan scan...
-[!] Input file not found: /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/uploads/temp_domains.txt
-
-Scan completed.

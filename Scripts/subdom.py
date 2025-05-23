@@ -151,14 +151,21 @@ def load_domains_from_file(file_path):
 def main():
     script_dir = os.path.dirname(os.path.abspath(__file__))
     excel_path = os.path.join(script_dir, "Domains.xlsx")
-    output_dir = os.path.join(script_dir, "..", "foundData")
+    base_dir = os.path.dirname(script_dir)
+    output_dir = os.path.join(base_dir, "foundData")  # Default output directory
     
     # Parse command line arguments
     parser = argparse.ArgumentParser(description="Subdomain enumeration tool")
     parser.add_argument("--resume", action="store_true", help="Resume scanning from the last domain")
     parser.add_argument("--start-from", type=str, help="Start scanning from a specific domain")
     parser.add_argument("--input", help="Input file containing domains (one per line)")
+    parser.add_argument("--output-dir", help="Directory to save output files")
     args = parser.parse_args()
+
+    # Use provided output directory if specified
+    if args.output_dir:
+        output_dir = args.output_dir
+        print(f"[*] Using output directory: {output_dir}")
 
     # Load existing results if in resume mode
     existing_results = []
@@ -248,17 +255,22 @@ def main():
                 "results": enriched_results
             })
             
-            # Save progress after each domain to enable resuming
+            # Save progress after each domain
             save_all_results_to_json(all_domain_results, output_dir=output_dir)
-
+            
+        print("\n[+] All domains processed successfully!")
+        
     except KeyboardInterrupt:
-        print("\n[!] Scan interrupted by user. Saving collected data...")
-
-    finally:
-        # Final save of all results
+        print("\n[!] Scan interrupted by user. Saving current progress...")
         save_all_results_to_json(all_domain_results, output_dir=output_dir)
         save_inactive_domains(inactive_domains, output_dir=output_dir)
-        print("[+] Exiting script.")
+        print("[+] Progress saved. You can resume the scan later using --resume")
+    except Exception as e:
+        print(f"\n[!] An error occurred: {e}")
+        print("[!] Saving current progress...")
+        save_all_results_to_json(all_domain_results, output_dir=output_dir)
+        save_inactive_domains(inactive_domains, output_dir=output_dir)
+        print("[+] Progress saved. You can resume the scan later using --resume")
 
 
 if __name__ == "__main__":

@@ -1,0 +1,31 @@
+Starting complete_scan scan...
+[*] Starting CompleteSecurityScan.py
+[*] Arguments parsed:
+    Input file: /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/uploads/temp_domains.txt
+    Output directory: foundData
+[*] Reading domains from /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/uploads/temp_domains.txt
+[+] Successfully read input file
+[+] Found 1 domains to scan
+[+] Created scan directory: foundData/scan_craftsportswear.com_20250523_234335
+[+] Results will be saved in: foundData/scan_craftsportswear.com_20250523_234335
+[+] Total number of scans to run: 6
+
+[*] Starting scan 1/6: subdom.py
+
+[*] Running subdom.py...
+[*] Full script path: Scripts/subdom.py
+[*] Input file: /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/uploads/temp_domains.txt
+[*] Output directory: foundData/scan_craftsportswear.com_20250523_234335
+[+] Created/verified scan directory: /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/foundData/scan_craftsportswear.com_20250523_234335
+[*] Creating symbolic link from /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/foundData/scan_craftsportswear.com_20250523_234335/foundData to /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/foundData
+[+] Created symbolic link from /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/foundData/scan_craftsportswear.com_20250523_234335/foundData to /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/foundData
+[*] Executing command: python3 -u /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/Scripts/subdom.py --input /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/uploads/temp_domains.txt --output-dir /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/foundData/scan_craftsportswear.com_20250523_234335
+[*] Changed working directory to: /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/Scripts
+[*] Process started with PID: 260729
+[*] Using output directory: /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/foundData/scan_craftsportswear.com_20250523_234335
+[+] Loading domains from /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/uploads/temp_domains.txt
+[+] Loaded 1 unique domains from input.
+
+=== Processing domain 1/1: craftsportswear.com ===
+[+] Pinging domain: craftsportswear.com
+[+] Running Amass for craftsportswear.com

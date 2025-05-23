@@ -10,15 +10,74 @@ def run_script(script_path, input_file, output_dir):
     """Run a script and return its output."""
     try:
         print(f"\n[*] Running {os.path.basename(script_path)}...", flush=True)
+        print(f"[*] Full script path: {script_path}", flush=True)
+        print(f"[*] Input file: {input_file}", flush=True)
+        print(f"[*] Output directory: {output_dir}", flush=True)
+        
+        # Get absolute paths
+        script_path = os.path.abspath(script_path)
+        input_file = os.path.abspath(input_file)
+        output_dir = os.path.abspath(output_dir)
+        script_dir = os.path.dirname(script_path)  # Directory containing the script
+        workspace_dir = os.path.dirname(os.path.dirname(script_path))  # Go up two levels from Scripts/
+        
+        # Verify script exists
+        if not os.path.exists(script_path):
+            print(f"[!] Error: Script not found at {script_path}", flush=True)
+            return False
+            
+        # Verify input file exists
+        if not os.path.exists(input_file):
+            print(f"[!] Error: Input file not found at {input_file}", flush=True)
+            return False
+            
         # Run the script with stdout and stderr unbuffered
+        cmd = ["python3", "-u", script_path, "--input", input_file]
+        
+        # Special handling for subdom.py - it uses its own output structure
+        if os.path.basename(script_path) == "subdom.py":
+            try:
+                # Create the scan directory if it doesn't exist
+                os.makedirs(output_dir, exist_ok=True)
+                print(f"[+] Created/verified scan directory: {output_dir}")
+                
+                # Create a symbolic link in the scan directory pointing to foundData
+                scan_found_data = os.path.join(output_dir, "foundData")
+                if os.path.exists(scan_found_data):
+                    print(f"[*] Removing existing foundData link in scan directory: {scan_found_data}")
+                    if os.path.islink(scan_found_data):
+                        os.remove(scan_found_data)
+                
+                # Create symbolic link from scan directory to foundData
+                print(f"[*] Creating symbolic link from {scan_found_data} to {output_dir}")
+                os.symlink(output_dir, scan_found_data)
+                print(f"[+] Created symbolic link from {scan_found_data} to {output_dir}")
+                
+                # Add output directory parameter for subdom.py
+                cmd.extend(["--output-dir", output_dir])
+            except Exception as e:
+                print(f"[!] Error creating symbolic link: {e}")
+                return False
+        elif output_dir:
+            cmd.extend(["--output-dir", output_dir])
+            
+        print(f"[*] Executing command: {' '.join(cmd)}", flush=True)
+        
+        # Change to the script's directory before running
+        original_dir = os.getcwd()
+        os.chdir(script_dir)
+        print(f"[*] Changed working directory to: {script_dir}")
+        
         process = subprocess.Popen(
-            ["python", "-u", script_path, "--input", input_file, "--output-dir", output_dir],
+            cmd,
             stdout=subprocess.PIPE,
             stderr=subprocess.PIPE,
             text=True,
             bufsize=1,
             universal_newlines=True
         )
+        
+        print(f"[*] Process started with PID: {process.pid}", flush=True)
         
         # Read output in real-time
         while True:
@@ -32,166 +91,100 @@ def run_script(script_path, input_file, output_dir):
         remaining_output, error = process.communicate()
         if remaining_output:
             print(remaining_output.strip(), flush=True)
-        
-        if process.returncode != 0:
-            print(f"[!] Error in {os.path.basename(script_path)}: {error}", flush=True)
-            return False
+        if error:
+            print(f"Error: {error}", flush=True)
             
-        return True
+        return_code = process.returncode
+        print(f"[*] Process completed with return code: {return_code}", flush=True)
+        
+        # Change back to original directory
+        os.chdir(original_dir)
+        print(f"[*] Changed back to original directory: {original_dir}")
+        
+        # Clean up symbolic link if it was created
+        if os.path.basename(script_path) == "subdom.py":
+            try:
+                scan_found_data = os.path.join(output_dir, "foundData")
+                if os.path.exists(scan_found_data) and os.path.islink(scan_found_data):
+                    print(f"[*] Removing symbolic link: {scan_found_data}")
+                    os.remove(scan_found_data)
+                    print("[+] Removed symbolic link")
+            except Exception as e:
+                print(f"[!] Error removing symbolic link: {e}")
+        
+        return return_code == 0
     except Exception as e:
-        print(f"[!] Error running {os.path.basename(script_path)}: {e}", flush=True)
+        print(f"Error running {script_path}: {str(e)}", flush=True)
         return False
 
 def main():
-    # Set up argument parser
-    parser = argparse.ArgumentParser(description='Complete Security Scan')
-    parser.add_argument('--input', help='Input file containing domains (one per line)')
+    print("[*] Starting CompleteSecurityScan.py", flush=True)
+    parser = argparse.ArgumentParser(description='Run a complete security scan on domains')
+    parser.add_argument('--input', required=True, help='Input file containing domains')
+    parser.add_argument('--output-dir', default='foundData', help='Output directory for results (default: foundData)')
     args = parser.parse_args()
-
-    # Define paths
-    script_dir = os.path.dirname(os.path.abspath(__file__))
-    base_dir = os.path.dirname(script_dir)
     
-    # Ensure the input file exists
-    if not args.input:
-        print("[!] No input file specified")
-        sys.exit(1)
-        
-    if not os.path.exists(args.input):
-        print(f"[!] Input file not found: {args.input}")
-        sys.exit(1)
+    print(f"[*] Arguments parsed:", flush=True)
+    print(f"    Input file: {args.input}", flush=True)
+    print(f"    Output directory: {args.output_dir}", flush=True)
     
-    # Load domains from input file
+    # Read domains from input file
     print(f"[*] Reading domains from {args.input}")
     try:
         with open(args.input, 'r') as f:
             domains = [line.strip() for line in f if line.strip()]
+        print(f"[+] Successfully read input file", flush=True)
     except Exception as e:
-        print(f"[!] Error reading input file: {e}")
-        sys.exit(1)
-    
-    if not domains:
-        print("[!] No domains found in the input file")
-        sys.exit(1)
+        print(f"[!] Error reading input file: {e}", flush=True)
+        return
     
     print(f"[+] Found {len(domains)} domains to scan")
     
-    # Create timestamped output directory for this scan
+    # Create timestamped directory for this scan
     timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-    scan_dir = os.path.join(base_dir, "foundData", f"scan_{domains[0]}_{timestamp}")
-    os.makedirs(scan_dir, exist_ok=True)
+    domain = domains[0]  # Get the first domain for the directory name
+    scan_dir = os.path.join(args.output_dir, f"scan_{domain}_{timestamp}")
+    
+    try:
+        os.makedirs(scan_dir, exist_ok=True)
+        print(f"[+] Created scan directory: {scan_dir}", flush=True)
+    except Exception as e:
+        print(f"[!] Error creating scan directory: {e}", flush=True)
+        return
     
     print(f"[+] Results will be saved in: {scan_dir}")
     
-    # List of scripts to run with their output files
-    scripts_to_run = [
-        {
-            "script": "subdom.py",
-            "output_files": [
-                "all_subdomains.json",
-                "activeDomains.json",
-                "inactiveDomains.json"
-            ]
-        },
-        {
-            "script": "Certificaat.py",
-            "output_files": ["certificates.json"]
-        },
-        {
-            "script": "Domeingeldigheid.py",
-            "output_files": ["domainLease.json"]
-        },
-        {
-            "script": "DetectWebTechnologies.py",
-            "output_files": ["web_technologies.json"]
-        },
-        {
-            "script": "Portscan.py",
-            "output_files": ["ports.json"]
-        },
-        {
-            "script": "EnhancedCVEScanner.py",
-            "output_files": [
-                "vulnerability_scan.json",
-                "vulnerability_report.txt"
-            ]
-        }
+    # List of scripts to run in order
+    scripts = [
+        "Scripts/subdom.py",
+        "Scripts/Certificaat.py",
+        "Scripts/DetectWebTechnologies.py",
+        "Scripts/Domeingeldigheid.py",
+        "Scripts/EnhancedCVEScanner.py",
+        "Scripts/Portscan.py"
     ]
     
-    print(f"[+] Total number of scans to run: {len(scripts_to_run)}\n")
+    print(f"[+] Total number of scans to run: {len(scripts)}")
     
     # Run each script
-    for i, script_info in enumerate(scripts_to_run, 1):
-        script = script_info["script"]
-        script_path = os.path.join(script_dir, script)
+    for i, script in enumerate(scripts, 1):
+        print(f"\n[*] Starting scan {i}/{len(scripts)}: {os.path.basename(script)}")
         
-        if not os.path.exists(script_path):
-            print(f"[!] Script not found: {script}")
-            continue
+        # Determine input and output for each script
+        if os.path.basename(script) == "subdom.py":
+            # First script uses the original input file
+            input_file = args.input
+            output_dir = scan_dir
+        else:
+            # Other scripts use the all_subdomains.json from the scan directory
+            input_file = os.path.join(scan_dir, "all_subdomains.json")
+            output_dir = scan_dir
             
-        print(f"[*] Starting scan {i}/{len(scripts_to_run)}: {script}")
-        try:
-            # Create a temporary file for this script
-            temp_input = os.path.join(scan_dir, f"temp_input_{i}.txt")
-            with open(temp_input, 'w') as f:
-                for domain in domains:
-                    f.write(f"{domain}\n")
-            
-            # Run the script with python3
-            result = subprocess.run(
-                ["python3", script_path, "--input", temp_input],
-                capture_output=True,
-                text=True
-            )
-            
-            # Print output
-            if result.stdout:
-                print(result.stdout)
-            if result.stderr:
-                print(f"[!] Errors from {script}:")
-                print(result.stderr)
-            
-            # Copy output files to scan directory
-            for output_file in script_info["output_files"]:
-                source_path = os.path.join(base_dir, "foundData", output_file)
-                if os.path.exists(source_path):
-                    # Copy the file to the scan directory
-                    dest_path = os.path.join(scan_dir, output_file)
-                    with open(source_path, 'r') as src, open(dest_path, 'w') as dst:
-                        dst.write(src.read())
-                    print(f"[+] Copied {output_file} to scan directory")
-            
-            # Clean up temporary file
-            os.remove(temp_input)
-            
-            print(f"[+] Completed scan {i}/{len(scripts_to_run)}: {script}\n")
-            
-        except Exception as e:
-            print(f"[!] Error running {script}: {e}")
-            continue
+        success = run_script(script, input_file, output_dir)
+        if not success:
+            print(f"[!] Warning: {os.path.basename(script)} did not complete successfully")
     
-    # Create a summary file
-    summary_file = os.path.join(scan_dir, "scan_summary.txt")
-    try:
-        with open(summary_file, 'w') as f:
-            f.write(f"Complete Security Scan Summary\n")
-            f.write(f"===========================\n\n")
-            f.write(f"Scan Date: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}\n")
-            f.write(f"Target Domain: {domains[0]}\n")
-            f.write(f"Number of Scans: {len(scripts_to_run)}\n\n")
-            f.write("Scans Performed:\n")
-            for script_info in scripts_to_run:
-                f.write(f"- {script_info['script']}\n")
-                f.write("  Output files:\n")
-                for output_file in script_info["output_files"]:
-                    f.write(f"    - {output_file}\n")
-            f.write(f"\nResults saved in: {scan_dir}\n")
-        print(f"[+] Created summary file: {summary_file}")
-    except Exception as e:
-        print(f"[!] Error creating summary file: {e}")
-    
-    print("[+] Complete security scan finished")
-    print(f"[+] All results saved in: {scan_dir}")
+    print("\n[+] All scans completed!")
 
 if __name__ == "__main__":
     main() 

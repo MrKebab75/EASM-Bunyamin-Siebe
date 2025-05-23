@@ -1,0 +1,13 @@
+[!] Nmap scan timed out for nwg.se
+[!] Scan for nwg.se did not complete successfully. Status: timeout
+[+] Results saved to /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/foundData/scan_nwg.se_20250523_220913/ports.json
+[+] Results saved to /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/foundData/scan_nwg.se_20250523_220913/ports.json
+
+[+] Completed scan of 1 domains
+[+] All results saved to /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/foundData/scan_nwg.se_20250523_220913/ports.json
+[*] Process completed with return code: 0
+[*] Changed back to original directory: /home/s141422/SecurityProject/EASM-Bunyamin-Siebe
+
+[+] All scans completed!
+
+Scan completed.
