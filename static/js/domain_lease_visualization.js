@@ -86,6 +86,9 @@ async function loadData() {
         
         // Initialize charts
         initializeCharts();
+
+        // Trigger initial filtering and display
+        filterDomains();
         
     } catch (error) {
         console.error('Error loading data:', error);

@@ -1,0 +1,12 @@
+[*] Reading domains from uploads/temp_domains.txt
+[+] Found 1 unique domains
+
+Domain Lease Information:
+--------------------------------------------------
+Domain: nwg.se
+Status: valid
+Registrar: Dotkeeper AB
+Creation Date: 1998-09-29
+Expiration Date: 2025-09-29
+Days Remaining: 130
+--------------------------------------------------

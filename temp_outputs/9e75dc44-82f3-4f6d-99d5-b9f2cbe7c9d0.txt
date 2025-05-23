@@ -1,0 +1,22 @@
+[*] Reading domains from uploads/temp_domains.txt
+[+] Found 1 unique domains
+[*] Checking which domains are reachable...
+[*] Testing domain 1/1: nwg.se - Reachable ✓
+[+] 1 domains are reachable
+[+] 0 domains are unreachable
+
+[!] Starting port scan for 1 reachable domains
+
+[+] Scanning domain 1/1: nwg.se
+[+] Performing nmap scan on nwg.se...
+[+] Found 401 open ports on nwg.se
+    21/tcp - ssl/ftp? - FTP - File Transfer Protocol
+    25/tcp - ssl/smtp? - SMTP - Simple Mail Transfer Protocol
+    37/tcp - ssl/time? - Unknown service
+    43/tcp - ssl/whois? - Unknown service
+    53/tcp - domain? - DNS - Domain Name System
+    ... and 396 more ports
+[+] Results saved to /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/foundData/ports.json
+
+[+] Completed scan of 1 domains
+[+] All results saved to /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/foundData/ports.json

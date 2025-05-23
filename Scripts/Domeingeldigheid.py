@@ -3,6 +3,8 @@ import pandas as pd
 import os
 import json
 from datetime import datetime
+import argparse
+import sys
 
 def check_domain_lease(domain):
     """Controleert de vervaldatum van een domeinnaam en geeft de details terug als een dictionary."""
@@ -60,49 +62,86 @@ def check_domain_lease(domain):
             "error_message": str(e)
         }
 
+def load_domains_from_file(file_path):
+    """Load domains from a text file, one domain per line."""
+    try:
+        with open(file_path, 'r') as f:
+            domains = [line.strip() for line in f if line.strip()]
+        return list(set(domains))  # Remove duplicates
+    except Exception as e:
+        print(f"[!] Error loading domains from {file_path}: {e}")
+        return []
+
+def load_domains_from_json(file_path):
+    """Load domains from a JSON file."""
+    try:
+        with open(file_path, 'r') as f:
+            domains = json.load(f)
+        return list(set(domains))  # Remove duplicates
+    except Exception as e:
+        print(f"[!] Error loading domains from {file_path}: {e}")
+        return []
+
 def main():
+    # Set up argument parser
+    parser = argparse.ArgumentParser(description='Domain Lease Scanner')
+    parser.add_argument('--input', help='Input file containing domains (one per line)')
+    args = parser.parse_args()
+
     # Define paths
     script_dir = os.path.dirname(os.path.abspath(__file__))
     base_dir = os.path.dirname(script_dir)
-    excel_path = os.path.join(script_dir, "Domains.xlsx")
-    output_dir = os.path.join(base_dir, "foundData")
-    output_file = os.path.join(output_dir, "domainLease.json")
     
-    # Ensure output directory exists
-    os.makedirs(output_dir, exist_ok=True)
+    # Load domains from input file
+    if args.input:
+        print(f"[*] Reading domains from {args.input}")
+        try:
+            with open(args.input, 'r') as f:
+                domains = [line.strip() for line in f if line.strip()]
+        except Exception as e:
+            print(f"[!] Error reading input file: {e}")
+            sys.exit(1)
+    else:
+        print("[!] No input file provided")
+        sys.exit(1)
     
+    # Remove duplicates and sort
+    domains = sorted(list(set(domains)))
+    print(f"[+] Found {len(domains)} unique domains\n")
+    
+    print("Domain Lease Information:")
+    print("-" * 50)
+    
+    results = []
+    for domain in domains:
+        print(f"Domain: {domain}")
+        try:
+            result = check_domain_lease(domain)
+            if result:
+                # Print with error handling for missing keys
+                print(f"Status: {result.get('status', 'unknown')}")
+                if result.get('status') == 'active':
+                    print(f"Registrar: {result.get('registrar', 'Unknown')}")
+                    print(f"Creation Date: {result.get('creation_date', 'Unknown')}")
+                    print(f"Expiration Date: {result.get('expiration_date', 'Unknown')}")
+                    print(f"Last Updated: {result.get('last_updated', 'Unknown')}")
+                results.append(result)
+            else:
+                print("Status: error")
+                results.append({"domain": domain, "status": "error"})
+        except Exception as e:
+            print(f"Status: error ({str(e)})")
+            results.append({"domain": domain, "status": "error", "error": str(e)})
+        print("-" * 50)
+    
+    # Save results to JSON
+    output_file = os.path.join(base_dir, "foundData", "domainLease.json")
     try:
-        # Read domains from Excel file
-        df = pd.read_excel(excel_path)
-        
-        if "Domain Name" not in df.columns:
-            print("Error: Column 'Domain Name' not found in Excel file")
-            return
-            
-        domains = df["Domain Name"].dropna().unique()
-        print(f"Loaded {len(domains)} unique domains from Excel")
-        
-        # Check each domain
-        results = []
-        for i, domain in enumerate(domains, 1):
-            print(f"[{i}/{len(domains)}] Checking domain: {domain}")
-            domain_info = check_domain_lease(domain)
-            results.append(domain_info)
-            
-            # Add a short delay to avoid overwhelming WHOIS servers
-            import time
-            time.sleep(1)
-        
-        # Save results to JSON file
         with open(output_file, 'w') as f:
             json.dump(results, f, indent=2)
-            
-        print(f"\nDomain lease information saved to {output_file}")
-        
-    except FileNotFoundError:
-        print(f"Error: Excel file not found at {excel_path}")
+        print(f"\n[+] Results saved to {output_file}")
     except Exception as e:
-        print(f"Error: {e}")
+        print(f"[!] Error saving results: {e}")
 
 if __name__ == "__main__":
     main()

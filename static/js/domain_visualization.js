@@ -68,6 +68,10 @@ async function loadData() {
                 attachDetailsButtonListeners();
             }
         });
+
+        // Trigger initial filtering and display
+        filterDomains();
+        
     } catch (error) {
         console.error('Error loading data:', error);
         tableLoader.innerHTML = 'Error loading data. Please try again.';

@@ -138,16 +138,26 @@ def save_inactive_domains(inactive_domains, output_dir="foundData", filename="in
     except Exception as e:
         print(f"[!] Error saving inactive domains file: {e}")
 
+def load_domains_from_file(file_path):
+    """Load domains from a text file, one domain per line."""
+    try:
+        with open(file_path, 'r') as f:
+            domains = [line.strip() for line in f if line.strip()]
+        return list(set(domains))  # Remove duplicates
+    except Exception as e:
+        print(f"[!] Error loading domains from {file_path}: {e}")
+        return []
+
 def main():
     script_dir = os.path.dirname(os.path.abspath(__file__))
     excel_path = os.path.join(script_dir, "Domains.xlsx")
     output_dir = os.path.join(script_dir, "..", "foundData")
     
     # Parse command line arguments
-    
     parser = argparse.ArgumentParser(description="Subdomain enumeration tool")
     parser.add_argument("--resume", action="store_true", help="Resume scanning from the last domain")
     parser.add_argument("--start-from", type=str, help="Start scanning from a specific domain")
+    parser.add_argument("--input", help="Input file containing domains (one per line)")
     args = parser.parse_args()
 
     # Load existing results if in resume mode
@@ -159,24 +169,27 @@ def main():
         print("[*] Resume mode enabled - loading previous scan results")
         existing_results, processed_domains, inactive_domains_list = load_existing_results(output_dir)
 
-    try:
-        df = pd.read_excel(excel_path)
-        if "Domain Name" not in df.columns:
-            print(f"[!] Error: Column 'Domain Name' not found in {excel_path}")
+    # Load domains from input file or Excel
+    if args.input:
+        print(f"[+] Loading domains from {args.input}")
+        domains = load_domains_from_file(args.input)
+    else:
+        try:
+            df = pd.read_excel(excel_path)
+            if "Domain Name" not in df.columns:
+                print(f"[!] Error: Column 'Domain Name' not found in {excel_path}")
+                return
+            domains = df["Domain Name"].dropna().unique()
+        except FileNotFoundError:
+            print(f"[!] Error: Excel file not found at {excel_path}")
             return
-        domains = df["Domain Name"].dropna().unique()
-    except FileNotFoundError:
-        print(f"[!] Error: Excel file not found at {excel_path}")
-        return
-    except Exception as e:
-        print(f"[!] Error reading Excel file {excel_path}: {e}")
-        return
-
+        except Exception as e:
+            print(f"[!] Error reading Excel file {excel_path}: {e}")
+            return
     if len(domains) == 0:
-        print("[!] No domains found in the Excel file.")
+        print("[!] No domains found in the input file.")
         return
-
-    print(f"[+] Loaded {len(domains)} unique domains from Excel.")
+    print(f"[+] Loaded {len(domains)} unique domains from input.")
 
     all_domain_results = existing_results.copy()
     inactive_domains = inactive_domains_list.copy()

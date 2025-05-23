@@ -1,126 +1,83 @@
-import ast
-import datetime
-import json
-import sys
+
+
+
 import requests
-import urllib.parse
-from tabulate import tabulate
+from bs4 import BeautifulSoup
+import re
+import json
 
-url = "https://www.whatruns.com/api/v1/get_site_apps"
-data = {
-    "data": {
-        "hostname": sys.argv[1],
-        "url": sys.argv[1],
-        "rawhostname": sys.argv[1]
+def clean_js_object(js_obj_str):
+    # Remove JS comments (optional)
+    js_obj_str = re.sub(r'//.*?\n|/\*.*?\*/', '', js_obj_str, flags=re.DOTALL)
+
+    # Replace JS literals with JSON-compatible ones
+    js_obj_str = js_obj_str.replace("undefined", "null")
+    js_obj_str = js_obj_str.replace("'", '"')
+
+    # Ensure object keys are quoted (naive but effective for known cases)
+    js_obj_str = re.sub(r'([{,])(\s*)([a-zA-Z0-9_]+)\s*:', r'\1"\3":', js_obj_str)
+
+    # Remove trailing commas in objects and arrays
+    js_obj_str = re.sub(r',(\s*[}\]])', r'\1', js_obj_str)
+
+    return js_obj_str
+
+def extract_var_s(domain):
+    url = f"https://www.whatruns.com/website/{domain}"
+    headers = {
+        "User-Agent": "Mozilla/5.0"
     }
-}
-data = urllib.parse.urlencode({k: json.dumps(v) for k, v in data.items()})
-data = data.replace('+', '')
-headers = {'Content-Type': 'application/x-www-form-urlencoded'}
-response = requests.post(url, data=data, headers=headers)
-loaded = json.loads(response.content)
-apps = ast.literal_eval(loaded['apps'])
-print(apps)
-nuance = list(apps.keys())[0]  # In Python 3, pop() on dict_keys is not allowed
 
-entries = []
-for app_type, values in apps[nuance].items():
-    for item in values:
-        dt = datetime.datetime.fromtimestamp(item['detectedTime'] / 1000)
-        ldt = datetime.datetime.fromtimestamp(item['latestDetectedTime'] / 1000)
-        entries.append({
-            'Type': app_type,
-            'Name': item['name'],
-            'Detected': dt,
-            'Last_Detected': ldt,
-            'Version': item.get('version', 'Unknown')
-        })
+    try:
+        response = requests.get(url, headers=headers)
+        response.raise_for_status()
 
-print(tabulate(entries, headers='keys'))
+        soup = BeautifulSoup(response.text, 'html.parser')
+        scripts = soup.find_all('script')
 
-# import ast
-# import json
-# import sys
-# import requests
-# import urllib
-# import subprocess
-# import os
+        for script in scripts:
+            if script.string and "var s=" in script.string:
+                script_text = script.string
+                start_idx = script_text.find("var s=")
+                script_slice = script_text[start_idx + len("var s="):]
 
-# # Functie om te controleren of een pakket is ge誰nstalleerd
-# def check_and_install(package):
-#     try:
-#         subprocess.run(["dpkg", "-l", package], check=True, stdout=subprocess.DEVNULL, stderr=subprocess.PIPE)
-#     except subprocess.CalledProcessError:
-#         print(f"{package} is niet ge誰nstalleerd. Het wordt nu ge誰nstalleerd...")
-#         subprocess.run(["sudo", "apt-get", "install", "-y", package], check=True, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
-#         print(f"{package} is succesvol ge誰nstalleerd.")
+                brace_count = 0
+                object_start = None
+                object_end = None
 
-# # Vereiste pakketten
-# required_tools = ["python3-requests", "python3-urllib3", "python3-tabulate"]
-# for tool in required_tools:
-#     check_and_install(tool)
+                for i, char in enumerate(script_slice):
+                    if char == '{':
+                        if brace_count == 0:
+                            object_start = i
+                        brace_count += 1
+                    elif char == '}':
+                        brace_count -= 1
+                        if brace_count == 0:
+                            object_end = i
+                            break
 
-# # Functie om resultaten in een JSON-bestand op te slaan
-# def save_results_to_json(data, filename):
-#     with open(filename, 'w', encoding='utf-8') as f:
-#         json.dump(data, f, indent=4, ensure_ascii=False)
-#     print(f"Resultaten zijn opgeslagen in: {filename}")
+                if object_start is not None and object_end is not None:
+                    js_object_str = script_slice[object_start:object_end+1]
+                    cleaned = clean_js_object(js_object_str)
 
-# def main():
-#     script_dir = os.path.dirname(os.path.abspath(__file__))
-#     project_root = os.path.abspath(os.path.join(script_dir, '..'))
-#     output_dir = os.path.join(project_root, "scan_results")
+                    try:
+                        parsed = json.loads(cleaned)
+                        print("🎉 Successfully parsed JSON:")
+                        print(json.dumps(parsed, indent=2))
+                        return parsed
+                    except json.JSONDecodeError as e:
+                        print("❌ JSON decoding failed.")
+                        print("Cleaned JS string:")
+                        print(cleaned)
+                        return None
 
-#     if not os.path.exists(output_dir):
-#         os.makedirs(output_dir)
-#         print(f"De directory 'scan_results' is aangemaakt op {output_dir}")
+        print("❌ Could not find `var s`.")
+        return None
 
-#     domain = input("Voer de domeinnaam in waarop je de softwaretoepassingen wilt analyseren: ").strip()
-#     if not domain:
-#         print("Geen domeinnaam opgegeven. Het programma wordt afgesloten.")
-#         sys.exit(1)
+    except requests.RequestException as e:
+        print(f"❌ Request error: {e}")
+        return None
 
-#     url = "https://www.whatruns.com/api/v1/get_site_apps"
-#     data = {"data": {"hostname": domain, "url": domain, "rawhostname": domain}}
-#     data = urllib.parse.urlencode({k: json.dumps(v) for k, v in data.items()}).replace('+', '')
-#     headers = {'Content-Type': 'application/x-www-form-urlencoded'}
-
-#     response = requests.post(url, data=data, headers=headers)
-#     if response.status_code != 200:
-#         print(f"Fout bij het ophalen van gegevens: {response.status_code}")
-#         sys.exit(1)
-
-#     loaded = json.loads(response.content)
-#     apps_str = loaded.get('apps')
-#     if not apps_str:
-#         print("Fout: 'apps' niet gevonden in de API-respons.")
-#         sys.exit(1)
-
-#     try:
-#         apps = json.loads(apps_str)
-#     except Exception as e:
-#         print("Kon 'apps' niet decoderen:", e)
-#         print("Inhoud van 'apps':", apps_str)
-#         sys.exit(1)
-
-#     if isinstance(apps, dict):
-#         nuance = list(apps.keys())[0]
-#     else:
-#         print("'apps' is geen geldige dictionary:", apps)
-#         sys.exit(1)
-
-#     technology_versions = []
-#     for app_type, values in apps[nuance].items():
-#         for item in values:
-#             version = item.get('version', 'N/A')
-#             technology_versions.append({
-#                 "name": item['name'],
-#                 "version": version,
-#                 "type": app_type
-#             })
-
-#     filename = os.path.join(output_dir, f"{domain}_technology_versions.json")
-#     save_results_to_json(technology_versions, filename)
-
-# if __name__ == "__main__":
-#     main()
+if __name__ == "__main__":
+    domain_input = input("Enter a domain name (e.g., example.com): ")
+    extract_var_s(domain_input)

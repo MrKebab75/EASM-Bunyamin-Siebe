@@ -2,6 +2,7 @@ import socket
 import ssl
 import json
 import os
+import argparse
 from datetime import datetime
 import time
 
@@ -75,28 +76,48 @@ def check_certificate(domain):
             "message": str(e)
         }
 
+def load_domains_from_file(file_path):
+    """Load domains from a text file, one domain per line."""
+    try:
+        with open(file_path, 'r') as f:
+            domains = [line.strip() for line in f if line.strip()]
+        return list(set(domains))  # Remove duplicates
+    except Exception as e:
+        print(f"[!] Error loading domains from {file_path}: {e}")
+        return []
+
 def main():
+    # Set up argument parser
+    parser = argparse.ArgumentParser(description='SSL Certificate Checker for Domains')
+    parser.add_argument('--input', help='Input file containing domains (one per line)')
+    args = parser.parse_args()
+
     script_dir = os.path.dirname(os.path.abspath(__file__))
     base_dir = os.path.dirname(script_dir)
     
     # Input and output file paths
-    input_file = os.path.join(base_dir, "foundData", "all_subdomains.json")
     output_file = os.path.join(base_dir, "foundData", "certificates.json")
     
     # Create foundData directory if it doesn't exist
     os.makedirs(os.path.dirname(output_file), exist_ok=True)
     
     # Load domain data
-    try:
-        with open(input_file, 'r') as f:
-            domains_data = json.load(f)
-        print(f"Loaded {len(domains_data)} domain entries from {input_file}")
-    except FileNotFoundError:
-        print(f"Error: Input file {input_file} not found")
-        return
-    except json.JSONDecodeError:
-        print(f"Error: Could not parse JSON in {input_file}")
-        return
+    if args.input:
+        print(f"Reading domains from {args.input}")
+        domains = load_domains_from_file(args.input)
+        domains_data = [{"domain": domain} for domain in domains]
+    else:
+        input_file = os.path.join(base_dir, "foundData", "all_subdomains.json")
+        try:
+            with open(input_file, 'r') as f:
+                domains_data = json.load(f)
+            print(f"Loaded {len(domains_data)} domain entries from {input_file}")
+        except FileNotFoundError:
+            print(f"Error: Input file {input_file} not found")
+            return
+        except json.JSONDecodeError:
+            print(f"Error: Could not parse JSON in {input_file}")
+            return
     
     # Process certificates for main domains only
     all_certificates = []

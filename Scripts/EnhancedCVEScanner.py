@@ -405,9 +405,20 @@ def generate_summary_report(results, output_file):
     except Exception as e:
         print(f"[!] Error generating summary report: {str(e)}")
 
+def load_domains_from_file(file_path):
+    """Load domains from a text file, one domain per line."""
+    try:
+        with open(file_path, 'r') as f:
+            domains = [line.strip() for line in f if line.strip()]
+        return list(set(domains))  # Remove duplicates
+    except Exception as e:
+        print(f"[!] Error loading domains from {file_path}: {e}")
+        return []
+
 def main():
     parser = argparse.ArgumentParser(description="Enhanced CVE vulnerability scanner for domains and subdomains.")
     parser.add_argument("--input-json", default="foundData/all_subdomains.json", help="Path to the input JSON file with domains and subdomains")
+    parser.add_argument("--input", help="Input file containing domains (one per line)")
     parser.add_argument("--output-json", default="foundData/vulnerability_scan.json", help="Path to the output JSON file")
     parser.add_argument("--output-report", default="foundData/vulnerability_report.txt", help="Path to the output report file")
     parser.add_argument("--ports", help="Comma-separated list of ports to scan (e.g., '80,443,8080')")
@@ -427,8 +438,12 @@ def main():
     os.makedirs(output_dir, exist_ok=True)
     
     # Load domains and subdomains
-    print(f"[*] Loading domains and subdomains from {args.input_json}...")
-    all_domains = read_domains_from_json(args.input_json)
+    if args.input:
+        print(f"[*] Loading domains from {args.input}...")
+        all_domains = load_domains_from_file(args.input)
+    else:
+        print(f"[*] Loading domains and subdomains from {args.input_json}...")
+        all_domains = read_domains_from_json(args.input_json)
     print(f"[+] Loaded {len(all_domains)} unique domains and subdomains")
     
     if not all_domains:

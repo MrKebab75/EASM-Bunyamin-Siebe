@@ -1,0 +1,4 @@
+Reading domains from uploads/temp_domains.txt
+[1/1] Checking domain: nwg.se
+
+Domain lease information saved to /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/foundData/domainLease.json

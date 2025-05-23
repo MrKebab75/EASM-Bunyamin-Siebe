@@ -337,33 +337,11 @@ document.addEventListener('DOMContentLoaded', function() {
 // Load data from JSON files
 async function loadData() {
     try {
-        console.log('Starting to load certificate data...');
-        
         // Fetch certificates data
         const response = await fetch('/api/certificates');
-        console.log('API response received:', response);
-        
-        if (!response.ok) {
-            throw new Error(`Error fetching data: ${response.status} ${response.statusText}`);
-        }
-        
         allCertificates = await response.json();
-        console.log('Certificates data parsed, count:', allCertificates.length);
         
-        // If no certificates were loaded, check if we need to load from a different location
-        if (!allCertificates.length) {
-            console.log('No certificates found, trying direct file access...');
-            // Try loading directly from file
-            const fileResponse = await fetch('/foundData/certificates.json');
-            console.log('File response:', fileResponse);
-            
-            if (fileResponse.ok) {
-                allCertificates = await fileResponse.json();
-                console.log('Certificates loaded from file, count:', allCertificates.length);
-            } else {
-                throw new Error('Could not load certificates from API or direct file access');
-            }
-        }
+        console.log('Certificates loaded:', allCertificates.length);
         
         // Process certificates (categorize by expiry)
         processCertificates();
@@ -410,6 +388,9 @@ async function loadData() {
         } catch (e) {
             console.error('Error initializing charts:', e);
         }
+
+        // Trigger initial filtering and display
+        filterCertificates();
         
     } catch (error) {
         console.error('Error loading data:', error);

@@ -21,6 +21,8 @@ function fetchDarknetData() {
         .then(data => {
             darknetData = data;
             processDarknetData(data);
+            // Trigger initial filtering and display
+            renderResultsPage(1);
         })
         .catch(error => {
             console.error('Error fetching darknet data:', error);

@@ -9,7 +9,7 @@
     <style>
         body {
             background-color: #0d1117;
-            color: #c9d1d9;
+            color: #f8f9fa;
             font-family: 'Segoe UI', sans-serif;
         }
         .main-container {
@@ -103,6 +103,9 @@
             border-top: 1px solid #30363d;
             color: #8b949e;
         }
+        .form-check-label {
+            color: #58a6ff;
+        }
     </style>
 </head>
 <body>
@@ -170,27 +173,126 @@
             </div>
         </div>
         
+        <!-- Complete Security Scan Section -->
+        <div class="complete-scan-section" style="background-color: #1a1f2c; border-radius: 12px; padding: 40px; margin: 40px 0; border: 1px solid #30363d;">
+            <div class="text-center mb-4">
+                <h2 style="color: #58a6ff; font-size: 2.5rem;">
+                    <i class="bi bi-shield-check"></i> Complete Security Scan
+                </h2>
+                <p class="text-muted" style="font-size: 1.2rem;">Run all security scans in sequence for comprehensive analysis</p>
+            </div>
+            
+            <form method="POST" enctype="multipart/form-data" class="mt-4">
+                <input type="hidden" name="script" value="complete_scan">
+                <div class="row justify-content-center">
+                    <div class="col-md-8">
+                        <div class="card bg-dark border-primary">
+                            <div class="card-body">
+                                <div class="mb-4">
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="radio" id="input_type_complete_scan_single" 
+                                               name="input_type_complete_scan" value="single" checked>
+                                        <label class="form-check-label" for="input_type_complete_scan_single">Single Domain</label>
+                                    </div>
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="radio" id="input_type_complete_scan_file" 
+                                               name="input_type_complete_scan" value="file">
+                                        <label class="form-check-label" for="input_type_complete_scan_file">Excel File</label>
+                                    </div>
+                                </div>
+                                
+                                <div id="complete_scan_single_input" class="mb-3">
+                                    <input type="text" class="form-control form-control-lg" 
+                                           id="domain_complete_scan" name="domain_complete_scan" 
+                                           placeholder="Enter domain (e.g., example.com)" required>
+                                </div>
+                                
+                                <div id="complete_scan_file_input" class="mb-3" style="display: none;">
+                                    <input type="file" class="form-control form-control-lg" 
+                                           id="file_complete_scan" name="file_complete_scan" 
+                                           accept=".xlsx,.xls">
+                                    <small class="text-muted">Excel file must contain a 'Domain Name' column</small>
+                                </div>
+                                
+                                <button type="submit" class="btn btn-primary btn-lg w-100" 
+                                        style="background-color: #238636; border-color: #238636;">
+                                    <i class="bi bi-shield-check"></i> Start Complete Security Scan
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+        
         <!-- Tool Section -->
         <div class="tool-section">
             <h2><i class="bi bi-gear"></i> EASM Tools</h2>
-            <form method="POST">
-                <div class="row">
-                    {% for key, script in scripts.items() %}
-                        <div class="col-md-6">
-                            <button type="submit" name="script" value="{{ key }}" class="btn btn-primary script-btn">
-                                <i class="bi bi-play-circle"></i> {{ script.split('/')[-1].replace('.py', '').replace('_', ' ') }}
-                            </button>
+            
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                    {% for category, message in messages %}
+                        <div class="alert alert-{{ category if category != 'error' else 'danger' }} alert-dismissible fade show" role="alert">
+                            {{ message }}
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                         </div>
+                    {% endfor %}
+                {% endif %}
+            {% endwith %}
+            
+            <form method="POST" enctype="multipart/form-data">
+                <div class="row">
+                    {% for script_id, script_path in scripts.items() %}
+                        {% if script_id != 'complete_scan' %}
+                            <div class="col-md-6 mb-4">
+                                <div class="card bg-dark border-primary">
+                                    <div class="card-body">
+                                        <h5 class="card-title text-primary">
+                                            <i class="bi bi-play-circle"></i> 
+                                            {{ script_path.split('/')[-1].replace('.py', '').replace('_', ' ').title() }}
+                                        </h5>
+                                        
+                                        <div class="mb-3">
+                                            <div class="form-check form-check-inline">
+                                                <input class="form-check-input" type="radio" name="input_type_{{ script_id }}" 
+                                                       id="single_{{ script_id }}" value="single" checked>
+                                                <label class="form-check-label" for="single_{{ script_id }}">Single Domain</label>
+                                            </div>
+                                            <div class="form-check form-check-inline">
+                                                <input class="form-check-input" type="radio" name="input_type_{{ script_id }}" 
+                                                       id="excel_{{ script_id }}" value="excel">
+                                                <label class="form-check-label" for="excel_{{ script_id }}">Excel File</label>
+                                            </div>
+                                        </div>
+                                        
+                                        <div id="single_input_{{ script_id }}" class="mb-3">
+                                            <input type="text" class="form-control" name="domain_{{ script_id }}" 
+                                                   placeholder="Enter domain (e.g., example.com)">
+                                        </div>
+                                        
+                                        <div id="excel_input_{{ script_id }}" class="mb-3" style="display: none;">
+                                            <input type="file" class="form-control" name="file_{{ script_id }}" 
+                                                   accept=".xlsx,.xls">
+                                            <small class="text-muted">Excel file must contain a 'Domain Name' column</small>
+                                        </div>
+                                        
+                                        <button type="submit" name="script" value="{{ script_id }}" 
+                                                class="btn btn-primary w-100">
+                                            Run Script
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        {% endif %}
                     {% endfor %}
                 </div>
             </form>
             
-            {% if output %}
-                <h3 class="mt-5" style="color:#58a6ff;">Script Output:</h3>
-                <pre class="bg-dark p-3 rounded text-white" style="max-height: 400px; overflow-y: scroll;">
-            {{ output }}
-                </pre>
-            {% endif %}
+            <!-- Export Output Form -->
+            <form method="POST" action="{{ url_for('export_output') }}" class="mt-3">
+                <input type="hidden" name="output" id="output_to_export">
+                <button type="submit" class="btn btn-success">Export Output to Text File</button>
+            </form>
         </div>
         
         <div class="footer">
@@ -199,5 +301,36 @@
     </div>
     
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Toggle between single domain and Excel file input (robust for underscores in scriptId)
+        document.querySelectorAll('input[type="radio"]').forEach(radio => {
+            radio.addEventListener('change', function() {
+                // Get the script id by removing the prefix and joining the rest
+                const idParts = this.id.split('_');
+                const scriptId = idParts.slice(1).join('_');
+                const singleInput = document.getElementById(`single_input_${scriptId}`);
+                const excelInput = document.getElementById(`excel_input_${scriptId}`);
+                if (singleInput && excelInput) {
+                    if (this.value === 'single') {
+                        singleInput.style.display = 'block';
+                        excelInput.style.display = 'none';
+                    } else {
+                        singleInput.style.display = 'none';
+                        excelInput.style.display = 'block';
+                    }
+                }
+            });
+        });
+
+        document.getElementById('input_type_complete_scan_single').addEventListener('change', function() {
+            document.getElementById('complete_scan_single_input').style.display = 'block';
+            document.getElementById('complete_scan_file_input').style.display = 'none';
+        });
+
+        document.getElementById('input_type_complete_scan_file').addEventListener('change', function() {
+            document.getElementById('complete_scan_single_input').style.display = 'none';
+            document.getElementById('complete_scan_file_input').style.display = 'block';
+        });
+    </script>
 </body>
 </html>

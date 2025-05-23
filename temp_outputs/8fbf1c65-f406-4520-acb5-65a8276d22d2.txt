@@ -1,0 +1,9 @@
+Reading domains from uploads/temp_domains.txt
+Found 1 main domains to check
+[1/1] Checking certificate for main domain: craft.se...
+  - Status: valid, expires in 87 days
+
+Certificate information for 1 main domains saved to /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/foundData/certificates.json
+
+Errors: /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/Scripts/Certificaat.py:29: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  days_remaining = (not_after - datetime.utcnow()).days
