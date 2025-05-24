@@ -1,0 +1,31 @@
+Starting complete_scan scan...
+[*] Starting CompleteSecurityScan.py
+[*] Arguments parsed:
+    Input file: /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/uploads/temp_domains.txt
+    Output directory: foundData
+[*] Reading domains from /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/uploads/temp_domains.txt
+[+] Successfully read input file
+[+] Found 1 domains to scan
+[+] Created scan directory: foundData/scan_nwg.se_20250524_113157
+[+] Results will be saved in: foundData/scan_nwg.se_20250524_113157
+[+] Total number of scans to run: 6
+
+[*] Starting scan 1/6: subdom.py
+
+[*] Running subdom.py...
+[*] Full script path: Scripts/subdom.py
+[*] Input file: /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/uploads/temp_domains.txt
+[*] Output directory: foundData/scan_nwg.se_20250524_113157
+[+] Created/verified scan directory: /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/foundData/scan_nwg.se_20250524_113157
+[*] Creating symbolic link from /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/foundData/scan_nwg.se_20250524_113157/foundData to /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/foundData/scan_nwg.se_20250524_113157
+[+] Created symbolic link from /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/foundData/scan_nwg.se_20250524_113157/foundData to /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/foundData/scan_nwg.se_20250524_113157
+[*] Executing command: python3 -u /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/Scripts/subdom.py --input /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/uploads/temp_domains.txt --output-dir /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/foundData/scan_nwg.se_20250524_113157
+[*] Changed working directory to: /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/Scripts
+[*] Process started with PID: 598234
+[*] Using output directory: /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/foundData/scan_nwg.se_20250524_113157
+[+] Loading domains from /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/uploads/temp_domains.txt
+[+] Loaded 1 unique domains from input.
+
+=== Processing domain 1/1: nwg.se ===
+[+] Pinging domain: nwg.se
+[+] Running Amass for nwg.se

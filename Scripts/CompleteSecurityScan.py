@@ -32,9 +32,9 @@ def run_script(script_path, input_file, output_dir):
             return False
             
         # Run the script with stdout and stderr unbuffered
-        cmd = ["python3", "-u", script_path, "--input", input_file]
+        cmd = ["python3", "-u", script_path]
         
-        # Special handling for subdom.py - it uses its own output structure
+        # Special handling for different scripts
         if os.path.basename(script_path) == "subdom.py":
             try:
                 # Create the scan directory if it doesn't exist
@@ -54,13 +54,24 @@ def run_script(script_path, input_file, output_dir):
                 print(f"[+] Created symbolic link from {scan_found_data} to {output_dir}")
                 
                 # Add output directory parameter for subdom.py
-                cmd.extend(["--output-dir", output_dir])
+                cmd.extend(["--input", input_file, "--output-dir", output_dir])
             except Exception as e:
                 print(f"[!] Error creating symbolic link: {e}")
                 return False
-        # Add output directory parameter for all scripts that accept it
+        elif os.path.basename(script_path) == "EnhancedCVEScanner.py":
+            # EnhancedCVEScanner.py has different argument requirements
+            output_json = os.path.join(output_dir, "cve_scan_results.json")
+            output_report = os.path.join(output_dir, "cve_scan_report.txt")
+            cmd.extend([
+                "--input-json", input_file,
+                "--output-json", output_json,
+                "--output-report", output_report,
+                "--discover-ports",
+                "--verbose"
+            ])
         else:
-            cmd.extend(["--output-dir", output_dir])
+            # Default case for other scripts
+            cmd.extend(["--input", input_file, "--output-dir", output_dir])
             
         print(f"[*] Executing command: {' '.join(cmd)}", flush=True)
         

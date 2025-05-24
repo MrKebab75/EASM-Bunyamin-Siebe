@@ -6,6 +6,7 @@ import os
 import time
 import argparse
 from datetime import datetime
+import socket
 
 def scan_with_nmap(domain):
     """Perform a port scan with nmap and return structured results."""
@@ -14,7 +15,7 @@ def scan_with_nmap(domain):
         # -sV for service detection, -p- for all ports
         result = subprocess.run(
             ["nmap", "-sV", "--open", domain],
-            capture_output=True, text=True, timeout=600  # 10 minute timeout
+            capture_output=True, text=True, timeout=1800  # 30 minute timeout
         )
         
         if result.returncode != 0:
@@ -24,7 +25,7 @@ def scan_with_nmap(domain):
         return parse_nmap_output(result.stdout, domain)
     except subprocess.TimeoutExpired:
         print(f"[!] Nmap scan timed out for {domain}")
-        return {"status": "timeout", "message": "Scan timed out after 10 minutes"}
+        return {"status": "timeout", "message": "Scan timed out after 30 minutes"}
     except FileNotFoundError:
         print("[!] nmap is not installed or not found in PATH")
         return {"status": "error", "message": "nmap not found"}
@@ -154,9 +155,9 @@ def ping_host(domain):
     try:
         # Different ping command based on OS
         if os.name == "nt":  # Windows
-            ping_cmd = ["ping", "-n", "1", "-w", "1000", domain]
+            ping_cmd = ["ping", "-n", "1", "-w", "2000", domain]
         else:  # Unix/Linux
-            ping_cmd = ["ping", "-c", "1", "-W", "1", domain]
+            ping_cmd = ["ping", "-c", "1", "-W", "2", domain]
             
         result = subprocess.run(
             ping_cmd,
@@ -165,21 +166,48 @@ def ping_host(domain):
             text=True,
             timeout=5
         )
-        return result.returncode == 0
+        
+        # Consider host up if either:
+        # 1. Ping was successful (return code 0)
+        # 2. We got a response but with errors (like "Destination Host Unreachable")
+        return result.returncode == 0 or "bytes from" in result.stdout
     except Exception:
+        # If ping fails, try a quick TCP connection to common ports
+        try:
+            for port in [80, 443]:
+                try:
+                    sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+                    sock.settimeout(2)
+                    result = sock.connect_ex((domain, port))
+                    sock.close()
+                    if result == 0:
+                        return True
+                except:
+                    continue
+        except:
+            pass
         return False
 
 def load_domains_from_json(json_file):
-    """Load domains from the all_subdomains.json file."""
+    """Load domains and subdomains from the all_subdomains.json file."""
     try:
         with open(json_file, 'r') as f:
             data = json.load(f)
             
-        # Extract only the main domains (not subdomains)
+        # Extract domains and subdomains
         domains = []
         for entry in data:
-            if "domain" in entry:
+            # Add main domain if present
+            if "domain" in entry and entry["domain"]:
                 domains.append(entry["domain"])
+            
+            # Add subdomains if present
+            if "results" in entry:
+                for subdomain_info in entry["results"]:
+                    if "subdomain" in subdomain_info and subdomain_info["subdomain"]:
+                        # Skip if subdomain is "No names were discovered"
+                        if subdomain_info["subdomain"] != "No names were discovered":
+                            domains.append(subdomain_info["subdomain"])
                 
         return list(set(domains))  # Remove duplicates
     except Exception as e:

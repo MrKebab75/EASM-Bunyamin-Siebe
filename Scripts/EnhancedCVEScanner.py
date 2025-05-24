@@ -11,6 +11,7 @@ import socket
 from datetime import datetime
 import argparse
 import requests
+import sys
 
 def get_cve_url(cve_id):
     """Generate a URL to the NIST NVD page for a given CVE."""
@@ -416,160 +417,88 @@ def load_domains_from_file(file_path):
         return []
 
 def main():
-    parser = argparse.ArgumentParser(description="Enhanced CVE vulnerability scanner for domains and subdomains.")
-    parser.add_argument("--input-json", default="foundData/all_subdomains.json", help="Path to the input JSON file with domains and subdomains")
-    parser.add_argument("--input", help="Input file containing domains (one per line)")
-    parser.add_argument("--output-json", default="foundData/vulnerability_scan.json", help="Path to the output JSON file")
-    parser.add_argument("--output-report", default="foundData/vulnerability_report.txt", help="Path to the output report file")
-    parser.add_argument("--ports", help="Comma-separated list of ports to scan (e.g., '80,443,8080')")
-    parser.add_argument("--discover-ports", action="store_true", help="Discover open ports before scanning")
-    parser.add_argument("--max-targets", type=int, help="Maximum number of targets to scan")
-    parser.add_argument("--verbose", action="store_true", help="Enable verbose output")
-    parser.add_argument("--skip-ping", action="store_true", help="Skip initial ping sweep (not recommended)")
+    parser = argparse.ArgumentParser(description='Enhanced CVE Scanner')
+    parser.add_argument('--input-json', help='Input JSON file containing domains')
+    parser.add_argument('--input', help='Input text file containing domains (one per line)')
+    parser.add_argument('--output-json', help='Output JSON file for results')
+    parser.add_argument('--output-report', help='Output text file for report')
+    parser.add_argument('--ports', help='Comma-separated list of ports to scan')
+    parser.add_argument('--discover-ports', action='store_true', help='Discover open ports automatically')
+    parser.add_argument('--max-targets', type=int, help='Maximum number of targets to scan')
+    parser.add_argument('--verbose', action='store_true', help='Enable verbose output')
+    parser.add_argument('--skip-ping', action='store_true', help='Skip initial ping check')
     args = parser.parse_args()
     
-    # Print banner
-    print("\n" + "="*80)
-    print("Enhanced CVE Vulnerability Scanner for Domains")
-    print("="*80)
-    
-    # Ensure output directory exists
-    output_dir = os.path.dirname(args.output_json)
-    os.makedirs(output_dir, exist_ok=True)
-    
-    # Load domains and subdomains
-    if args.input:
-        print(f"[*] Loading domains from {args.input}...")
-        all_domains = load_domains_from_file(args.input)
+    # Load domains from input file
+    domains = []
+    if args.input_json:
+        domains = read_domains_from_json(args.input_json)
+    elif args.input:
+        domains = load_domains_from_file(args.input)
     else:
-        print(f"[*] Loading domains and subdomains from {args.input_json}...")
-        all_domains = read_domains_from_json(args.input_json)
-    print(f"[+] Loaded {len(all_domains)} unique domains and subdomains")
+        print("Error: No input file specified")
+        sys.exit(1)
     
-    if not all_domains:
-        print("[!] No valid domains found. Please check your input file.")
-        return
+    if not domains:
+        print("Error: No domains found in input file")
+        sys.exit(1)
     
-    # Limit targets if specified
-    if args.max_targets and args.max_targets < len(all_domains):
-        print(f"[*] Limiting scan to the first {args.max_targets} domains")
-        all_domains = all_domains[:args.max_targets]
+    # Limit number of targets if specified
+    if args.max_targets and len(domains) > args.max_targets:
+        print(f"[*] Limiting scan to {args.max_targets} targets")
+        domains = domains[:args.max_targets]
     
-    # Perform initial ping sweep to filter unreachable domains
-    active_domains = []
-    unreachable_domains = []
+    # First, check which targets are reachable
+    print("\n[*] Checking which targets are reachable...")
+    reachable_domains = []
+    for domain in domains:
+        if args.skip_ping or ping_host(domain, args.verbose):
+            reachable_domains.append(domain)
+            if args.verbose:
+                print(f"[+] {domain} is reachable")
+        else:
+            if args.verbose:
+                print(f"[!] {domain} is not reachable, skipping")
     
-    if not args.skip_ping:
-        print("\n[*] Performing initial ping sweep to identify reachable domains...")
-        active_domains, unreachable_domains = ping_sweep(all_domains, verbose=args.verbose)
-        
-        if not active_domains:
-            print("[!] No reachable domains found. Exiting.")
-            # Create empty results with unreachable domains
-            results = [{
-                'domain': domain,
-                'timestamp': datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
-                'is_up': False,
-                'ports': {},
-                'vulnerabilities': []
-            } for domain in unreachable_domains]
-            
-            save_results_to_json(results, args.output_json)
-            generate_summary_report(results, args.output_report)
-            return
-    else:
-        active_domains = all_domains
-        print("[!] Initial ping sweep skipped. Proceeding with all domains.")
+    print(f"\n[*] Found {len(reachable_domains)} reachable targets out of {len(domains)} total targets")
     
-    print(f"[*] Preparing to scan {len(active_domains)} reachable domains")
+    if not reachable_domains:
+        print("[!] No reachable targets found, exiting")
+        sys.exit(1)
     
-    # Parse ports if provided
+    # Parse ports if specified
     ports = None
     if args.ports:
-        ports = args.ports.split(',')
-        print(f"[*] Will scan the following ports: {', '.join(ports)}")
-    elif args.discover_ports:
-        print(f"[*] Will discover open ports for each domain")
-    else:
-        print(f"[*] Will discover open ports for each domain (default)")
-        args.discover_ports = True
+        ports = [p.strip() for p in args.ports.split(',')]
     
-    # Perform the scans
+    # Scan each reachable domain
     results = []
-    start_time = time.time()
-    
-    # First, add all unreachable domains to results
-    if not args.skip_ping:
-        for domain in unreachable_domains:
-            results.append({
-                'domain': domain,
-                'timestamp': datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
-                'is_up': False,
-                'ports': {},
-                'vulnerabilities': []
-            })
-            
-        if results:
-            print(f"[*] Added {len(unreachable_domains)} unreachable domains to results")
-    
-    # Then scan the reachable domains
-    for i, domain in enumerate(active_domains, 1):
-        print(f"\n[*] Scanning domain {i}/{len(active_domains)}: {domain}")
-        
-        # Scan the domain (now we know it's reachable)
+    for i, domain in enumerate(reachable_domains, 1):
+        print(f"\n[*] Scanning domain {i}/{len(reachable_domains)}: {domain}")
         result = scan_domain_for_vulnerabilities(
             domain,
             ports=ports,
             scan_all_ports=args.discover_ports,
             verbose=args.verbose
         )
-        
         results.append(result)
-        
-        # Print a summary for this domain
-        vulns = result['vulnerabilities']
-        if vulns:
-            severity_counts = {}
-            for v in vulns:
-                severity = v['severity']
-                if severity not in severity_counts:
-                    severity_counts[severity] = 0
-                severity_counts[severity] += 1
-            
-            print(f"[+] Found {len(vulns)} vulnerabilities for {domain}:")
-            for severity, count in severity_counts.items():
-                print(f"    - {severity}: {count}")
-        else:
-            print(f"[*] No vulnerabilities found for {domain}")
-        
-        # Pause between scans to be nice to the network
-        if i < len(active_domains):
-            print(f"[*] Pausing before next scan...")
-            time.sleep(2)
     
-    # Calculate total scan time
-    scan_time = time.time() - start_time
-    minutes, seconds = divmod(scan_time, 60)
+    # Save results
+    if args.output_json:
+        save_results_to_json(results, args.output_json)
+        print(f"\n[+] Results saved to {args.output_json}")
     
-    # Print final summary
-    domains_up = sum(1 for r in results if r['is_up'])
+    if args.output_report:
+        generate_summary_report(results, args.output_report)
+        print(f"[+] Report generated at {args.output_report}")
+    
+    # Print summary
     total_vulns = sum(len(r['vulnerabilities']) for r in results)
-    domains_with_vulns = sum(1 for r in results if r['vulnerabilities'])
+    print(f"\n[*] Scan complete!")
+    print(f"    - Scanned {len(reachable_domains)} reachable domains")
+    print(f"    - Found {total_vulns} vulnerabilities")
     
-    print(f"\n[+] Scan completed in {int(minutes)}m {int(seconds)}s")
-    print(f"[+] Reviewed {len(all_domains)} domains")
-    print(f"[+] {domains_up} domains were reachable")
-    print(f"[+] Found vulnerabilities in {domains_with_vulns} domains")
-    print(f"[+] Total vulnerabilities found: {total_vulns}")
-    
-    # Save the results
-    save_results_to_json(results, args.output_json)
-    generate_summary_report(results, args.output_report)
-    
-    print(f"\n[+] Scan complete! Results saved to:")
-    print(f"    - JSON data: {args.output_json}")
-    print(f"    - Summary report: {args.output_report}")
-    print("="*80)
+    return 0
 
 if __name__ == "__main__":
     main()
