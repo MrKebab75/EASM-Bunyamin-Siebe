@@ -1,0 +1,87 @@
+Starting complete_scan scan...
+[Domain 1/1: nwg.se] [*] Starting CompleteSecurityScan.py
+[Domain 1/1: nwg.se] [*] Arguments parsed:
+[Domain 1/1: nwg.se]     Input file: /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/uploads/temp_domain_1.txt
+[Domain 1/1: nwg.se]     Output directory: foundData
+[Domain 1/1: nwg.se] [*] Reading domains from /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/uploads/temp_domain_1.txt
+[Domain 1/1: nwg.se] [+] Successfully read input file
+[Domain 1/1: nwg.se] [+] Found 1 domains to scan
+[Domain 1/1: nwg.se] [+] Created scan directory: foundData/scan_nwg.se_20250528_135953
+[Domain 1/1: nwg.se] [+] Results will be saved in: foundData/scan_nwg.se_20250528_135953
+[Domain 1/1: nwg.se] [+] Total number of scans to run: 6
+[Domain 1/1: nwg.se] 
+[Domain 1/1: nwg.se] [*] Starting scan 1/6: subdom.py
+[Domain 1/1: nwg.se] 
+[Domain 1/1: nwg.se] [*] Running subdom.py...
+[Domain 1/1: nwg.se] [*] Full script path: Scripts/subdom.py
+[Domain 1/1: nwg.se] [*] Input file: /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/uploads/temp_domain_1.txt
+[Domain 1/1: nwg.se] [*] Output directory: foundData/scan_nwg.se_20250528_135953
+[Domain 1/1: nwg.se] [+] Created/verified scan directory: /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/foundData/scan_nwg.se_20250528_135953
+[Domain 1/1: nwg.se] [*] Creating symbolic link from /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/foundData/scan_nwg.se_20250528_135953/foundData to /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/foundData/scan_nwg.se_20250528_135953
+[Domain 1/1: nwg.se] [+] Created symbolic link from /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/foundData/scan_nwg.se_20250528_135953/foundData to /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/foundData/scan_nwg.se_20250528_135953
+[Domain 1/1: nwg.se] [*] Executing command: python3 -u /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/Scripts/subdom.py --input /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/uploads/temp_domain_1.txt --output-dir /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/foundData/scan_nwg.se_20250528_135953
+[Domain 1/1: nwg.se] [*] Changed working directory to: /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/Scripts
+[Domain 1/1: nwg.se] [*] Process started with PID: 38951
+[Domain 1/1: nwg.se] [*] Using output directory: /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/foundData/scan_nwg.se_20250528_135953
+[Domain 1/1: nwg.se] [+] Loading domains from /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/uploads/temp_domain_1.txt
+[Domain 1/1: nwg.se] [+] Loaded 1 unique domains from input.
+[Domain 1/1: nwg.se] 
+[Domain 1/1: nwg.se] === Processing domain 1/1: nwg.se ===
+[Domain 1/1: nwg.se] [+] Pinging domain: nwg.se
+[Domain 1/1: nwg.se] [-] Domain nwg.se is unreachable. Skipping...
+[Domain 1/1: nwg.se] [+] Inactive domains saved to: /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/foundData/scan_nwg.se_20250528_135953/inactiveDomains.json
+[Domain 1/1: nwg.se] 
+[Domain 1/1: nwg.se] [+] All domains processed successfully!
+[Domain 1/1: nwg.se] [*] Process completed with return code: 0
+[Domain 1/1: nwg.se] [*] Changed back to original directory: /home/s141422/SecurityProject/EASM-Bunyamin-Siebe
+[Domain 1/1: nwg.se] [*] Removing symbolic link: /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/foundData/scan_nwg.se_20250528_135953/foundData
+[Domain 1/1: nwg.se] [+] Removed symbolic link
+[Domain 1/1: nwg.se] 
+[Domain 1/1: nwg.se] [*] Starting scan 2/6: Certificaat.py
+[Domain 1/1: nwg.se] 
+[Domain 1/1: nwg.se] [*] Running Certificaat.py...
+[Domain 1/1: nwg.se] [*] Full script path: Scripts/Certificaat.py
+[Domain 1/1: nwg.se] [*] Input file: foundData/scan_nwg.se_20250528_135953/all_subdomains.json
+[Domain 1/1: nwg.se] [*] Output directory: foundData/scan_nwg.se_20250528_135953
+[Domain 1/1: nwg.se] [!] Error: Input file not found at /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/foundData/scan_nwg.se_20250528_135953/all_subdomains.json
+[Domain 1/1: nwg.se] [!] Warning: Certificaat.py did not complete successfully
+[Domain 1/1: nwg.se] 
+[Domain 1/1: nwg.se] [*] Starting scan 3/6: DetectWebTechnologies.py
+[Domain 1/1: nwg.se] 
+[Domain 1/1: nwg.se] [*] Running DetectWebTechnologies.py...
+[Domain 1/1: nwg.se] [*] Full script path: Scripts/DetectWebTechnologies.py
+[Domain 1/1: nwg.se] [*] Input file: foundData/scan_nwg.se_20250528_135953/all_subdomains.json
+[Domain 1/1: nwg.se] [*] Output directory: foundData/scan_nwg.se_20250528_135953
+[Domain 1/1: nwg.se] [!] Error: Input file not found at /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/foundData/scan_nwg.se_20250528_135953/all_subdomains.json
+[Domain 1/1: nwg.se] [!] Warning: DetectWebTechnologies.py did not complete successfully
+[Domain 1/1: nwg.se] 
+[Domain 1/1: nwg.se] [*] Starting scan 4/6: Domeingeldigheid.py
+[Domain 1/1: nwg.se] 
+[Domain 1/1: nwg.se] [*] Running Domeingeldigheid.py...
+[Domain 1/1: nwg.se] [*] Full script path: Scripts/Domeingeldigheid.py
+[Domain 1/1: nwg.se] [*] Input file: foundData/scan_nwg.se_20250528_135953/all_subdomains.json
+[Domain 1/1: nwg.se] [*] Output directory: foundData/scan_nwg.se_20250528_135953
+[Domain 1/1: nwg.se] [!] Error: Input file not found at /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/foundData/scan_nwg.se_20250528_135953/all_subdomains.json
+[Domain 1/1: nwg.se] [!] Warning: Domeingeldigheid.py did not complete successfully
+[Domain 1/1: nwg.se] 
+[Domain 1/1: nwg.se] [*] Starting scan 5/6: EnhancedCVEScanner.py
+[Domain 1/1: nwg.se] 
+[Domain 1/1: nwg.se] [*] Running EnhancedCVEScanner.py...
+[Domain 1/1: nwg.se] [*] Full script path: Scripts/EnhancedCVEScanner.py
+[Domain 1/1: nwg.se] [*] Input file: foundData/scan_nwg.se_20250528_135953/all_subdomains.json
+[Domain 1/1: nwg.se] [*] Output directory: foundData/scan_nwg.se_20250528_135953
+[Domain 1/1: nwg.se] [!] Error: Input file not found at /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/foundData/scan_nwg.se_20250528_135953/all_subdomains.json
+[Domain 1/1: nwg.se] [!] Warning: EnhancedCVEScanner.py did not complete successfully
+[Domain 1/1: nwg.se] 
+[Domain 1/1: nwg.se] [*] Starting scan 6/6: Portscan.py
+[Domain 1/1: nwg.se] 
+[Domain 1/1: nwg.se] [*] Running Portscan.py...
+[Domain 1/1: nwg.se] [*] Full script path: Scripts/Portscan.py
+[Domain 1/1: nwg.se] [*] Input file: foundData/scan_nwg.se_20250528_135953/all_subdomains.json
+[Domain 1/1: nwg.se] [*] Output directory: foundData/scan_nwg.se_20250528_135953
+[Domain 1/1: nwg.se] [!] Error: Input file not found at /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/foundData/scan_nwg.se_20250528_135953/all_subdomains.json
+[Domain 1/1: nwg.se] [!] Warning: Portscan.py did not complete successfully
+[Domain 1/1: nwg.se] 
+[Domain 1/1: nwg.se] [+] All scans completed!
+
+All domains processed. Scan completed.

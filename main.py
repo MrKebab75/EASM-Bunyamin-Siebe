@@ -55,14 +55,21 @@ def process_excel_file(file_path):
 def index():
     if request.method == "POST":
         # Debug print all form data
+        print("\n[*] ===== FORM SUBMISSION DEBUG ===== ")
         print("[*] Form data received:")
         for key, value in request.form.items():
             print(f"  {key}: {value}")
             
+        # Debug print all files
+        print("\n[*] Files received:")
+        for key, file in request.files.items():
+            print(f"  {key}: {file.filename}")
+            
         script_name = request.form.get("script")
-        input_type = request.form.get(f"input_type_{script_name}")
+        print(f"\n[*] Script name: {script_name}")
         
-        print(f"[*] Processing request for script: {script_name}, input type: {input_type}")
+        input_type = request.form.get(f"input_type_{script_name}")
+        print(f"[*] Input type: {input_type}")
         
         if script_name not in scripts:
             print(f"[!] Invalid script name: {script_name}")
@@ -75,37 +82,64 @@ def index():
             print(f"[*] Received domain input: {domain}")
             if not domain:
                 print("[!] No domain provided")
+                flash("Please enter a domain", "error")
                 return redirect(url_for("index"))
             domains = [domain.strip()]
         else:  # Excel file
+            print("\n[*] Processing Excel file upload")
             file_key = f"file_{script_name}"
+            print(f"[*] Looking for file with key: {file_key}")
+            print(f"[*] Available files in request: {list(request.files.keys())}")
+            
             if file_key not in request.files:
                 print(f"[!] No file uploaded for {script_name}")
+                print(f"[!] Available files: {list(request.files.keys())}")
+                flash("Please select an Excel file", "error")
                 return redirect(url_for("index"))
                 
             file = request.files[file_key]
+            print(f"[*] File object: {file}")
+            print(f"[*] File name: {file.filename}")
+            
             if file.filename == '':
                 print("[!] No file selected")
+                flash("Please select an Excel file", "error")
                 return redirect(url_for("index"))
                 
             if not allowed_file(file.filename):
                 print(f"[!] Invalid file type: {file.filename}")
+                flash("Invalid file type. Please upload an Excel file (.xlsx or .xls)", "error")
                 return redirect(url_for("index"))
                 
             filename = secure_filename(file.filename)
             file_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
-            file.save(file_path)
+            print(f"[*] Saving file to: {file_path}")
             
-            domains, error = process_excel_file(file_path)
-            if error:
-                print(f"[!] Error processing Excel file: {error}")
-                return redirect(url_for("index"))
+            try:
+                file.save(file_path)
+                print(f"[+] File saved successfully")
                 
-            # Clean up the uploaded file
-            os.remove(file_path)
+                print(f"[*] Processing Excel file: {file_path}")
+                domains, error = process_excel_file(file_path)
+                if error:
+                    print(f"[!] Error processing Excel file: {error}")
+                    flash(f"Error processing Excel file: {error}", "error")
+                    return redirect(url_for("index"))
+                    
+                print(f"[+] Successfully processed Excel file. Found {len(domains)} domains")
+                
+                # Clean up the uploaded file
+                os.remove(file_path)
+                print(f"[+] Cleaned up temporary file: {file_path}")
+                
+            except Exception as e:
+                print(f"[!] Error handling file upload: {str(e)}")
+                flash(f"Error processing file: {str(e)}", "error")
+                return redirect(url_for("index"))
         
         if not domains:
             print("[!] No domains to process")
+            flash("No domains found to process", "error")
             return redirect(url_for("index"))
             
         print(f"[+] Processing {len(domains)} domains: {domains}")
@@ -130,13 +164,16 @@ def index():
                     print(content)
                     if not content.strip():
                         print("[!] Warning: Temporary file is empty")
+                        flash("No valid domains found in the input", "error")
                         return redirect(url_for("index"))
             else:
                 print(f"[!] Temporary file was not created at: {temp_file}")
+                flash("Error creating temporary file", "error")
                 return redirect(url_for("index"))
                 
         except Exception as e:
             print(f"[!] Error writing to temp file: {e}")
+            flash(f"Error processing domains: {str(e)}", "error")
             return redirect(url_for("index"))
         
         try:
@@ -165,6 +202,7 @@ def index():
             print(f"[!] Error starting scan: {e}")
             if os.path.exists(temp_file):
                 os.remove(temp_file)
+            flash(f"Error starting scan: {str(e)}", "error")
             return redirect(url_for("index"))
     
     return render_template("index.html", scripts=scripts)
@@ -224,59 +262,82 @@ def update_output_file(script_name, input_file, output_file, process=None):
         # Determine if this is a complete scan or individual tool
         is_complete_scan = script_name == "complete_scan"
         
-        # If process is not provided, create one
-        if process is None:
-            # Prepare the command
-            if is_complete_scan:
-                # For complete scan, use foundData as output directory
-                cmd = ["python3", "-u", scripts[script_name], "--input", input_file, "--output-dir", "foundData"]
-                print(f"[*] Running complete scan with output to foundData directory")
-            else:
-                # For individual tools, just use the input file
-                cmd = ["python3", "-u", scripts[script_name], "--input", input_file]
-                print(f"[*] Running individual tool scan")
-            
-            print(f"[*] Executing command: {' '.join(cmd)}")
-            
-            # Run the script
-            process = subprocess.Popen(
-                cmd,
-                stdout=subprocess.PIPE,
-                stderr=subprocess.PIPE,
-                text=True,
-                bufsize=1,
-                universal_newlines=True
-            )
+        # Read domains from input file
+        with open(input_file, 'r') as f:
+            domains = [line.strip() for line in f if line.strip()]
         
-        print(f"[*] Process started with PID: {process.pid}", flush=True)
+        total_domains = len(domains)
+        print(f"[*] Processing {total_domains} domains")
         
-        # Read output in real-time
-        while True:
-            output = process.stdout.readline()
-            if output == '' and process.poll() is not None:
-                break
-            if output:
-                print(f"[*] Script output: {output.strip()}")
+        # Process each domain
+        for index, domain in enumerate(domains, 1):
+            print(f"[*] Processing domain {index}/{total_domains}: {domain}")
+            
+            # Create a temporary file for this domain
+            temp_domain_file = os.path.join(app.config['UPLOAD_FOLDER'], f'temp_domain_{index}.txt')
+            with open(temp_domain_file, 'w') as f:
+                f.write(f"{domain}\n")
+            
+            try:
+                # Prepare the command
+                if is_complete_scan:
+                    # For complete scan, use foundData as output directory
+                    cmd = ["python3", "-u", scripts[script_name], "--input", temp_domain_file, "--output-dir", "foundData"]
+                    print(f"[*] Running complete scan for domain {domain}")
+                else:
+                    # For individual tools, just use the input file
+                    cmd = ["python3", "-u", scripts[script_name], "--input", temp_domain_file]
+                    print(f"[*] Running individual tool scan for domain {domain}")
+                
+                print(f"[*] Executing command: {' '.join(cmd)}")
+                
+                # Run the script
+                process = subprocess.Popen(
+                    cmd,
+                    stdout=subprocess.PIPE,
+                    stderr=subprocess.PIPE,
+                    text=True,
+                    bufsize=1,
+                    universal_newlines=True
+                )
+                
+                # Read output in real-time
+                while True:
+                    output = process.stdout.readline()
+                    if output == '' and process.poll() is not None:
+                        break
+                    if output:
+                        print(f"[*] Script output for {domain}: {output.strip()}")
+                        with open(output_file, 'a') as f:
+                            f.write(f"[Domain {index}/{total_domains}: {domain}] {output}")
+                            f.flush()
+                
+                # Get any remaining output
+                remaining_output, error = process.communicate()
+                if remaining_output:
+                    print(f"[*] Remaining output for {domain}: {remaining_output.strip()}")
+                    with open(output_file, 'a') as f:
+                        f.write(f"[Domain {index}/{total_domains}: {domain}] {remaining_output}")
+                        f.flush()
+                if error:
+                    print(f"[!] Script error for {domain}: {error}")
+                    with open(output_file, 'a') as f:
+                        f.write(f"[Domain {index}/{total_domains}: {domain}] Errors: {error}")
+                        f.flush()
+                
+            except Exception as e:
+                print(f"[!] Error processing domain {domain}: {e}")
                 with open(output_file, 'a') as f:
-                    f.write(output)
+                    f.write(f"[Domain {index}/{total_domains}: {domain}] Error: {str(e)}\n")
                     f.flush()
-        
-        # Get any remaining output
-        remaining_output, error = process.communicate()
-        if remaining_output:
-            print(f"[*] Remaining output: {remaining_output.strip()}")
-            with open(output_file, 'a') as f:
-                f.write(remaining_output)
-                f.flush()
-        if error:
-            print(f"[!] Script error: {error}")
-            with open(output_file, 'a') as f:
-                f.write(f"\nErrors: {error}")
-                f.flush()
+            finally:
+                # Clean up temporary domain file
+                if os.path.exists(temp_domain_file):
+                    os.remove(temp_domain_file)
         
         # Write completion message
         with open(output_file, 'a') as f:
-            f.write("\nScan completed.\n")
+            f.write("\nAll domains processed. Scan completed.\n")
             f.flush()
             
         print(f"[+] Background task completed for {script_name}")
@@ -290,14 +351,13 @@ def update_output_file(script_name, input_file, output_file, process=None):
         except Exception as write_error:
             print(f"[!] Error writing error message: {write_error}")
     finally:
-        # Only clean up the temporary file after the process has completed
-        if process and process.poll() is not None:
-            if os.path.exists(input_file):
-                try:
-                    os.remove(input_file)
-                    print(f"[+] Cleaned up temporary file: {input_file}")
-                except Exception as e:
-                    print(f"[!] Error cleaning up temporary file: {e}")
+        # Clean up the original input file
+        if os.path.exists(input_file):
+            try:
+                os.remove(input_file)
+                print(f"[+] Cleaned up temporary file: {input_file}")
+            except Exception as e:
+                print(f"[!] Error cleaning up temporary file: {e}")
 
 @app.route("/download-output/<output_id>")
 def download_output(output_id):

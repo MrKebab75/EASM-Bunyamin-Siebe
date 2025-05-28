@@ -314,9 +314,19 @@
                     if (this.value === 'single') {
                         singleInput.style.display = 'block';
                         excelInput.style.display = 'none';
+                        // Update required attributes
+                        const domainInput = singleInput.querySelector('input[type="text"]');
+                        const fileInput = excelInput.querySelector('input[type="file"]');
+                        if (domainInput) domainInput.required = true;
+                        if (fileInput) fileInput.required = false;
                     } else {
                         singleInput.style.display = 'none';
                         excelInput.style.display = 'block';
+                        // Update required attributes
+                        const domainInput = singleInput.querySelector('input[type="text"]');
+                        const fileInput = excelInput.querySelector('input[type="file"]');
+                        if (domainInput) domainInput.required = false;
+                        if (fileInput) fileInput.required = true;
                     }
                 }
             });
@@ -325,11 +335,17 @@
         document.getElementById('input_type_complete_scan_single').addEventListener('change', function() {
             document.getElementById('complete_scan_single_input').style.display = 'block';
             document.getElementById('complete_scan_file_input').style.display = 'none';
+            // Update required attributes
+            document.getElementById('domain_complete_scan').required = true;
+            document.getElementById('file_complete_scan').required = false;
         });
 
         document.getElementById('input_type_complete_scan_file').addEventListener('change', function() {
             document.getElementById('complete_scan_single_input').style.display = 'none';
             document.getElementById('complete_scan_file_input').style.display = 'block';
+            // Update required attributes
+            document.getElementById('domain_complete_scan').required = false;
+            document.getElementById('file_complete_scan').required = true;
         });
     </script>
 </body>

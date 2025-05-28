@@ -1,0 +1,141 @@
+[Domain 1/2: nwg.se] [-] Domain nwg.se is unreachable. Skipping...
+[Domain 1/2: nwg.se] [+] Inactive domains saved to: /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/foundData/scan_nwg.se_20250528_135943/inactiveDomains.json
+[Domain 1/2: nwg.se] 
+[Domain 1/2: nwg.se] [+] All domains processed successfully!
+[Domain 1/2: nwg.se] [*] Process completed with return code: 0
+[Domain 1/2: nwg.se] [*] Changed back to original directory: /home/s141422/SecurityProject/EASM-Bunyamin-Siebe
+[Domain 1/2: nwg.se] [*] Removing symbolic link: /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/foundData/scan_nwg.se_20250528_135943/foundData
+[Domain 1/2: nwg.se] [+] Removed symbolic link
+[Domain 1/2: nwg.se] 
+[Domain 1/2: nwg.se] [*] Starting scan 2/6: Certificaat.py
+[Domain 1/2: nwg.se] 
+[Domain 1/2: nwg.se] [*] Running Certificaat.py...
+[Domain 1/2: nwg.se] [*] Full script path: Scripts/Certificaat.py
+[Domain 1/2: nwg.se] [*] Input file: foundData/scan_nwg.se_20250528_135943/all_subdomains.json
+[Domain 1/2: nwg.se] [*] Output directory: foundData/scan_nwg.se_20250528_135943
+[Domain 1/2: nwg.se] [!] Error: Input file not found at /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/foundData/scan_nwg.se_20250528_135943/all_subdomains.json
+[Domain 1/2: nwg.se] [!] Warning: Certificaat.py did not complete successfully
+[Domain 1/2: nwg.se] 
+[Domain 1/2: nwg.se] [*] Starting scan 3/6: DetectWebTechnologies.py
+[Domain 1/2: nwg.se] 
+[Domain 1/2: nwg.se] [*] Running DetectWebTechnologies.py...
+[Domain 1/2: nwg.se] [*] Full script path: Scripts/DetectWebTechnologies.py
+[Domain 1/2: nwg.se] [*] Input file: foundData/scan_nwg.se_20250528_135943/all_subdomains.json
+[Domain 1/2: nwg.se] [*] Output directory: foundData/scan_nwg.se_20250528_135943
+[Domain 1/2: nwg.se] [!] Error: Input file not found at /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/foundData/scan_nwg.se_20250528_135943/all_subdomains.json
+[Domain 1/2: nwg.se] [!] Warning: DetectWebTechnologies.py did not complete successfully
+[Domain 1/2: nwg.se] 
+[Domain 1/2: nwg.se] [*] Starting scan 4/6: Domeingeldigheid.py
+[Domain 1/2: nwg.se] 
+[Domain 1/2: nwg.se] [*] Running Domeingeldigheid.py...
+[Domain 1/2: nwg.se] [*] Full script path: Scripts/Domeingeldigheid.py
+[Domain 1/2: nwg.se] [*] Input file: foundData/scan_nwg.se_20250528_135943/all_subdomains.json
+[Domain 1/2: nwg.se] [*] Output directory: foundData/scan_nwg.se_20250528_135943
+[Domain 1/2: nwg.se] [!] Error: Input file not found at /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/foundData/scan_nwg.se_20250528_135943/all_subdomains.json
+[Domain 1/2: nwg.se] [!] Warning: Domeingeldigheid.py did not complete successfully
+[Domain 1/2: nwg.se] 
+[Domain 1/2: nwg.se] [*] Starting scan 5/6: EnhancedCVEScanner.py
+[Domain 1/2: nwg.se] 
+[Domain 1/2: nwg.se] [*] Running EnhancedCVEScanner.py...
+[Domain 1/2: nwg.se] [*] Full script path: Scripts/EnhancedCVEScanner.py
+[Domain 1/2: nwg.se] [*] Input file: foundData/scan_nwg.se_20250528_135943/all_subdomains.json
+[Domain 1/2: nwg.se] [*] Output directory: foundData/scan_nwg.se_20250528_135943
+[Domain 1/2: nwg.se] [!] Error: Input file not found at /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/foundData/scan_nwg.se_20250528_135943/all_subdomains.json
+[Domain 1/2: nwg.se] [!] Warning: EnhancedCVEScanner.py did not complete successfully
+[Domain 1/2: nwg.se] 
+[Domain 1/2: nwg.se] [*] Starting scan 6/6: Portscan.py
+[Domain 1/2: nwg.se] 
+[Domain 1/2: nwg.se] [*] Running Portscan.py...
+[Domain 1/2: nwg.se] [*] Full script path: Scripts/Portscan.py
+[Domain 1/2: nwg.se] [*] Input file: foundData/scan_nwg.se_20250528_135943/all_subdomains.json
+[Domain 1/2: nwg.se] [*] Output directory: foundData/scan_nwg.se_20250528_135943
+[Domain 1/2: nwg.se] [!] Error: Input file not found at /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/foundData/scan_nwg.se_20250528_135943/all_subdomains.json
+[Domain 1/2: nwg.se] [!] Warning: Portscan.py did not complete successfully
+[Domain 1/2: nwg.se] 
+[Domain 1/2: nwg.se] [+] All scans completed!
+[Domain 2/2: craftsportswear.com] [*] Starting CompleteSecurityScan.py
+[Domain 2/2: craftsportswear.com] [*] Arguments parsed:
+[Domain 2/2: craftsportswear.com]     Input file: /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/uploads/temp_domain_2.txt
+[Domain 2/2: craftsportswear.com]     Output directory: foundData
+[Domain 2/2: craftsportswear.com] [*] Reading domains from /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/uploads/temp_domain_2.txt
+[Domain 2/2: craftsportswear.com] [+] Successfully read input file
+[Domain 2/2: craftsportswear.com] [+] Found 1 domains to scan
+[Domain 2/2: craftsportswear.com] [+] Created scan directory: foundData/scan_craftsportswear.com_20250528_135956
+[Domain 2/2: craftsportswear.com] [+] Results will be saved in: foundData/scan_craftsportswear.com_20250528_135956
+[Domain 2/2: craftsportswear.com] [+] Total number of scans to run: 6
+[Domain 2/2: craftsportswear.com] 
+[Domain 2/2: craftsportswear.com] [*] Starting scan 1/6: subdom.py
+[Domain 2/2: craftsportswear.com] 
+[Domain 2/2: craftsportswear.com] [*] Running subdom.py...
+[Domain 2/2: craftsportswear.com] [*] Full script path: Scripts/subdom.py
+[Domain 2/2: craftsportswear.com] [*] Input file: /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/uploads/temp_domain_2.txt
+[Domain 2/2: craftsportswear.com] [*] Output directory: foundData/scan_craftsportswear.com_20250528_135956
+[Domain 2/2: craftsportswear.com] [+] Created/verified scan directory: /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/foundData/scan_craftsportswear.com_20250528_135956
+[Domain 2/2: craftsportswear.com] [*] Creating symbolic link from /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/foundData/scan_craftsportswear.com_20250528_135956/foundData to /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/foundData/scan_craftsportswear.com_20250528_135956
+[Domain 2/2: craftsportswear.com] [+] Created symbolic link from /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/foundData/scan_craftsportswear.com_20250528_135956/foundData to /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/foundData/scan_craftsportswear.com_20250528_135956
+[Domain 2/2: craftsportswear.com] [*] Executing command: python3 -u /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/Scripts/subdom.py --input /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/uploads/temp_domain_2.txt --output-dir /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/foundData/scan_craftsportswear.com_20250528_135956
+[Domain 2/2: craftsportswear.com] [*] Changed working directory to: /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/Scripts
+[Domain 2/2: craftsportswear.com] [*] Process started with PID: 39027
+[Domain 2/2: craftsportswear.com] [*] Using output directory: /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/foundData/scan_craftsportswear.com_20250528_135956
+[Domain 2/2: craftsportswear.com] [+] Loading domains from /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/uploads/temp_domain_2.txt
+[Domain 2/2: craftsportswear.com] [+] Loaded 1 unique domains from input.
+[Domain 2/2: craftsportswear.com] 
+[Domain 2/2: craftsportswear.com] === Processing domain 1/1: craftsportswear.com ===
+[Domain 2/2: craftsportswear.com] [+] Pinging domain: craftsportswear.com
+[Domain 2/2: craftsportswear.com] [-] Domain craftsportswear.com is unreachable. Skipping...
+[Domain 2/2: craftsportswear.com] [+] Inactive domains saved to: /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/foundData/scan_craftsportswear.com_20250528_135956/inactiveDomains.json
+[Domain 2/2: craftsportswear.com] 
+[Domain 2/2: craftsportswear.com] [+] All domains processed successfully!
+[Domain 2/2: craftsportswear.com] [*] Process completed with return code: 0
+[Domain 2/2: craftsportswear.com] [*] Changed back to original directory: /home/s141422/SecurityProject/EASM-Bunyamin-Siebe
+[Domain 2/2: craftsportswear.com] [*] Removing symbolic link: /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/foundData/scan_craftsportswear.com_20250528_135956/foundData
+[Domain 2/2: craftsportswear.com] [+] Removed symbolic link
+[Domain 2/2: craftsportswear.com] 
+[Domain 2/2: craftsportswear.com] [*] Starting scan 2/6: Certificaat.py
+[Domain 2/2: craftsportswear.com] 
+[Domain 2/2: craftsportswear.com] [*] Running Certificaat.py...
+[Domain 2/2: craftsportswear.com] [*] Full script path: Scripts/Certificaat.py
+[Domain 2/2: craftsportswear.com] [*] Input file: foundData/scan_craftsportswear.com_20250528_135956/all_subdomains.json
+[Domain 2/2: craftsportswear.com] [*] Output directory: foundData/scan_craftsportswear.com_20250528_135956
+[Domain 2/2: craftsportswear.com] [!] Error: Input file not found at /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/foundData/scan_craftsportswear.com_20250528_135956/all_subdomains.json
+[Domain 2/2: craftsportswear.com] [!] Warning: Certificaat.py did not complete successfully
+[Domain 2/2: craftsportswear.com] 
+[Domain 2/2: craftsportswear.com] [*] Starting scan 3/6: DetectWebTechnologies.py
+[Domain 2/2: craftsportswear.com] 
+[Domain 2/2: craftsportswear.com] [*] Running DetectWebTechnologies.py...
+[Domain 2/2: craftsportswear.com] [*] Full script path: Scripts/DetectWebTechnologies.py
+[Domain 2/2: craftsportswear.com] [*] Input file: foundData/scan_craftsportswear.com_20250528_135956/all_subdomains.json
+[Domain 2/2: craftsportswear.com] [*] Output directory: foundData/scan_craftsportswear.com_20250528_135956
+[Domain 2/2: craftsportswear.com] [!] Error: Input file not found at /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/foundData/scan_craftsportswear.com_20250528_135956/all_subdomains.json
+[Domain 2/2: craftsportswear.com] [!] Warning: DetectWebTechnologies.py did not complete successfully
+[Domain 2/2: craftsportswear.com] 
+[Domain 2/2: craftsportswear.com] [*] Starting scan 4/6: Domeingeldigheid.py
+[Domain 2/2: craftsportswear.com] 
+[Domain 2/2: craftsportswear.com] [*] Running Domeingeldigheid.py...
+[Domain 2/2: craftsportswear.com] [*] Full script path: Scripts/Domeingeldigheid.py
+[Domain 2/2: craftsportswear.com] [*] Input file: foundData/scan_craftsportswear.com_20250528_135956/all_subdomains.json
+[Domain 2/2: craftsportswear.com] [*] Output directory: foundData/scan_craftsportswear.com_20250528_135956
+[Domain 2/2: craftsportswear.com] [!] Error: Input file not found at /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/foundData/scan_craftsportswear.com_20250528_135956/all_subdomains.json
+[Domain 2/2: craftsportswear.com] [!] Warning: Domeingeldigheid.py did not complete successfully
+[Domain 2/2: craftsportswear.com] 
+[Domain 2/2: craftsportswear.com] [*] Starting scan 5/6: EnhancedCVEScanner.py
+[Domain 2/2: craftsportswear.com] 
+[Domain 2/2: craftsportswear.com] [*] Running EnhancedCVEScanner.py...
+[Domain 2/2: craftsportswear.com] [*] Full script path: Scripts/EnhancedCVEScanner.py
+[Domain 2/2: craftsportswear.com] [*] Input file: foundData/scan_craftsportswear.com_20250528_135956/all_subdomains.json
+[Domain 2/2: craftsportswear.com] [*] Output directory: foundData/scan_craftsportswear.com_20250528_135956
+[Domain 2/2: craftsportswear.com] [!] Error: Input file not found at /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/foundData/scan_craftsportswear.com_20250528_135956/all_subdomains.json
+[Domain 2/2: craftsportswear.com] [!] Warning: EnhancedCVEScanner.py did not complete successfully
+[Domain 2/2: craftsportswear.com] 
+[Domain 2/2: craftsportswear.com] [*] Starting scan 6/6: Portscan.py
+[Domain 2/2: craftsportswear.com] 
+[Domain 2/2: craftsportswear.com] [*] Running Portscan.py...
+[Domain 2/2: craftsportswear.com] [*] Full script path: Scripts/Portscan.py
+[Domain 2/2: craftsportswear.com] [*] Input file: foundData/scan_craftsportswear.com_20250528_135956/all_subdomains.json
+[Domain 2/2: craftsportswear.com] [*] Output directory: foundData/scan_craftsportswear.com_20250528_135956
+[Domain 2/2: craftsportswear.com] [!] Error: Input file not found at /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/foundData/scan_craftsportswear.com_20250528_135956/all_subdomains.json
+[Domain 2/2: craftsportswear.com] [!] Warning: Portscan.py did not complete successfully
+[Domain 2/2: craftsportswear.com] 
+[Domain 2/2: craftsportswear.com] [+] All scans completed!
+
+All domains processed. Scan completed.
