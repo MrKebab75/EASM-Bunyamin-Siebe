@@ -1,0 +1,171 @@
+Starting complete_scan scan...
+[*] Starting CompleteSecurityScan.py
+[*] Arguments parsed:
+    Input file: /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/uploads/temp_domains.txt
+    Output directory: foundData
+[*] Reading domains from /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/uploads/temp_domains.txt
+[+] Successfully read input file
+[+] Found 1 domains to scan
+
+[*] Checking which domains are public...
+[+] nwg.se is public
+
+[+] Found 1 public domains out of 1 total domains
+[+] Created scan directory: foundData/scan_nwg.se_20250524_121708
+[+] Results will be saved in: foundData/scan_nwg.se_20250524_121708
+[+] Saved list of public domains to foundData/scan_nwg.se_20250524_121708/public_domains.txt
+[+] Total number of scans to run: 6
+
+[*] Starting scan 1/6: subdom.py
+
+[*] Running subdom.py...
+[*] Full script path: Scripts/subdom.py
+[*] Input file: /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/uploads/temp_domains.txt
+[*] Output directory: foundData/scan_nwg.se_20250524_121708
+[+] Created/verified scan directory: /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/foundData/scan_nwg.se_20250524_121708
+[*] Creating symbolic link from /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/foundData/scan_nwg.se_20250524_121708/foundData to /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/foundData/scan_nwg.se_20250524_121708
+[+] Created symbolic link from /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/foundData/scan_nwg.se_20250524_121708/foundData to /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/foundData/scan_nwg.se_20250524_121708
+[*] Executing command: python3 -u /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/Scripts/subdom.py --input /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/uploads/temp_domains.txt --output-dir /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/foundData/scan_nwg.se_20250524_121708
+[*] Changed working directory to: /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/Scripts
+[*] Process started with PID: 615057
+[*] Using output directory: /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/foundData/scan_nwg.se_20250524_121708
+[+] Loading domains from /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/uploads/temp_domains.txt
+[+] Loaded 1 unique domains from input.
+
+=== Processing domain 1/1: nwg.se ===
+[+] Pinging domain: nwg.se
+[+] Running Amass for nwg.se
+[+] Running Subfinder for nwg.se
+[+] Found 127 unique subdomains for nwg.se.
+[+] Resolving IPs for 127 subdomains...
+Resolved 50/127...
+Resolved 100/127...
+[+] IP resolution complete.
+
+[+] All results saved to: /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/foundData/scan_nwg.se_20250524_121708/all_subdomains.json
+
+[+] All domains processed successfully!
+[*] Process completed with return code: 0
+[*] Changed back to original directory: /home/s141422/SecurityProject/EASM-Bunyamin-Siebe
+[*] Removing symbolic link: /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/foundData/scan_nwg.se_20250524_121708/foundData
+[+] Removed symbolic link
+
+[*] Starting scan 2/6: Certificaat.py
+
+[*] Running Certificaat.py...
+[*] Full script path: Scripts/Certificaat.py
+[*] Input file: foundData/scan_nwg.se_20250524_121708/public_domains.txt
+[*] Output directory: foundData/scan_nwg.se_20250524_121708
+[*] Executing command: python3 -u /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/Scripts/Certificaat.py --input /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/foundData/scan_nwg.se_20250524_121708/public_domains.txt --output-dir /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/foundData/scan_nwg.se_20250524_121708
+[*] Changed working directory to: /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/Scripts
+[*] Process started with PID: 617297
+Reading domains from /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/foundData/scan_nwg.se_20250524_121708/public_domains.txt
+Found 1 domains to check
+[1/1] Checking certificate for domain: nwg.se...
+- Status: valid, expires in 175 days
+
+Certificate information for 1 domains saved to /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/foundData/scan_nwg.se_20250524_121708/certificates.json
+[*] Process completed with return code: 0
+[*] Changed back to original directory: /home/s141422/SecurityProject/EASM-Bunyamin-Siebe
+
+[*] Starting scan 3/6: DetectWebTechnologies.py
+
+[*] Running DetectWebTechnologies.py...
+[*] Full script path: Scripts/DetectWebTechnologies.py
+[*] Input file: foundData/scan_nwg.se_20250524_121708/public_domains.txt
+[*] Output directory: foundData/scan_nwg.se_20250524_121708
+[*] Executing command: python3 -u /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/Scripts/DetectWebTechnologies.py --input /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/foundData/scan_nwg.se_20250524_121708/public_domains.txt --output-dir /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/foundData/scan_nwg.se_20250524_121708
+[*] Changed working directory to: /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/Scripts
+[*] Process started with PID: 617304
+[+] webtech module found. Web technology detection is enabled.
+[*] Reading domains from /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/foundData/scan_nwg.se_20250524_121708/public_domains.txt
+[+] Found 1 unique subdomains
+
+[*] Processing subdomain 1/1: nwg.se
+[*] Querying WhatRuns website for nwg.se...
+[*] Sending request to WhatRuns website...
+[*] Received response, processing data...
+[+] Successfully parsed WhatRuns data
+[+] WhatRuns detected: Google Analytics UA (Analytics)
+[+] WhatRuns detected: jQuery 2.2.3 (Javascript Frameworks)
+[+] WhatRuns detected: jQuery UI (Javascript Frameworks)
+[+] WhatRuns detected: Bootstrap (Web Framework)
+[+] WhatRuns detected: IIS 8.5 (Web Server)
+[+] WhatRuns detected: ASP.NET 4.0.30319 (Programming Language)
+[+] WhatRuns detected: Windows Server (Operating System)
+[+] WhatRuns detected: Incapsula (CDN)
+[+] WhatRuns detected: Google Tag Manager (Tag Managers)
+[+] WhatRuns found 9 technologies (4 with version info)
+[*] Detecting web technologies on https://nwg.se
+[*] No technologies detected on https://nwg.se
+[+] Detected technology: Jquery 2.2.3
+[+] Detected technology: Google analytics Unknown
+[*] Detecting web technologies on http://nwg.se
+[*] No technologies detected on http://nwg.se
+[+] Detected technology: Jquery 2.2.3
+[+] Detected technology: Google analytics Unknown
+[+] Completed subdomain 1/1: nwg.se
+[+] Results saved to /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/foundData/scan_nwg.se_20250524_121708/web_technologies.json
+
+[+] Scan complete! Processed 1 subdomains
+[+] Final results saved to /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/foundData/scan_nwg.se_20250524_121708/web_technologies.json
+[*] Process completed with return code: 0
+[*] Changed back to original directory: /home/s141422/SecurityProject/EASM-Bunyamin-Siebe
+
+[*] Starting scan 4/6: Domeingeldigheid.py
+
+[*] Running Domeingeldigheid.py...
+[*] Full script path: Scripts/Domeingeldigheid.py
+[*] Input file: foundData/scan_nwg.se_20250524_121708/public_domains.txt
+[*] Output directory: foundData/scan_nwg.se_20250524_121708
+[*] Executing command: python3 -u /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/Scripts/Domeingeldigheid.py --input /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/foundData/scan_nwg.se_20250524_121708/public_domains.txt --output-dir /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/foundData/scan_nwg.se_20250524_121708
+[*] Changed working directory to: /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/Scripts
+[*] Process started with PID: 617327
+[*] Reading domains from /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/foundData/scan_nwg.se_20250524_121708/public_domains.txt
+[+] Found 1 unique domains
+
+Domain Lease Information:
+--------------------------------------------------
+Domain: nwg.se
+Status: valid
+--------------------------------------------------
+
+[+] Results saved to /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/foundData/scan_nwg.se_20250524_121708/domainLease.json
+[*] Process completed with return code: 0
+[*] Changed back to original directory: /home/s141422/SecurityProject/EASM-Bunyamin-Siebe
+
+[*] Starting scan 5/6: EnhancedCVEScanner.py
+
+[*] Running EnhancedCVEScanner.py...
+[*] Full script path: Scripts/EnhancedCVEScanner.py
+[*] Input file: foundData/scan_nwg.se_20250524_121708/public_domains.txt
+[*] Output directory: foundData/scan_nwg.se_20250524_121708
+[*] Executing command: python3 -u /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/Scripts/EnhancedCVEScanner.py --input-json /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/foundData/scan_nwg.se_20250524_121708/public_domains.txt --output-json /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/foundData/scan_nwg.se_20250524_121708/cve_scan_results.json --output-report /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/foundData/scan_nwg.se_20250524_121708/cve_scan_report.txt --discover-ports --verbose
+[*] Changed working directory to: /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/Scripts
+[*] Process started with PID: 617359
+[!] Error reading domains from /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/foundData/scan_nwg.se_20250524_121708/public_domains.txt: Expecting value: line 1 column 1 (char 0)
+Error: No domains found in input file
+[*] Process completed with return code: 1
+[*] Changed back to original directory: /home/s141422/SecurityProject/EASM-Bunyamin-Siebe
+[!] Warning: EnhancedCVEScanner.py did not complete successfully
+
+[*] Starting scan 6/6: Portscan.py
+
+[*] Running Portscan.py...
+[*] Full script path: Scripts/Portscan.py
+[*] Input file: foundData/scan_nwg.se_20250524_121708/public_domains.txt
+[*] Output directory: foundData/scan_nwg.se_20250524_121708
+[*] Executing command: python3 -u /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/Scripts/Portscan.py --input /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/foundData/scan_nwg.se_20250524_121708/public_domains.txt --output-dir /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/foundData/scan_nwg.se_20250524_121708
+[*] Changed working directory to: /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/Scripts
+[*] Process started with PID: 617360
+[*] Reading domains from /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/foundData/scan_nwg.se_20250524_121708/public_domains.txt
+[+] Found 1 unique domains
+[*] Checking which domains are reachable...
+[*] Testing domain 1/1: nwg.se - Reachable ✓
+[+] 1 domains are reachable
+[+] 0 domains are unreachable
+
+[!] Starting port scan for 1 reachable domains
+
+[+] Scanning domain 1/1: nwg.se
+[+] Performing nmap scan on nwg.se...
