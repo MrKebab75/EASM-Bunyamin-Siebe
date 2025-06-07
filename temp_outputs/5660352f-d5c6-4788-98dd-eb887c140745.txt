@@ -1,0 +1,42 @@
+[Domain 1/1: nwg.se] [!] Error discovering ports on nwbrands-no.dev.nwg.se: Command '['nmap', '-sV', '--open', 'nwbrands-no.dev.nwg.se']' timed out after 180 seconds
+[Domain 1/1: nwg.se] 
+[Domain 1/1: nwg.se] [*] Scanning domain 9/82: hotfolder.gateway.nwg.se
+[Domain 1/1: nwg.se] [*] Pinging hotfolder.gateway.nwg.se...
+[Domain 1/1: nwg.se] [+] Host hotfolder.gateway.nwg.se is up
+[Domain 1/1: nwg.se] [*] Discovering open ports on hotfolder.gateway.nwg.se...
+[Domain 1/1: nwg.se] [*] Running: nmap -sV --open hotfolder.gateway.nwg.se
+[Domain 1/1: nwg.se] [!] Error discovering ports on hotfolder.gateway.nwg.se: Command '['nmap', '-sV', '--open', 'hotfolder.gateway.nwg.se']' timed out after 180 seconds
+[Domain 1/1: nwg.se] 
+[Domain 1/1: nwg.se] [*] Scanning domain 10/82: portal.gateway.nwg.se
+[Domain 1/1: nwg.se] [*] Pinging portal.gateway.nwg.se...
+[Domain 1/1: nwg.se] [+] Host portal.gateway.nwg.se is up
+[Domain 1/1: nwg.se] [*] Discovering open ports on portal.gateway.nwg.se...
+[Domain 1/1: nwg.se] [*] Running: nmap -sV --open portal.gateway.nwg.se
+[Domain 1/1: nwg.se] [!] Error discovering ports on portal.gateway.nwg.se: Command '['nmap', '-sV', '--open', 'portal.gateway.nwg.se']' timed out after 180 seconds
+[Domain 1/1: nwg.se] 
+[Domain 1/1: nwg.se] [*] Scanning domain 11/82: retail-awoliving-com.dev.nwg.se
+[Domain 1/1: nwg.se] [*] Pinging retail-awoliving-com.dev.nwg.se...
+[Domain 1/1: nwg.se] [+] Host retail-awoliving-com.dev.nwg.se is up
+[Domain 1/1: nwg.se] [*] Discovering open ports on retail-awoliving-com.dev.nwg.se...
+[Domain 1/1: nwg.se] [*] Running: nmap -sV --open retail-awoliving-com.dev.nwg.se
+[Domain 1/1: nwg.se] [!] Error discovering ports on retail-awoliving-com.dev.nwg.se: Command '['nmap', '-sV', '--open', 'retail-awoliving-com.dev.nwg.se']' timed out after 180 seconds
+[Domain 1/1: nwg.se] 
+[Domain 1/1: nwg.se] [*] Scanning domain 12/82: newwaveprofile-dk.dev.nwg.se
+[Domain 1/1: nwg.se] [*] Pinging newwaveprofile-dk.dev.nwg.se...
+[Domain 1/1: nwg.se] [+] Host newwaveprofile-dk.dev.nwg.se is up
+[Domain 1/1: nwg.se] [*] Discovering open ports on newwaveprofile-dk.dev.nwg.se...
+[Domain 1/1: nwg.se] [*] Running: nmap -sV --open newwaveprofile-dk.dev.nwg.se
+[Domain 1/1: nwg.se] [!] Error discovering ports on newwaveprofile-dk.dev.nwg.se: Command '['nmap', '-sV', '--open', 'newwaveprofile-dk.dev.nwg.se']' timed out after 180 seconds
+[Domain 1/1: nwg.se] 
+[Domain 1/1: nwg.se] [*] Scanning domain 13/82: newwave-germany-de.dev.nwg.se
+[Domain 1/1: nwg.se] [*] Pinging newwave-germany-de.dev.nwg.se...
+[Domain 1/1: nwg.se] [+] Host newwave-germany-de.dev.nwg.se is up
+[Domain 1/1: nwg.se] [*] Discovering open ports on newwave-germany-de.dev.nwg.se...
+[Domain 1/1: nwg.se] [*] Running: nmap -sV --open newwave-germany-de.dev.nwg.se
+[Domain 1/1: nwg.se] [!] Error discovering ports on newwave-germany-de.dev.nwg.se: Command '['nmap', '-sV', '--open', 'newwave-germany-de.dev.nwg.se']' timed out after 180 seconds
+[Domain 1/1: nwg.se] 
+[Domain 1/1: nwg.se] [*] Scanning domain 14/82: newwave-fr.dev.nwg.se
+[Domain 1/1: nwg.se] [*] Pinging newwave-fr.dev.nwg.se...
+[Domain 1/1: nwg.se] [+] Host newwave-fr.dev.nwg.se is up
+[Domain 1/1: nwg.se] [*] Discovering open ports on newwave-fr.dev.nwg.se...
+[Domain 1/1: nwg.se] [*] Running: nmap -sV --open newwave-fr.dev.nwg.se

@@ -1,0 +1,675 @@
+Starting complete_scan scan...
+[Domain 1/771: 4yourlogo.com] [*] Starting CompleteSecurityScan.py
+[Domain 1/771: 4yourlogo.com] [*] Arguments parsed:
+[Domain 1/771: 4yourlogo.com]     Input file: /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/uploads/temp_domain_1.txt
+[Domain 1/771: 4yourlogo.com]     Output directory: foundData
+[Domain 1/771: 4yourlogo.com] [*] Reading domains from /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/uploads/temp_domain_1.txt
+[Domain 1/771: 4yourlogo.com] [+] Successfully read input file
+[Domain 1/771: 4yourlogo.com] [+] Found 1 domains to scan
+[Domain 1/771: 4yourlogo.com] [+] Created scan directory: foundData/scan_4yourlogo.com_20250607_162026
+[Domain 1/771: 4yourlogo.com] [+] Results will be saved in: foundData/scan_4yourlogo.com_20250607_162026
+[Domain 1/771: 4yourlogo.com] [+] Total number of scans to run: 6
+[Domain 1/771: 4yourlogo.com] 
+[Domain 1/771: 4yourlogo.com] [*] Starting scan 1/6: subdom.py
+[Domain 1/771: 4yourlogo.com] 
+[Domain 1/771: 4yourlogo.com] [*] Running subdom.py...
+[Domain 1/771: 4yourlogo.com] [*] Full script path: Scripts/subdom.py
+[Domain 1/771: 4yourlogo.com] [*] Input file: /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/uploads/temp_domain_1.txt
+[Domain 1/771: 4yourlogo.com] [*] Output directory: foundData/scan_4yourlogo.com_20250607_162026
+[Domain 1/771: 4yourlogo.com] [+] Created/verified scan directory: /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/foundData/scan_4yourlogo.com_20250607_162026
+[Domain 1/771: 4yourlogo.com] [*] Creating symbolic link from /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/foundData/scan_4yourlogo.com_20250607_162026/foundData to /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/foundData/scan_4yourlogo.com_20250607_162026
+[Domain 1/771: 4yourlogo.com] [+] Created symbolic link from /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/foundData/scan_4yourlogo.com_20250607_162026/foundData to /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/foundData/scan_4yourlogo.com_20250607_162026
+[Domain 1/771: 4yourlogo.com] [*] Executing command: python3 -u /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/Scripts/subdom.py --input /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/uploads/temp_domain_1.txt --output-dir /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/foundData/scan_4yourlogo.com_20250607_162026
+[Domain 1/771: 4yourlogo.com] [*] Changed working directory to: /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/Scripts
+[Domain 1/771: 4yourlogo.com] [*] Process started with PID: 91537
+[Domain 1/771: 4yourlogo.com] [*] Using output directory: /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/foundData/scan_4yourlogo.com_20250607_162026
+[Domain 1/771: 4yourlogo.com] [+] Loading domains from /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/uploads/temp_domain_1.txt
+[Domain 1/771: 4yourlogo.com] [+] Loaded 1 unique domains from input.
+[Domain 1/771: 4yourlogo.com] 
+[Domain 1/771: 4yourlogo.com] === Processing domain 1/1: 4yourlogo.com ===
+[Domain 1/771: 4yourlogo.com] [+] Pinging domain: 4yourlogo.com
+[Domain 1/771: 4yourlogo.com] [-] Domain 4yourlogo.com is unreachable. Skipping...
+[Domain 1/771: 4yourlogo.com] [+] Inactive domains saved to: /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/foundData/scan_4yourlogo.com_20250607_162026/inactiveDomains.json
+[Domain 1/771: 4yourlogo.com] 
+[Domain 1/771: 4yourlogo.com] [+] All domains processed successfully!
+[Domain 1/771: 4yourlogo.com] [*] Process completed with return code: 0
+[Domain 1/771: 4yourlogo.com] [*] Changed back to original directory: /home/s141422/SecurityProject/EASM-Bunyamin-Siebe
+[Domain 1/771: 4yourlogo.com] [*] Removing symbolic link: /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/foundData/scan_4yourlogo.com_20250607_162026/foundData
+[Domain 1/771: 4yourlogo.com] [+] Removed symbolic link
+[Domain 1/771: 4yourlogo.com] 
+[Domain 1/771: 4yourlogo.com] [*] Starting scan 2/6: Certificaat.py
+[Domain 1/771: 4yourlogo.com] 
+[Domain 1/771: 4yourlogo.com] [*] Running Certificaat.py...
+[Domain 1/771: 4yourlogo.com] [*] Full script path: Scripts/Certificaat.py
+[Domain 1/771: 4yourlogo.com] [*] Input file: foundData/scan_4yourlogo.com_20250607_162026/all_subdomains.json
+[Domain 1/771: 4yourlogo.com] [*] Output directory: foundData/scan_4yourlogo.com_20250607_162026
+[Domain 1/771: 4yourlogo.com] [!] Error: Input file not found at /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/foundData/scan_4yourlogo.com_20250607_162026/all_subdomains.json
+[Domain 1/771: 4yourlogo.com] [!] Warning: Certificaat.py did not complete successfully
+[Domain 1/771: 4yourlogo.com] 
+[Domain 1/771: 4yourlogo.com] [*] Starting scan 3/6: DetectWebTechnologies.py
+[Domain 1/771: 4yourlogo.com] 
+[Domain 1/771: 4yourlogo.com] [*] Running DetectWebTechnologies.py...
+[Domain 1/771: 4yourlogo.com] [*] Full script path: Scripts/DetectWebTechnologies.py
+[Domain 1/771: 4yourlogo.com] [*] Input file: foundData/scan_4yourlogo.com_20250607_162026/all_subdomains.json
+[Domain 1/771: 4yourlogo.com] [*] Output directory: foundData/scan_4yourlogo.com_20250607_162026
+[Domain 1/771: 4yourlogo.com] [!] Error: Input file not found at /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/foundData/scan_4yourlogo.com_20250607_162026/all_subdomains.json
+[Domain 1/771: 4yourlogo.com] [!] Warning: DetectWebTechnologies.py did not complete successfully
+[Domain 1/771: 4yourlogo.com] 
+[Domain 1/771: 4yourlogo.com] [*] Starting scan 4/6: Domeingeldigheid.py
+[Domain 1/771: 4yourlogo.com] 
+[Domain 1/771: 4yourlogo.com] [*] Running Domeingeldigheid.py...
+[Domain 1/771: 4yourlogo.com] [*] Full script path: Scripts/Domeingeldigheid.py
+[Domain 1/771: 4yourlogo.com] [*] Input file: foundData/scan_4yourlogo.com_20250607_162026/all_subdomains.json
+[Domain 1/771: 4yourlogo.com] [*] Output directory: foundData/scan_4yourlogo.com_20250607_162026
+[Domain 1/771: 4yourlogo.com] [!] Error: Input file not found at /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/foundData/scan_4yourlogo.com_20250607_162026/all_subdomains.json
+[Domain 1/771: 4yourlogo.com] [!] Warning: Domeingeldigheid.py did not complete successfully
+[Domain 1/771: 4yourlogo.com] 
+[Domain 1/771: 4yourlogo.com] [*] Starting scan 5/6: EnhancedCVEScanner.py
+[Domain 1/771: 4yourlogo.com] 
+[Domain 1/771: 4yourlogo.com] [*] Running EnhancedCVEScanner.py...
+[Domain 1/771: 4yourlogo.com] [*] Full script path: Scripts/EnhancedCVEScanner.py
+[Domain 1/771: 4yourlogo.com] [*] Input file: foundData/scan_4yourlogo.com_20250607_162026/all_subdomains.json
+[Domain 1/771: 4yourlogo.com] [*] Output directory: foundData/scan_4yourlogo.com_20250607_162026
+[Domain 1/771: 4yourlogo.com] [!] Error: Input file not found at /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/foundData/scan_4yourlogo.com_20250607_162026/all_subdomains.json
+[Domain 1/771: 4yourlogo.com] [!] Warning: EnhancedCVEScanner.py did not complete successfully
+[Domain 1/771: 4yourlogo.com] 
+[Domain 1/771: 4yourlogo.com] [*] Starting scan 6/6: Portscan.py
+[Domain 1/771: 4yourlogo.com] 
+[Domain 1/771: 4yourlogo.com] [*] Running Portscan.py...
+[Domain 1/771: 4yourlogo.com] [*] Full script path: Scripts/Portscan.py
+[Domain 1/771: 4yourlogo.com] [*] Input file: foundData/scan_4yourlogo.com_20250607_162026/all_subdomains.json
+[Domain 1/771: 4yourlogo.com] [*] Output directory: foundData/scan_4yourlogo.com_20250607_162026
+[Domain 1/771: 4yourlogo.com] [!] Error: Input file not found at /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/foundData/scan_4yourlogo.com_20250607_162026/all_subdomains.json
+[Domain 1/771: 4yourlogo.com] [!] Warning: Portscan.py did not complete successfully
+[Domain 1/771: 4yourlogo.com] 
+[Domain 1/771: 4yourlogo.com] [+] All scans completed!
+[Domain 2/771: 4yourlogo.eu] [*] Starting CompleteSecurityScan.py
+[Domain 2/771: 4yourlogo.eu] [*] Arguments parsed:
+[Domain 2/771: 4yourlogo.eu]     Input file: /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/uploads/temp_domain_2.txt
+[Domain 2/771: 4yourlogo.eu]     Output directory: foundData
+[Domain 2/771: 4yourlogo.eu] [*] Reading domains from /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/uploads/temp_domain_2.txt
+[Domain 2/771: 4yourlogo.eu] [+] Successfully read input file
+[Domain 2/771: 4yourlogo.eu] [+] Found 1 domains to scan
+[Domain 2/771: 4yourlogo.eu] [+] Created scan directory: foundData/scan_4yourlogo.eu_20250607_162027
+[Domain 2/771: 4yourlogo.eu] [+] Results will be saved in: foundData/scan_4yourlogo.eu_20250607_162027
+[Domain 2/771: 4yourlogo.eu] [+] Total number of scans to run: 6
+[Domain 2/771: 4yourlogo.eu] 
+[Domain 2/771: 4yourlogo.eu] [*] Starting scan 1/6: subdom.py
+[Domain 2/771: 4yourlogo.eu] 
+[Domain 2/771: 4yourlogo.eu] [*] Running subdom.py...
+[Domain 2/771: 4yourlogo.eu] [*] Full script path: Scripts/subdom.py
+[Domain 2/771: 4yourlogo.eu] [*] Input file: /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/uploads/temp_domain_2.txt
+[Domain 2/771: 4yourlogo.eu] [*] Output directory: foundData/scan_4yourlogo.eu_20250607_162027
+[Domain 2/771: 4yourlogo.eu] [+] Created/verified scan directory: /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/foundData/scan_4yourlogo.eu_20250607_162027
+[Domain 2/771: 4yourlogo.eu] [*] Creating symbolic link from /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/foundData/scan_4yourlogo.eu_20250607_162027/foundData to /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/foundData/scan_4yourlogo.eu_20250607_162027
+[Domain 2/771: 4yourlogo.eu] [+] Created symbolic link from /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/foundData/scan_4yourlogo.eu_20250607_162027/foundData to /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/foundData/scan_4yourlogo.eu_20250607_162027
+[Domain 2/771: 4yourlogo.eu] [*] Executing command: python3 -u /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/Scripts/subdom.py --input /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/uploads/temp_domain_2.txt --output-dir /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/foundData/scan_4yourlogo.eu_20250607_162027
+[Domain 2/771: 4yourlogo.eu] [*] Changed working directory to: /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/Scripts
+[Domain 2/771: 4yourlogo.eu] [*] Process started with PID: 91561
+[Domain 2/771: 4yourlogo.eu] [*] Using output directory: /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/foundData/scan_4yourlogo.eu_20250607_162027
+[Domain 2/771: 4yourlogo.eu] [+] Loading domains from /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/uploads/temp_domain_2.txt
+[Domain 2/771: 4yourlogo.eu] [+] Loaded 1 unique domains from input.
+[Domain 2/771: 4yourlogo.eu] 
+[Domain 2/771: 4yourlogo.eu] === Processing domain 1/1: 4yourlogo.eu ===
+[Domain 2/771: 4yourlogo.eu] [+] Pinging domain: 4yourlogo.eu
+[Domain 2/771: 4yourlogo.eu] [-] Domain 4yourlogo.eu is unreachable. Skipping...
+[Domain 2/771: 4yourlogo.eu] [+] Inactive domains saved to: /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/foundData/scan_4yourlogo.eu_20250607_162027/inactiveDomains.json
+[Domain 2/771: 4yourlogo.eu] 
+[Domain 2/771: 4yourlogo.eu] [+] All domains processed successfully!
+[Domain 2/771: 4yourlogo.eu] [*] Process completed with return code: 0
+[Domain 2/771: 4yourlogo.eu] [*] Changed back to original directory: /home/s141422/SecurityProject/EASM-Bunyamin-Siebe
+[Domain 2/771: 4yourlogo.eu] [*] Removing symbolic link: /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/foundData/scan_4yourlogo.eu_20250607_162027/foundData
+[Domain 2/771: 4yourlogo.eu] [+] Removed symbolic link
+[Domain 2/771: 4yourlogo.eu] 
+[Domain 2/771: 4yourlogo.eu] [*] Starting scan 2/6: Certificaat.py
+[Domain 2/771: 4yourlogo.eu] 
+[Domain 2/771: 4yourlogo.eu] [*] Running Certificaat.py...
+[Domain 2/771: 4yourlogo.eu] [*] Full script path: Scripts/Certificaat.py
+[Domain 2/771: 4yourlogo.eu] [*] Input file: foundData/scan_4yourlogo.eu_20250607_162027/all_subdomains.json
+[Domain 2/771: 4yourlogo.eu] [*] Output directory: foundData/scan_4yourlogo.eu_20250607_162027
+[Domain 2/771: 4yourlogo.eu] [!] Error: Input file not found at /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/foundData/scan_4yourlogo.eu_20250607_162027/all_subdomains.json
+[Domain 2/771: 4yourlogo.eu] [!] Warning: Certificaat.py did not complete successfully
+[Domain 2/771: 4yourlogo.eu] 
+[Domain 2/771: 4yourlogo.eu] [*] Starting scan 3/6: DetectWebTechnologies.py
+[Domain 2/771: 4yourlogo.eu] 
+[Domain 2/771: 4yourlogo.eu] [*] Running DetectWebTechnologies.py...
+[Domain 2/771: 4yourlogo.eu] [*] Full script path: Scripts/DetectWebTechnologies.py
+[Domain 2/771: 4yourlogo.eu] [*] Input file: foundData/scan_4yourlogo.eu_20250607_162027/all_subdomains.json
+[Domain 2/771: 4yourlogo.eu] [*] Output directory: foundData/scan_4yourlogo.eu_20250607_162027
+[Domain 2/771: 4yourlogo.eu] [!] Error: Input file not found at /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/foundData/scan_4yourlogo.eu_20250607_162027/all_subdomains.json
+[Domain 2/771: 4yourlogo.eu] [!] Warning: DetectWebTechnologies.py did not complete successfully
+[Domain 2/771: 4yourlogo.eu] 
+[Domain 2/771: 4yourlogo.eu] [*] Starting scan 4/6: Domeingeldigheid.py
+[Domain 2/771: 4yourlogo.eu] 
+[Domain 2/771: 4yourlogo.eu] [*] Running Domeingeldigheid.py...
+[Domain 2/771: 4yourlogo.eu] [*] Full script path: Scripts/Domeingeldigheid.py
+[Domain 2/771: 4yourlogo.eu] [*] Input file: foundData/scan_4yourlogo.eu_20250607_162027/all_subdomains.json
+[Domain 2/771: 4yourlogo.eu] [*] Output directory: foundData/scan_4yourlogo.eu_20250607_162027
+[Domain 2/771: 4yourlogo.eu] [!] Error: Input file not found at /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/foundData/scan_4yourlogo.eu_20250607_162027/all_subdomains.json
+[Domain 2/771: 4yourlogo.eu] [!] Warning: Domeingeldigheid.py did not complete successfully
+[Domain 2/771: 4yourlogo.eu] 
+[Domain 2/771: 4yourlogo.eu] [*] Starting scan 5/6: EnhancedCVEScanner.py
+[Domain 2/771: 4yourlogo.eu] 
+[Domain 2/771: 4yourlogo.eu] [*] Running EnhancedCVEScanner.py...
+[Domain 2/771: 4yourlogo.eu] [*] Full script path: Scripts/EnhancedCVEScanner.py
+[Domain 2/771: 4yourlogo.eu] [*] Input file: foundData/scan_4yourlogo.eu_20250607_162027/all_subdomains.json
+[Domain 2/771: 4yourlogo.eu] [*] Output directory: foundData/scan_4yourlogo.eu_20250607_162027
+[Domain 2/771: 4yourlogo.eu] [!] Error: Input file not found at /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/foundData/scan_4yourlogo.eu_20250607_162027/all_subdomains.json
+[Domain 2/771: 4yourlogo.eu] [!] Warning: EnhancedCVEScanner.py did not complete successfully
+[Domain 2/771: 4yourlogo.eu] 
+[Domain 2/771: 4yourlogo.eu] [*] Starting scan 6/6: Portscan.py
+[Domain 2/771: 4yourlogo.eu] 
+[Domain 2/771: 4yourlogo.eu] [*] Running Portscan.py...
+[Domain 2/771: 4yourlogo.eu] [*] Full script path: Scripts/Portscan.py
+[Domain 2/771: 4yourlogo.eu] [*] Input file: foundData/scan_4yourlogo.eu_20250607_162027/all_subdomains.json
+[Domain 2/771: 4yourlogo.eu] [*] Output directory: foundData/scan_4yourlogo.eu_20250607_162027
+[Domain 2/771: 4yourlogo.eu] [!] Error: Input file not found at /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/foundData/scan_4yourlogo.eu_20250607_162027/all_subdomains.json
+[Domain 2/771: 4yourlogo.eu] [!] Warning: Portscan.py did not complete successfully
+[Domain 2/771: 4yourlogo.eu] 
+[Domain 2/771: 4yourlogo.eu] [+] All scans completed!
+[Domain 3/771: 4yourlogo.no] [*] Starting CompleteSecurityScan.py
+[Domain 3/771: 4yourlogo.no] [*] Arguments parsed:
+[Domain 3/771: 4yourlogo.no]     Input file: /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/uploads/temp_domain_3.txt
+[Domain 3/771: 4yourlogo.no]     Output directory: foundData
+[Domain 3/771: 4yourlogo.no] [*] Reading domains from /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/uploads/temp_domain_3.txt
+[Domain 3/771: 4yourlogo.no] [+] Successfully read input file
+[Domain 3/771: 4yourlogo.no] [+] Found 1 domains to scan
+[Domain 3/771: 4yourlogo.no] [+] Created scan directory: foundData/scan_4yourlogo.no_20250607_162027
+[Domain 3/771: 4yourlogo.no] [+] Results will be saved in: foundData/scan_4yourlogo.no_20250607_162027
+[Domain 3/771: 4yourlogo.no] [+] Total number of scans to run: 6
+[Domain 3/771: 4yourlogo.no] 
+[Domain 3/771: 4yourlogo.no] [*] Starting scan 1/6: subdom.py
+[Domain 3/771: 4yourlogo.no] 
+[Domain 3/771: 4yourlogo.no] [*] Running subdom.py...
+[Domain 3/771: 4yourlogo.no] [*] Full script path: Scripts/subdom.py
+[Domain 3/771: 4yourlogo.no] [*] Input file: /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/uploads/temp_domain_3.txt
+[Domain 3/771: 4yourlogo.no] [*] Output directory: foundData/scan_4yourlogo.no_20250607_162027
+[Domain 3/771: 4yourlogo.no] [+] Created/verified scan directory: /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/foundData/scan_4yourlogo.no_20250607_162027
+[Domain 3/771: 4yourlogo.no] [*] Creating symbolic link from /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/foundData/scan_4yourlogo.no_20250607_162027/foundData to /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/foundData/scan_4yourlogo.no_20250607_162027
+[Domain 3/771: 4yourlogo.no] [+] Created symbolic link from /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/foundData/scan_4yourlogo.no_20250607_162027/foundData to /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/foundData/scan_4yourlogo.no_20250607_162027
+[Domain 3/771: 4yourlogo.no] [*] Executing command: python3 -u /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/Scripts/subdom.py --input /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/uploads/temp_domain_3.txt --output-dir /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/foundData/scan_4yourlogo.no_20250607_162027
+[Domain 3/771: 4yourlogo.no] [*] Changed working directory to: /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/Scripts
+[Domain 3/771: 4yourlogo.no] [*] Process started with PID: 91593
+[Domain 3/771: 4yourlogo.no] [*] Using output directory: /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/foundData/scan_4yourlogo.no_20250607_162027
+[Domain 3/771: 4yourlogo.no] [+] Loading domains from /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/uploads/temp_domain_3.txt
+[Domain 3/771: 4yourlogo.no] [+] Loaded 1 unique domains from input.
+[Domain 3/771: 4yourlogo.no] 
+[Domain 3/771: 4yourlogo.no] === Processing domain 1/1: 4yourlogo.no ===
+[Domain 3/771: 4yourlogo.no] [+] Pinging domain: 4yourlogo.no
+[Domain 3/771: 4yourlogo.no] [-] Domain 4yourlogo.no is unreachable. Skipping...
+[Domain 3/771: 4yourlogo.no] [+] Inactive domains saved to: /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/foundData/scan_4yourlogo.no_20250607_162027/inactiveDomains.json
+[Domain 3/771: 4yourlogo.no] 
+[Domain 3/771: 4yourlogo.no] [+] All domains processed successfully!
+[Domain 3/771: 4yourlogo.no] [*] Process completed with return code: 0
+[Domain 3/771: 4yourlogo.no] [*] Changed back to original directory: /home/s141422/SecurityProject/EASM-Bunyamin-Siebe
+[Domain 3/771: 4yourlogo.no] [*] Removing symbolic link: /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/foundData/scan_4yourlogo.no_20250607_162027/foundData
+[Domain 3/771: 4yourlogo.no] [+] Removed symbolic link
+[Domain 3/771: 4yourlogo.no] 
+[Domain 3/771: 4yourlogo.no] [*] Starting scan 2/6: Certificaat.py
+[Domain 3/771: 4yourlogo.no] 
+[Domain 3/771: 4yourlogo.no] [*] Running Certificaat.py...
+[Domain 3/771: 4yourlogo.no] [*] Full script path: Scripts/Certificaat.py
+[Domain 3/771: 4yourlogo.no] [*] Input file: foundData/scan_4yourlogo.no_20250607_162027/all_subdomains.json
+[Domain 3/771: 4yourlogo.no] [*] Output directory: foundData/scan_4yourlogo.no_20250607_162027
+[Domain 3/771: 4yourlogo.no] [!] Error: Input file not found at /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/foundData/scan_4yourlogo.no_20250607_162027/all_subdomains.json
+[Domain 3/771: 4yourlogo.no] [!] Warning: Certificaat.py did not complete successfully
+[Domain 3/771: 4yourlogo.no] 
+[Domain 3/771: 4yourlogo.no] [*] Starting scan 3/6: DetectWebTechnologies.py
+[Domain 3/771: 4yourlogo.no] 
+[Domain 3/771: 4yourlogo.no] [*] Running DetectWebTechnologies.py...
+[Domain 3/771: 4yourlogo.no] [*] Full script path: Scripts/DetectWebTechnologies.py
+[Domain 3/771: 4yourlogo.no] [*] Input file: foundData/scan_4yourlogo.no_20250607_162027/all_subdomains.json
+[Domain 3/771: 4yourlogo.no] [*] Output directory: foundData/scan_4yourlogo.no_20250607_162027
+[Domain 3/771: 4yourlogo.no] [!] Error: Input file not found at /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/foundData/scan_4yourlogo.no_20250607_162027/all_subdomains.json
+[Domain 3/771: 4yourlogo.no] [!] Warning: DetectWebTechnologies.py did not complete successfully
+[Domain 3/771: 4yourlogo.no] 
+[Domain 3/771: 4yourlogo.no] [*] Starting scan 4/6: Domeingeldigheid.py
+[Domain 3/771: 4yourlogo.no] 
+[Domain 3/771: 4yourlogo.no] [*] Running Domeingeldigheid.py...
+[Domain 3/771: 4yourlogo.no] [*] Full script path: Scripts/Domeingeldigheid.py
+[Domain 3/771: 4yourlogo.no] [*] Input file: foundData/scan_4yourlogo.no_20250607_162027/all_subdomains.json
+[Domain 3/771: 4yourlogo.no] [*] Output directory: foundData/scan_4yourlogo.no_20250607_162027
+[Domain 3/771: 4yourlogo.no] [!] Error: Input file not found at /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/foundData/scan_4yourlogo.no_20250607_162027/all_subdomains.json
+[Domain 3/771: 4yourlogo.no] [!] Warning: Domeingeldigheid.py did not complete successfully
+[Domain 3/771: 4yourlogo.no] 
+[Domain 3/771: 4yourlogo.no] [*] Starting scan 5/6: EnhancedCVEScanner.py
+[Domain 3/771: 4yourlogo.no] 
+[Domain 3/771: 4yourlogo.no] [*] Running EnhancedCVEScanner.py...
+[Domain 3/771: 4yourlogo.no] [*] Full script path: Scripts/EnhancedCVEScanner.py
+[Domain 3/771: 4yourlogo.no] [*] Input file: foundData/scan_4yourlogo.no_20250607_162027/all_subdomains.json
+[Domain 3/771: 4yourlogo.no] [*] Output directory: foundData/scan_4yourlogo.no_20250607_162027
+[Domain 3/771: 4yourlogo.no] [!] Error: Input file not found at /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/foundData/scan_4yourlogo.no_20250607_162027/all_subdomains.json
+[Domain 3/771: 4yourlogo.no] [!] Warning: EnhancedCVEScanner.py did not complete successfully
+[Domain 3/771: 4yourlogo.no] 
+[Domain 3/771: 4yourlogo.no] [*] Starting scan 6/6: Portscan.py
+[Domain 3/771: 4yourlogo.no] 
+[Domain 3/771: 4yourlogo.no] [*] Running Portscan.py...
+[Domain 3/771: 4yourlogo.no] [*] Full script path: Scripts/Portscan.py
+[Domain 3/771: 4yourlogo.no] [*] Input file: foundData/scan_4yourlogo.no_20250607_162027/all_subdomains.json
+[Domain 3/771: 4yourlogo.no] [*] Output directory: foundData/scan_4yourlogo.no_20250607_162027
+[Domain 3/771: 4yourlogo.no] [!] Error: Input file not found at /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/foundData/scan_4yourlogo.no_20250607_162027/all_subdomains.json
+[Domain 3/771: 4yourlogo.no] [!] Warning: Portscan.py did not complete successfully
+[Domain 3/771: 4yourlogo.no] 
+[Domain 3/771: 4yourlogo.no] [+] All scans completed!
+[Domain 4/771: 4yourlogo.org] [*] Starting CompleteSecurityScan.py
+[Domain 4/771: 4yourlogo.org] [*] Arguments parsed:
+[Domain 4/771: 4yourlogo.org]     Input file: /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/uploads/temp_domain_4.txt
+[Domain 4/771: 4yourlogo.org]     Output directory: foundData
+[Domain 4/771: 4yourlogo.org] [*] Reading domains from /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/uploads/temp_domain_4.txt
+[Domain 4/771: 4yourlogo.org] [+] Successfully read input file
+[Domain 4/771: 4yourlogo.org] [+] Found 1 domains to scan
+[Domain 4/771: 4yourlogo.org] [+] Created scan directory: foundData/scan_4yourlogo.org_20250607_162028
+[Domain 4/771: 4yourlogo.org] [+] Results will be saved in: foundData/scan_4yourlogo.org_20250607_162028
+[Domain 4/771: 4yourlogo.org] [+] Total number of scans to run: 6
+[Domain 4/771: 4yourlogo.org] 
+[Domain 4/771: 4yourlogo.org] [*] Starting scan 1/6: subdom.py
+[Domain 4/771: 4yourlogo.org] 
+[Domain 4/771: 4yourlogo.org] [*] Running subdom.py...
+[Domain 4/771: 4yourlogo.org] [*] Full script path: Scripts/subdom.py
+[Domain 4/771: 4yourlogo.org] [*] Input file: /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/uploads/temp_domain_4.txt
+[Domain 4/771: 4yourlogo.org] [*] Output directory: foundData/scan_4yourlogo.org_20250607_162028
+[Domain 4/771: 4yourlogo.org] [+] Created/verified scan directory: /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/foundData/scan_4yourlogo.org_20250607_162028
+[Domain 4/771: 4yourlogo.org] [*] Creating symbolic link from /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/foundData/scan_4yourlogo.org_20250607_162028/foundData to /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/foundData/scan_4yourlogo.org_20250607_162028
+[Domain 4/771: 4yourlogo.org] [+] Created symbolic link from /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/foundData/scan_4yourlogo.org_20250607_162028/foundData to /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/foundData/scan_4yourlogo.org_20250607_162028
+[Domain 4/771: 4yourlogo.org] [*] Executing command: python3 -u /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/Scripts/subdom.py --input /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/uploads/temp_domain_4.txt --output-dir /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/foundData/scan_4yourlogo.org_20250607_162028
+[Domain 4/771: 4yourlogo.org] [*] Changed working directory to: /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/Scripts
+[Domain 4/771: 4yourlogo.org] [*] Process started with PID: 91611
+[Domain 4/771: 4yourlogo.org] [*] Using output directory: /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/foundData/scan_4yourlogo.org_20250607_162028
+[Domain 4/771: 4yourlogo.org] [+] Loading domains from /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/uploads/temp_domain_4.txt
+[Domain 4/771: 4yourlogo.org] [+] Loaded 1 unique domains from input.
+[Domain 4/771: 4yourlogo.org] 
+[Domain 4/771: 4yourlogo.org] === Processing domain 1/1: 4yourlogo.org ===
+[Domain 4/771: 4yourlogo.org] [+] Pinging domain: 4yourlogo.org
+[Domain 4/771: 4yourlogo.org] [-] Domain 4yourlogo.org is unreachable. Skipping...
+[Domain 4/771: 4yourlogo.org] [+] Inactive domains saved to: /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/foundData/scan_4yourlogo.org_20250607_162028/inactiveDomains.json
+[Domain 4/771: 4yourlogo.org] 
+[Domain 4/771: 4yourlogo.org] [+] All domains processed successfully!
+[Domain 4/771: 4yourlogo.org] [*] Process completed with return code: 0
+[Domain 4/771: 4yourlogo.org] [*] Changed back to original directory: /home/s141422/SecurityProject/EASM-Bunyamin-Siebe
+[Domain 4/771: 4yourlogo.org] [*] Removing symbolic link: /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/foundData/scan_4yourlogo.org_20250607_162028/foundData
+[Domain 4/771: 4yourlogo.org] [+] Removed symbolic link
+[Domain 4/771: 4yourlogo.org] 
+[Domain 4/771: 4yourlogo.org] [*] Starting scan 2/6: Certificaat.py
+[Domain 4/771: 4yourlogo.org] 
+[Domain 4/771: 4yourlogo.org] [*] Running Certificaat.py...
+[Domain 4/771: 4yourlogo.org] [*] Full script path: Scripts/Certificaat.py
+[Domain 4/771: 4yourlogo.org] [*] Input file: foundData/scan_4yourlogo.org_20250607_162028/all_subdomains.json
+[Domain 4/771: 4yourlogo.org] [*] Output directory: foundData/scan_4yourlogo.org_20250607_162028
+[Domain 4/771: 4yourlogo.org] [!] Error: Input file not found at /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/foundData/scan_4yourlogo.org_20250607_162028/all_subdomains.json
+[Domain 4/771: 4yourlogo.org] [!] Warning: Certificaat.py did not complete successfully
+[Domain 4/771: 4yourlogo.org] 
+[Domain 4/771: 4yourlogo.org] [*] Starting scan 3/6: DetectWebTechnologies.py
+[Domain 4/771: 4yourlogo.org] 
+[Domain 4/771: 4yourlogo.org] [*] Running DetectWebTechnologies.py...
+[Domain 4/771: 4yourlogo.org] [*] Full script path: Scripts/DetectWebTechnologies.py
+[Domain 4/771: 4yourlogo.org] [*] Input file: foundData/scan_4yourlogo.org_20250607_162028/all_subdomains.json
+[Domain 4/771: 4yourlogo.org] [*] Output directory: foundData/scan_4yourlogo.org_20250607_162028
+[Domain 4/771: 4yourlogo.org] [!] Error: Input file not found at /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/foundData/scan_4yourlogo.org_20250607_162028/all_subdomains.json
+[Domain 4/771: 4yourlogo.org] [!] Warning: DetectWebTechnologies.py did not complete successfully
+[Domain 4/771: 4yourlogo.org] 
+[Domain 4/771: 4yourlogo.org] [*] Starting scan 4/6: Domeingeldigheid.py
+[Domain 4/771: 4yourlogo.org] 
+[Domain 4/771: 4yourlogo.org] [*] Running Domeingeldigheid.py...
+[Domain 4/771: 4yourlogo.org] [*] Full script path: Scripts/Domeingeldigheid.py
+[Domain 4/771: 4yourlogo.org] [*] Input file: foundData/scan_4yourlogo.org_20250607_162028/all_subdomains.json
+[Domain 4/771: 4yourlogo.org] [*] Output directory: foundData/scan_4yourlogo.org_20250607_162028
+[Domain 4/771: 4yourlogo.org] [!] Error: Input file not found at /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/foundData/scan_4yourlogo.org_20250607_162028/all_subdomains.json
+[Domain 4/771: 4yourlogo.org] [!] Warning: Domeingeldigheid.py did not complete successfully
+[Domain 4/771: 4yourlogo.org] 
+[Domain 4/771: 4yourlogo.org] [*] Starting scan 5/6: EnhancedCVEScanner.py
+[Domain 4/771: 4yourlogo.org] 
+[Domain 4/771: 4yourlogo.org] [*] Running EnhancedCVEScanner.py...
+[Domain 4/771: 4yourlogo.org] [*] Full script path: Scripts/EnhancedCVEScanner.py
+[Domain 4/771: 4yourlogo.org] [*] Input file: foundData/scan_4yourlogo.org_20250607_162028/all_subdomains.json
+[Domain 4/771: 4yourlogo.org] [*] Output directory: foundData/scan_4yourlogo.org_20250607_162028
+[Domain 4/771: 4yourlogo.org] [!] Error: Input file not found at /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/foundData/scan_4yourlogo.org_20250607_162028/all_subdomains.json
+[Domain 4/771: 4yourlogo.org] [!] Warning: EnhancedCVEScanner.py did not complete successfully
+[Domain 4/771: 4yourlogo.org] 
+[Domain 4/771: 4yourlogo.org] [*] Starting scan 6/6: Portscan.py
+[Domain 4/771: 4yourlogo.org] 
+[Domain 4/771: 4yourlogo.org] [*] Running Portscan.py...
+[Domain 4/771: 4yourlogo.org] [*] Full script path: Scripts/Portscan.py
+[Domain 4/771: 4yourlogo.org] [*] Input file: foundData/scan_4yourlogo.org_20250607_162028/all_subdomains.json
+[Domain 4/771: 4yourlogo.org] [*] Output directory: foundData/scan_4yourlogo.org_20250607_162028
+[Domain 4/771: 4yourlogo.org] [!] Error: Input file not found at /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/foundData/scan_4yourlogo.org_20250607_162028/all_subdomains.json
+[Domain 4/771: 4yourlogo.org] [!] Warning: Portscan.py did not complete successfully
+[Domain 4/771: 4yourlogo.org] 
+[Domain 4/771: 4yourlogo.org] [+] All scans completed!
+[Domain 5/771: 4yourlogo.se] [*] Starting CompleteSecurityScan.py
+[Domain 5/771: 4yourlogo.se] [*] Arguments parsed:
+[Domain 5/771: 4yourlogo.se]     Input file: /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/uploads/temp_domain_5.txt
+[Domain 5/771: 4yourlogo.se]     Output directory: foundData
+[Domain 5/771: 4yourlogo.se] [*] Reading domains from /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/uploads/temp_domain_5.txt
+[Domain 5/771: 4yourlogo.se] [+] Successfully read input file
+[Domain 5/771: 4yourlogo.se] [+] Found 1 domains to scan
+[Domain 5/771: 4yourlogo.se] [+] Created scan directory: foundData/scan_4yourlogo.se_20250607_162028
+[Domain 5/771: 4yourlogo.se] [+] Results will be saved in: foundData/scan_4yourlogo.se_20250607_162028
+[Domain 5/771: 4yourlogo.se] [+] Total number of scans to run: 6
+[Domain 5/771: 4yourlogo.se] 
+[Domain 5/771: 4yourlogo.se] [*] Starting scan 1/6: subdom.py
+[Domain 5/771: 4yourlogo.se] 
+[Domain 5/771: 4yourlogo.se] [*] Running subdom.py...
+[Domain 5/771: 4yourlogo.se] [*] Full script path: Scripts/subdom.py
+[Domain 5/771: 4yourlogo.se] [*] Input file: /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/uploads/temp_domain_5.txt
+[Domain 5/771: 4yourlogo.se] [*] Output directory: foundData/scan_4yourlogo.se_20250607_162028
+[Domain 5/771: 4yourlogo.se] [+] Created/verified scan directory: /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/foundData/scan_4yourlogo.se_20250607_162028
+[Domain 5/771: 4yourlogo.se] [*] Creating symbolic link from /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/foundData/scan_4yourlogo.se_20250607_162028/foundData to /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/foundData/scan_4yourlogo.se_20250607_162028
+[Domain 5/771: 4yourlogo.se] [+] Created symbolic link from /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/foundData/scan_4yourlogo.se_20250607_162028/foundData to /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/foundData/scan_4yourlogo.se_20250607_162028
+[Domain 5/771: 4yourlogo.se] [*] Executing command: python3 -u /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/Scripts/subdom.py --input /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/uploads/temp_domain_5.txt --output-dir /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/foundData/scan_4yourlogo.se_20250607_162028
+[Domain 5/771: 4yourlogo.se] [*] Changed working directory to: /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/Scripts
+[Domain 5/771: 4yourlogo.se] [*] Process started with PID: 91638
+[Domain 5/771: 4yourlogo.se] [*] Using output directory: /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/foundData/scan_4yourlogo.se_20250607_162028
+[Domain 5/771: 4yourlogo.se] [+] Loading domains from /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/uploads/temp_domain_5.txt
+[Domain 5/771: 4yourlogo.se] [+] Loaded 1 unique domains from input.
+[Domain 5/771: 4yourlogo.se] 
+[Domain 5/771: 4yourlogo.se] === Processing domain 1/1: 4yourlogo.se ===
+[Domain 5/771: 4yourlogo.se] [+] Pinging domain: 4yourlogo.se
+[Domain 5/771: 4yourlogo.se] [-] Domain 4yourlogo.se is unreachable. Skipping...
+[Domain 5/771: 4yourlogo.se] [+] Inactive domains saved to: /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/foundData/scan_4yourlogo.se_20250607_162028/inactiveDomains.json
+[Domain 5/771: 4yourlogo.se] 
+[Domain 5/771: 4yourlogo.se] [+] All domains processed successfully!
+[Domain 5/771: 4yourlogo.se] [*] Process completed with return code: 0
+[Domain 5/771: 4yourlogo.se] [*] Changed back to original directory: /home/s141422/SecurityProject/EASM-Bunyamin-Siebe
+[Domain 5/771: 4yourlogo.se] [*] Removing symbolic link: /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/foundData/scan_4yourlogo.se_20250607_162028/foundData
+[Domain 5/771: 4yourlogo.se] [+] Removed symbolic link
+[Domain 5/771: 4yourlogo.se] 
+[Domain 5/771: 4yourlogo.se] [*] Starting scan 2/6: Certificaat.py
+[Domain 5/771: 4yourlogo.se] 
+[Domain 5/771: 4yourlogo.se] [*] Running Certificaat.py...
+[Domain 5/771: 4yourlogo.se] [*] Full script path: Scripts/Certificaat.py
+[Domain 5/771: 4yourlogo.se] [*] Input file: foundData/scan_4yourlogo.se_20250607_162028/all_subdomains.json
+[Domain 5/771: 4yourlogo.se] [*] Output directory: foundData/scan_4yourlogo.se_20250607_162028
+[Domain 5/771: 4yourlogo.se] [!] Error: Input file not found at /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/foundData/scan_4yourlogo.se_20250607_162028/all_subdomains.json
+[Domain 5/771: 4yourlogo.se] [!] Warning: Certificaat.py did not complete successfully
+[Domain 5/771: 4yourlogo.se] 
+[Domain 5/771: 4yourlogo.se] [*] Starting scan 3/6: DetectWebTechnologies.py
+[Domain 5/771: 4yourlogo.se] 
+[Domain 5/771: 4yourlogo.se] [*] Running DetectWebTechnologies.py...
+[Domain 5/771: 4yourlogo.se] [*] Full script path: Scripts/DetectWebTechnologies.py
+[Domain 5/771: 4yourlogo.se] [*] Input file: foundData/scan_4yourlogo.se_20250607_162028/all_subdomains.json
+[Domain 5/771: 4yourlogo.se] [*] Output directory: foundData/scan_4yourlogo.se_20250607_162028
+[Domain 5/771: 4yourlogo.se] [!] Error: Input file not found at /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/foundData/scan_4yourlogo.se_20250607_162028/all_subdomains.json
+[Domain 5/771: 4yourlogo.se] [!] Warning: DetectWebTechnologies.py did not complete successfully
+[Domain 5/771: 4yourlogo.se] 
+[Domain 5/771: 4yourlogo.se] [*] Starting scan 4/6: Domeingeldigheid.py
+[Domain 5/771: 4yourlogo.se] 
+[Domain 5/771: 4yourlogo.se] [*] Running Domeingeldigheid.py...
+[Domain 5/771: 4yourlogo.se] [*] Full script path: Scripts/Domeingeldigheid.py
+[Domain 5/771: 4yourlogo.se] [*] Input file: foundData/scan_4yourlogo.se_20250607_162028/all_subdomains.json
+[Domain 5/771: 4yourlogo.se] [*] Output directory: foundData/scan_4yourlogo.se_20250607_162028
+[Domain 5/771: 4yourlogo.se] [!] Error: Input file not found at /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/foundData/scan_4yourlogo.se_20250607_162028/all_subdomains.json
+[Domain 5/771: 4yourlogo.se] [!] Warning: Domeingeldigheid.py did not complete successfully
+[Domain 5/771: 4yourlogo.se] 
+[Domain 5/771: 4yourlogo.se] [*] Starting scan 5/6: EnhancedCVEScanner.py
+[Domain 5/771: 4yourlogo.se] 
+[Domain 5/771: 4yourlogo.se] [*] Running EnhancedCVEScanner.py...
+[Domain 5/771: 4yourlogo.se] [*] Full script path: Scripts/EnhancedCVEScanner.py
+[Domain 5/771: 4yourlogo.se] [*] Input file: foundData/scan_4yourlogo.se_20250607_162028/all_subdomains.json
+[Domain 5/771: 4yourlogo.se] [*] Output directory: foundData/scan_4yourlogo.se_20250607_162028
+[Domain 5/771: 4yourlogo.se] [!] Error: Input file not found at /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/foundData/scan_4yourlogo.se_20250607_162028/all_subdomains.json
+[Domain 5/771: 4yourlogo.se] [!] Warning: EnhancedCVEScanner.py did not complete successfully
+[Domain 5/771: 4yourlogo.se] 
+[Domain 5/771: 4yourlogo.se] [*] Starting scan 6/6: Portscan.py
+[Domain 5/771: 4yourlogo.se] 
+[Domain 5/771: 4yourlogo.se] [*] Running Portscan.py...
+[Domain 5/771: 4yourlogo.se] [*] Full script path: Scripts/Portscan.py
+[Domain 5/771: 4yourlogo.se] [*] Input file: foundData/scan_4yourlogo.se_20250607_162028/all_subdomains.json
+[Domain 5/771: 4yourlogo.se] [*] Output directory: foundData/scan_4yourlogo.se_20250607_162028
+[Domain 5/771: 4yourlogo.se] [!] Error: Input file not found at /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/foundData/scan_4yourlogo.se_20250607_162028/all_subdomains.json
+[Domain 5/771: 4yourlogo.se] [!] Warning: Portscan.py did not complete successfully
+[Domain 5/771: 4yourlogo.se] 
+[Domain 5/771: 4yourlogo.se] [+] All scans completed!
+[Domain 6/771: allxmas.se] [*] Starting CompleteSecurityScan.py
+[Domain 6/771: allxmas.se] [*] Arguments parsed:
+[Domain 6/771: allxmas.se]     Input file: /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/uploads/temp_domain_6.txt
+[Domain 6/771: allxmas.se]     Output directory: foundData
+[Domain 6/771: allxmas.se] [*] Reading domains from /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/uploads/temp_domain_6.txt
+[Domain 6/771: allxmas.se] [+] Successfully read input file
+[Domain 6/771: allxmas.se] [+] Found 1 domains to scan
+[Domain 6/771: allxmas.se] [+] Created scan directory: foundData/scan_allxmas.se_20250607_162029
+[Domain 6/771: allxmas.se] [+] Results will be saved in: foundData/scan_allxmas.se_20250607_162029
+[Domain 6/771: allxmas.se] [+] Total number of scans to run: 6
+[Domain 6/771: allxmas.se] 
+[Domain 6/771: allxmas.se] [*] Starting scan 1/6: subdom.py
+[Domain 6/771: allxmas.se] 
+[Domain 6/771: allxmas.se] [*] Running subdom.py...
+[Domain 6/771: allxmas.se] [*] Full script path: Scripts/subdom.py
+[Domain 6/771: allxmas.se] [*] Input file: /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/uploads/temp_domain_6.txt
+[Domain 6/771: allxmas.se] [*] Output directory: foundData/scan_allxmas.se_20250607_162029
+[Domain 6/771: allxmas.se] [+] Created/verified scan directory: /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/foundData/scan_allxmas.se_20250607_162029
+[Domain 6/771: allxmas.se] [*] Creating symbolic link from /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/foundData/scan_allxmas.se_20250607_162029/foundData to /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/foundData/scan_allxmas.se_20250607_162029
+[Domain 6/771: allxmas.se] [+] Created symbolic link from /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/foundData/scan_allxmas.se_20250607_162029/foundData to /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/foundData/scan_allxmas.se_20250607_162029
+[Domain 6/771: allxmas.se] [*] Executing command: python3 -u /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/Scripts/subdom.py --input /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/uploads/temp_domain_6.txt --output-dir /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/foundData/scan_allxmas.se_20250607_162029
+[Domain 6/771: allxmas.se] [*] Changed working directory to: /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/Scripts
+[Domain 6/771: allxmas.se] [*] Process started with PID: 91661
+[Domain 6/771: allxmas.se] [*] Using output directory: /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/foundData/scan_allxmas.se_20250607_162029
+[Domain 6/771: allxmas.se] [+] Loading domains from /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/uploads/temp_domain_6.txt
+[Domain 6/771: allxmas.se] [+] Loaded 1 unique domains from input.
+[Domain 6/771: allxmas.se] 
+[Domain 6/771: allxmas.se] === Processing domain 1/1: allxmas.se ===
+[Domain 6/771: allxmas.se] [+] Pinging domain: allxmas.se
+[Domain 6/771: allxmas.se] [-] Domain allxmas.se is unreachable. Skipping...
+[Domain 6/771: allxmas.se] [+] Inactive domains saved to: /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/foundData/scan_allxmas.se_20250607_162029/inactiveDomains.json
+[Domain 6/771: allxmas.se] 
+[Domain 6/771: allxmas.se] [+] All domains processed successfully!
+[Domain 6/771: allxmas.se] [*] Process completed with return code: 0
+[Domain 6/771: allxmas.se] [*] Changed back to original directory: /home/s141422/SecurityProject/EASM-Bunyamin-Siebe
+[Domain 6/771: allxmas.se] [*] Removing symbolic link: /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/foundData/scan_allxmas.se_20250607_162029/foundData
+[Domain 6/771: allxmas.se] [+] Removed symbolic link
+[Domain 6/771: allxmas.se] 
+[Domain 6/771: allxmas.se] [*] Starting scan 2/6: Certificaat.py
+[Domain 6/771: allxmas.se] 
+[Domain 6/771: allxmas.se] [*] Running Certificaat.py...
+[Domain 6/771: allxmas.se] [*] Full script path: Scripts/Certificaat.py
+[Domain 6/771: allxmas.se] [*] Input file: foundData/scan_allxmas.se_20250607_162029/all_subdomains.json
+[Domain 6/771: allxmas.se] [*] Output directory: foundData/scan_allxmas.se_20250607_162029
+[Domain 6/771: allxmas.se] [!] Error: Input file not found at /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/foundData/scan_allxmas.se_20250607_162029/all_subdomains.json
+[Domain 6/771: allxmas.se] [!] Warning: Certificaat.py did not complete successfully
+[Domain 6/771: allxmas.se] 
+[Domain 6/771: allxmas.se] [*] Starting scan 3/6: DetectWebTechnologies.py
+[Domain 6/771: allxmas.se] 
+[Domain 6/771: allxmas.se] [*] Running DetectWebTechnologies.py...
+[Domain 6/771: allxmas.se] [*] Full script path: Scripts/DetectWebTechnologies.py
+[Domain 6/771: allxmas.se] [*] Input file: foundData/scan_allxmas.se_20250607_162029/all_subdomains.json
+[Domain 6/771: allxmas.se] [*] Output directory: foundData/scan_allxmas.se_20250607_162029
+[Domain 6/771: allxmas.se] [!] Error: Input file not found at /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/foundData/scan_allxmas.se_20250607_162029/all_subdomains.json
+[Domain 6/771: allxmas.se] [!] Warning: DetectWebTechnologies.py did not complete successfully
+[Domain 6/771: allxmas.se] 
+[Domain 6/771: allxmas.se] [*] Starting scan 4/6: Domeingeldigheid.py
+[Domain 6/771: allxmas.se] 
+[Domain 6/771: allxmas.se] [*] Running Domeingeldigheid.py...
+[Domain 6/771: allxmas.se] [*] Full script path: Scripts/Domeingeldigheid.py
+[Domain 6/771: allxmas.se] [*] Input file: foundData/scan_allxmas.se_20250607_162029/all_subdomains.json
+[Domain 6/771: allxmas.se] [*] Output directory: foundData/scan_allxmas.se_20250607_162029
+[Domain 6/771: allxmas.se] [!] Error: Input file not found at /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/foundData/scan_allxmas.se_20250607_162029/all_subdomains.json
+[Domain 6/771: allxmas.se] [!] Warning: Domeingeldigheid.py did not complete successfully
+[Domain 6/771: allxmas.se] 
+[Domain 6/771: allxmas.se] [*] Starting scan 5/6: EnhancedCVEScanner.py
+[Domain 6/771: allxmas.se] 
+[Domain 6/771: allxmas.se] [*] Running EnhancedCVEScanner.py...
+[Domain 6/771: allxmas.se] [*] Full script path: Scripts/EnhancedCVEScanner.py
+[Domain 6/771: allxmas.se] [*] Input file: foundData/scan_allxmas.se_20250607_162029/all_subdomains.json
+[Domain 6/771: allxmas.se] [*] Output directory: foundData/scan_allxmas.se_20250607_162029
+[Domain 6/771: allxmas.se] [!] Error: Input file not found at /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/foundData/scan_allxmas.se_20250607_162029/all_subdomains.json
+[Domain 6/771: allxmas.se] [!] Warning: EnhancedCVEScanner.py did not complete successfully
+[Domain 6/771: allxmas.se] 
+[Domain 6/771: allxmas.se] [*] Starting scan 6/6: Portscan.py
+[Domain 6/771: allxmas.se] 
+[Domain 6/771: allxmas.se] [*] Running Portscan.py...
+[Domain 6/771: allxmas.se] [*] Full script path: Scripts/Portscan.py
+[Domain 6/771: allxmas.se] [*] Input file: foundData/scan_allxmas.se_20250607_162029/all_subdomains.json
+[Domain 6/771: allxmas.se] [*] Output directory: foundData/scan_allxmas.se_20250607_162029
+[Domain 6/771: allxmas.se] [!] Error: Input file not found at /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/foundData/scan_allxmas.se_20250607_162029/all_subdomains.json
+[Domain 6/771: allxmas.se] [!] Warning: Portscan.py did not complete successfully
+[Domain 6/771: allxmas.se] 
+[Domain 6/771: allxmas.se] [+] All scans completed!
+[Domain 7/771: auclairglove.com] [*] Starting CompleteSecurityScan.py
+[Domain 7/771: auclairglove.com] [*] Arguments parsed:
+[Domain 7/771: auclairglove.com]     Input file: /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/uploads/temp_domain_7.txt
+[Domain 7/771: auclairglove.com]     Output directory: foundData
+[Domain 7/771: auclairglove.com] [*] Reading domains from /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/uploads/temp_domain_7.txt
+[Domain 7/771: auclairglove.com] [+] Successfully read input file
+[Domain 7/771: auclairglove.com] [+] Found 1 domains to scan
+[Domain 7/771: auclairglove.com] [+] Created scan directory: foundData/scan_auclairglove.com_20250607_162030
+[Domain 7/771: auclairglove.com] [+] Results will be saved in: foundData/scan_auclairglove.com_20250607_162030
+[Domain 7/771: auclairglove.com] [+] Total number of scans to run: 6
+[Domain 7/771: auclairglove.com] 
+[Domain 7/771: auclairglove.com] [*] Starting scan 1/6: subdom.py
+[Domain 7/771: auclairglove.com] 
+[Domain 7/771: auclairglove.com] [*] Running subdom.py...
+[Domain 7/771: auclairglove.com] [*] Full script path: Scripts/subdom.py
+[Domain 7/771: auclairglove.com] [*] Input file: /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/uploads/temp_domain_7.txt
+[Domain 7/771: auclairglove.com] [*] Output directory: foundData/scan_auclairglove.com_20250607_162030
+[Domain 7/771: auclairglove.com] [+] Created/verified scan directory: /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/foundData/scan_auclairglove.com_20250607_162030
+[Domain 7/771: auclairglove.com] [*] Creating symbolic link from /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/foundData/scan_auclairglove.com_20250607_162030/foundData to /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/foundData/scan_auclairglove.com_20250607_162030
+[Domain 7/771: auclairglove.com] [+] Created symbolic link from /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/foundData/scan_auclairglove.com_20250607_162030/foundData to /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/foundData/scan_auclairglove.com_20250607_162030
+[Domain 7/771: auclairglove.com] [*] Executing command: python3 -u /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/Scripts/subdom.py --input /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/uploads/temp_domain_7.txt --output-dir /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/foundData/scan_auclairglove.com_20250607_162030
+[Domain 7/771: auclairglove.com] [*] Changed working directory to: /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/Scripts
+[Domain 7/771: auclairglove.com] [*] Process started with PID: 91682
+[Domain 7/771: auclairglove.com] [*] Using output directory: /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/foundData/scan_auclairglove.com_20250607_162030
+[Domain 7/771: auclairglove.com] [+] Loading domains from /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/uploads/temp_domain_7.txt
+[Domain 7/771: auclairglove.com] [+] Loaded 1 unique domains from input.
+[Domain 7/771: auclairglove.com] 
+[Domain 7/771: auclairglove.com] === Processing domain 1/1: auclairglove.com ===
+[Domain 7/771: auclairglove.com] [+] Pinging domain: auclairglove.com
+[Domain 7/771: auclairglove.com] [+] Running Amass for auclairglove.com
+[Domain 7/771: auclairglove.com] [+] Running Subfinder for auclairglove.com
+[Domain 7/771: auclairglove.com] [+] Found 2 unique subdomains for auclairglove.com.
+[Domain 7/771: auclairglove.com] [+] Resolving IPs for 2 subdomains...
+[Domain 7/771: auclairglove.com] [+] IP resolution complete.
+[Domain 7/771: auclairglove.com] 
+[Domain 7/771: auclairglove.com] [+] All results saved to: /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/foundData/scan_auclairglove.com_20250607_162030/all_subdomains.json
+[Domain 7/771: auclairglove.com] 
+[Domain 7/771: auclairglove.com] [+] All domains processed successfully!
+[Domain 7/771: auclairglove.com] [*] Process completed with return code: 0
+[Domain 7/771: auclairglove.com] [*] Changed back to original directory: /home/s141422/SecurityProject/EASM-Bunyamin-Siebe
+[Domain 7/771: auclairglove.com] [*] Removing symbolic link: /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/foundData/scan_auclairglove.com_20250607_162030/foundData
+[Domain 7/771: auclairglove.com] [+] Removed symbolic link
+[Domain 7/771: auclairglove.com] 
+[Domain 7/771: auclairglove.com] [*] Starting scan 2/6: Certificaat.py
+[Domain 7/771: auclairglove.com] 
+[Domain 7/771: auclairglove.com] [*] Running Certificaat.py...
+[Domain 7/771: auclairglove.com] [*] Full script path: Scripts/Certificaat.py
+[Domain 7/771: auclairglove.com] [*] Input file: foundData/scan_auclairglove.com_20250607_162030/all_subdomains.json
+[Domain 7/771: auclairglove.com] [*] Output directory: foundData/scan_auclairglove.com_20250607_162030
+[Domain 7/771: auclairglove.com] [*] Executing command: python3 -u /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/Scripts/Certificaat.py --input /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/foundData/scan_auclairglove.com_20250607_162030/all_subdomains.json --output-dir /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/foundData/scan_auclairglove.com_20250607_162030
+[Domain 7/771: auclairglove.com] [*] Changed working directory to: /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/Scripts
+[Domain 7/771: auclairglove.com] [*] Process started with PID: 92277
+[Domain 7/771: auclairglove.com] Reading domains from /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/foundData/scan_auclairglove.com_20250607_162030/all_subdomains.json
+[Domain 7/771: auclairglove.com] Found 3 domains to check
+[Domain 7/771: auclairglove.com] [1/3] Checking certificate for domain: auclairglove.com...
+[Domain 7/771: auclairglove.com] - Status: valid, expires in 84 days
+[Domain 7/771: auclairglove.com] [2/3] Checking certificate for domain: No names were discovered...
+[Domain 7/771: auclairglove.com] - Status: error: dns_error
+[Domain 7/771: auclairglove.com] [3/3] Checking certificate for domain: www.auclairglove.com...
+[Domain 7/771: auclairglove.com] - Status: valid, expires in 15 days (EXPIRING SOON)
+[Domain 7/771: auclairglove.com] 
+[Domain 7/771: auclairglove.com] Certificate information for 3 domains saved to /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/foundData/scan_auclairglove.com_20250607_162030/certificates.json
+[Domain 7/771: auclairglove.com] [*] Process completed with return code: 0
+[Domain 7/771: auclairglove.com] [*] Changed back to original directory: /home/s141422/SecurityProject/EASM-Bunyamin-Siebe
+[Domain 7/771: auclairglove.com] 
+[Domain 7/771: auclairglove.com] [*] Starting scan 3/6: DetectWebTechnologies.py
+[Domain 7/771: auclairglove.com] 
+[Domain 7/771: auclairglove.com] [*] Running DetectWebTechnologies.py...
+[Domain 7/771: auclairglove.com] [*] Full script path: Scripts/DetectWebTechnologies.py
+[Domain 7/771: auclairglove.com] [*] Input file: foundData/scan_auclairglove.com_20250607_162030/all_subdomains.json
+[Domain 7/771: auclairglove.com] [*] Output directory: foundData/scan_auclairglove.com_20250607_162030
+[Domain 7/771: auclairglove.com] [*] Executing command: python3 -u /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/Scripts/DetectWebTechnologies.py --input /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/foundData/scan_auclairglove.com_20250607_162030/all_subdomains.json --output-dir /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/foundData/scan_auclairglove.com_20250607_162030
+[Domain 7/771: auclairglove.com] [*] Changed working directory to: /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/Scripts
+[Domain 7/771: auclairglove.com] [*] Process started with PID: 92300
+[Domain 7/771: auclairglove.com] [+] webtech module found. Web technology detection is enabled.
+[Domain 7/771: auclairglove.com] [*] Reading domains from /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/foundData/scan_auclairglove.com_20250607_162030/all_subdomains.json
+[Domain 7/771: auclairglove.com] [+] Adding main domain: auclairglove.com
+[Domain 7/771: auclairglove.com] [+] Found 2 unique domains to scan
+[Domain 7/771: auclairglove.com] 
+[Domain 7/771: auclairglove.com] [*] Processing subdomain 1/2: auclairglove.com
+[Domain 7/771: auclairglove.com] [*] Querying WhatRuns API for auclairglove.com...
+[Domain 7/771: auclairglove.com] [*] Sending request to WhatRuns API...
+[Domain 7/771: auclairglove.com] [*] Received response, processing data...
+[Domain 7/771: auclairglove.com] [!] No 'apps' found in WhatRuns API response
+[Domain 7/771: auclairglove.com] [+] Completed subdomain 1/2: auclairglove.com
+[Domain 7/771: auclairglove.com] [+] Results saved to /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/foundData/scan_auclairglove.com_20250607_162030/web_technologies.json
+[Domain 7/771: auclairglove.com] [*] Processing subdomain 2/2: www.auclairglove.com
+[Domain 7/771: auclairglove.com] [*] Querying WhatRuns API for www.auclairglove.com...
+[Domain 7/771: auclairglove.com] [*] Sending request to WhatRuns API...
+[Domain 7/771: auclairglove.com] [*] Received response, processing data...
+[Domain 7/771: auclairglove.com] [!] No 'apps' found in WhatRuns API response
+[Domain 7/771: auclairglove.com] [+] Completed subdomain 2/2: www.auclairglove.com
+[Domain 7/771: auclairglove.com] [+] Results saved to /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/foundData/scan_auclairglove.com_20250607_162030/web_technologies.json
+[Domain 7/771: auclairglove.com] 
+[Domain 7/771: auclairglove.com] [+] Scan complete! Processed 2 subdomains
+[Domain 7/771: auclairglove.com] [+] Final results saved to /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/foundData/scan_auclairglove.com_20250607_162030/web_technologies.json
+[Domain 7/771: auclairglove.com] [*] Process completed with return code: 0
+[Domain 7/771: auclairglove.com] [*] Changed back to original directory: /home/s141422/SecurityProject/EASM-Bunyamin-Siebe
+[Domain 7/771: auclairglove.com] 
+[Domain 7/771: auclairglove.com] [*] Starting scan 4/6: Domeingeldigheid.py
+[Domain 7/771: auclairglove.com] 
+[Domain 7/771: auclairglove.com] [*] Running Domeingeldigheid.py...
+[Domain 7/771: auclairglove.com] [*] Full script path: Scripts/Domeingeldigheid.py
+[Domain 7/771: auclairglove.com] [*] Input file: foundData/scan_auclairglove.com_20250607_162030/all_subdomains.json
+[Domain 7/771: auclairglove.com] [*] Output directory: foundData/scan_auclairglove.com_20250607_162030
+[Domain 7/771: auclairglove.com] [*] Executing command: python3 -u /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/Scripts/Domeingeldigheid.py --input /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/foundData/scan_auclairglove.com_20250607_162030/all_subdomains.json --output-dir /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/foundData/scan_auclairglove.com_20250607_162030
+[Domain 7/771: auclairglove.com] [*] Changed working directory to: /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/Scripts
+[Domain 7/771: auclairglove.com] [*] Process started with PID: 92305
+[Domain 7/771: auclairglove.com] [*] Reading domains from /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/foundData/scan_auclairglove.com_20250607_162030/all_subdomains.json
+[Domain 7/771: auclairglove.com] [+] Found 1 unique domains
+[Domain 7/771: auclairglove.com] 
+[Domain 7/771: auclairglove.com] Domain Lease Information:
+[Domain 7/771: auclairglove.com] --------------------------------------------------
+[Domain 7/771: auclairglove.com] Domain: auclairglove.com
+[Domain 7/771: auclairglove.com] Status: valid
+[Domain 7/771: auclairglove.com] --------------------------------------------------
+[Domain 7/771: auclairglove.com] 
+[Domain 7/771: auclairglove.com] [+] Results saved to /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/foundData/scan_auclairglove.com_20250607_162030/domainLease.json
+[Domain 7/771: auclairglove.com] [*] Process completed with return code: 0
+[Domain 7/771: auclairglove.com] [*] Changed back to original directory: /home/s141422/SecurityProject/EASM-Bunyamin-Siebe
+[Domain 7/771: auclairglove.com] 
+[Domain 7/771: auclairglove.com] [*] Starting scan 5/6: EnhancedCVEScanner.py
+[Domain 7/771: auclairglove.com] 
+[Domain 7/771: auclairglove.com] [*] Running EnhancedCVEScanner.py...
+[Domain 7/771: auclairglove.com] [*] Full script path: Scripts/EnhancedCVEScanner.py
+[Domain 7/771: auclairglove.com] [*] Input file: foundData/scan_auclairglove.com_20250607_162030/all_subdomains.json
+[Domain 7/771: auclairglove.com] [*] Output directory: foundData/scan_auclairglove.com_20250607_162030
+[Domain 7/771: auclairglove.com] [*] Executing command: python3 -u /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/Scripts/EnhancedCVEScanner.py --input-json /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/foundData/scan_auclairglove.com_20250607_162030/all_subdomains.json --output-json /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/foundData/scan_auclairglove.com_20250607_162030/cve_scan_results.json --output-report /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/foundData/scan_auclairglove.com_20250607_162030/cve_scan_report.txt --discover-ports --verbose
+[Domain 7/771: auclairglove.com] [*] Changed working directory to: /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/Scripts
+[Domain 7/771: auclairglove.com] [*] Process started with PID: 92332
+[Domain 7/771: auclairglove.com] 
+[Domain 7/771: auclairglove.com] [*] Checking which targets are reachable...
+[Domain 7/771: auclairglove.com] [*] Pinging auclairglove.com...
+[Domain 7/771: auclairglove.com] [+] Host auclairglove.com is up
+[Domain 7/771: auclairglove.com] [+] auclairglove.com is reachable
+[Domain 7/771: auclairglove.com] [*] Pinging www.auclairglove.com...
+[Domain 7/771: auclairglove.com] [+] Host www.auclairglove.com is up
+[Domain 7/771: auclairglove.com] [+] www.auclairglove.com is reachable
+[Domain 7/771: auclairglove.com] 
+[Domain 7/771: auclairglove.com] [*] Found 2 reachable targets out of 2 total targets
+[Domain 7/771: auclairglove.com] 
+[Domain 7/771: auclairglove.com] [*] Scanning domain 1/2: auclairglove.com
+[Domain 7/771: auclairglove.com] [*] Pinging auclairglove.com...
+[Domain 7/771: auclairglove.com] [+] Host auclairglove.com is up
+[Domain 7/771: auclairglove.com] [*] Discovering open ports on auclairglove.com...
+[Domain 7/771: auclairglove.com] [*] Running: nmap -sV --open auclairglove.com
+[Domain 7/771: auclairglove.com] [+] Discovered 2 open ports on auclairglove.com: 80, 443
+[Domain 7/771: auclairglove.com] 
+[Domain 7/771: auclairglove.com] [*] Scanning port 80 on auclairglove.com for vulnerabilities...
+[Domain 7/771: auclairglove.com] [*] Running: nmap --script vuln -p 80 auclairglove.com
+[Domain 7/771: auclairglove.com] [+] Found vulnerability: CVE-2011-1002). [Unknown]
+[Domain 7/771: auclairglove.com] [+] Total 1 vulnerabilities found on auclairglove.com:80
+[Domain 7/771: auclairglove.com] 
+[Domain 7/771: auclairglove.com] [*] Scanning port 443 on auclairglove.com for vulnerabilities...
+[Domain 7/771: auclairglove.com] [*] Running: nmap --script vuln -p 443 auclairglove.com
+[Domain 7/771: auclairglove.com] [+] Found vulnerability: CVE-2011-1002). [Unknown]
+[Domain 7/771: auclairglove.com] [+] Total 1 vulnerabilities found on auclairglove.com:443
+[Domain 7/771: auclairglove.com] 
+[Domain 7/771: auclairglove.com] [+] Completed vulnerability scan for auclairglove.com
+[Domain 7/771: auclairglove.com] [+] Found 2 vulnerabilities across 2 ports
+[Domain 7/771: auclairglove.com] 
+[Domain 7/771: auclairglove.com] [*] Scanning domain 2/2: www.auclairglove.com
+[Domain 7/771: auclairglove.com] [*] Pinging www.auclairglove.com...
+[Domain 7/771: auclairglove.com] [+] Host www.auclairglove.com is up
+[Domain 7/771: auclairglove.com] [*] Discovering open ports on www.auclairglove.com...
+[Domain 7/771: auclairglove.com] [*] Running: nmap -sV --open www.auclairglove.com
+[Domain 7/771: auclairglove.com] [+] Discovered 2 open ports on www.auclairglove.com: 80, 443
+[Domain 7/771: auclairglove.com] 
+[Domain 7/771: auclairglove.com] [*] Scanning port 80 on www.auclairglove.com for vulnerabilities...
+[Domain 7/771: auclairglove.com] [*] Running: nmap --script vuln -p 80 www.auclairglove.com

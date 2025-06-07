@@ -168,6 +168,159 @@ def detect_technologies_with_whatruns(domain, timeout=10, verbose=True):
             
     return technologies
 
+def detect_technologies_with_whatruns_api(domain, timeout=10, verbose=True):
+    """
+    Detect technologies using WhatRuns API.
+    """
+    technologies = []
+    
+    if verbose:
+        print(f"[*] Querying WhatRuns API for {domain}...")
+    
+    try:
+        # WhatRuns API endpoint
+        url = "https://www.whatruns.com/api/v1/get_site_apps"
+        
+        # Format data exactly like the working version
+        data = {
+            "data": {
+                "hostname": domain,
+                "url": domain,
+                "rawhostname": domain
+            }
+        }
+        
+        # Use urllib.parse for proper encoding
+        data_str = urllib.parse.urlencode({k: json.dumps(v) for k, v in data.items()})
+        data_str = data_str.replace('+', '')
+        
+        # Keep headers simple like in the working version
+        headers = {
+            'Content-Type': 'application/x-www-form-urlencoded',
+            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+            'Accept': 'application/json, text/plain, */*',
+            'Accept-Language': 'en-US,en;q=0.9',
+            'Origin': 'https://www.whatruns.com',
+            'Referer': 'https://www.whatruns.com/',
+            'sec-ch-ua': '"Not_A Brand";v="8", "Chromium";v="120"',
+            'sec-ch-ua-mobile': '?0',
+            'sec-ch-ua-platform': '"Windows"',
+            'Sec-Fetch-Dest': 'empty',
+            'Sec-Fetch-Mode': 'cors',
+            'Sec-Fetch-Site': 'same-origin'
+        }
+        
+        if verbose:
+            print(f"[*] Sending request to WhatRuns API...")
+            
+        response = requests.post(url, data=data_str, headers=headers, timeout=timeout)
+        
+        if response.status_code != 200:
+            if verbose:
+                print(f"[!] WhatRuns API returned status {response.status_code}")
+            return technologies
+            
+        if verbose:
+            print(f"[*] Received response, processing data...")
+        
+        # Parse the response
+        loaded = json.loads(response.content)
+        
+        if 'apps' not in loaded:
+            if verbose:
+                print(f"[!] No 'apps' found in WhatRuns API response")
+            return technologies
+            
+        # Try direct JSON parsing instead of ast.literal_eval
+        if isinstance(loaded['apps'], str):
+            try:
+                apps = json.loads(loaded['apps'])
+            except json.JSONDecodeError:
+                if verbose:
+                    print("Could not parse apps as JSON string, trying ast.literal_eval")
+                try:
+                    # Fall back to ast.literal_eval
+                    apps = ast.literal_eval(loaded['apps'])
+                except:
+                    if verbose:
+                        print(f"Error parsing apps data, cannot process response")
+                    return technologies
+        else:
+            # It's already a dict/list, use it directly
+            apps = loaded['apps']
+            
+        if not apps:
+            if verbose:
+                print(f"[!] No apps data in WhatRuns API response")
+            return technologies
+            
+        # Handle timestamp key format (the new format we're seeing)
+        for timestamp_key in apps.keys():
+            categories_dict = apps[timestamp_key]  # This is a dict of categories
+            
+            # Now process each category
+            for category, tech_items in categories_dict.items():
+                for item in tech_items:
+                    # Extract datetime values if available
+                    detected_time = None
+                    latest_detected_time = None
+                    
+                    if 'detectedTime' in item:
+                        try:
+                            # Handle epoch timestamp (milliseconds)
+                            detected_time = datetime.fromtimestamp(int(item['detectedTime'])/1000)
+                        except (ValueError, TypeError):
+                            pass
+                    
+                    if 'latestDetectedTime' in item:
+                        try:
+                            # Handle epoch timestamp (milliseconds)
+                            latest_detected_time = datetime.fromtimestamp(int(item['latestDetectedTime'])/1000)
+                        except (ValueError, TypeError):
+                            pass
+                    
+                    # Get version if available
+                    version = 'Unknown'
+                    if 'version' in item and item['version']:
+                        version = item['version']
+                    # Some technologies store version in 'info' field
+                    elif 'info' in item and item['info']:
+                        # Try to extract version from info field
+                        info_str = str(item['info'])
+                        # Look for version patterns like "v1.2.3" or "1.2.3"
+                        version_match = re.search(r'v?(\d+\.\d+(\.\d+)*)', info_str)
+                        if version_match:
+                            version = version_match.group(0)
+                    
+                    # Create technology entry
+                    tech = {
+                        'name': item['name'],
+                        'version': version,
+                        'categories': [category],
+                        'confidence': 90,
+                        'detection_method': 'WhatRuns API',
+                        'detected_time': detected_time.strftime('%Y-%m-%d') if detected_time else 'Unknown',
+                        'latest_detected': latest_detected_time.strftime('%Y-%m-%d') if latest_detected_time else 'Unknown',
+                        'source_url': item.get('sourceUrl', '')
+                    }
+                    
+                    technologies.append(tech)
+                    
+                    if verbose:
+                        version_info = f" {version}" if version != 'Unknown' else ""
+                        print(f"[+] WhatRuns API detected: {item['name']}{version_info} ({category})")
+        
+        if verbose:
+            versions_found = sum(1 for t in technologies if t['version'] != 'Unknown')
+            print(f"[+] WhatRuns API found {len(technologies)} technologies ({versions_found} with version info)")
+                
+    except Exception as e:
+        if verbose:
+            print(f"[!] Error using WhatRuns API: {str(e)}")
+            print("[*] Will fall back to WhatRuns website scraping")
+            
+    return technologies
+
 def extract_version_from_content(response_text, tech_name):
     """
     Attempt to extract version information for a technology from page content
@@ -520,13 +673,7 @@ def load_domains_from_file(file_path):
 def check_technology_vulnerabilities(tech_name, version, verbose=True, api_key=None):
     """
     Check if a detected technology with given version has known vulnerabilities
-    by querying vulnerability databases.
-    
-    Args:
-        tech_name: Name of the technology to check
-        version: Version string of the technology
-        verbose: Whether to print verbose output
-        api_key: NVD API key for higher rate limits (optional)
+    by querying vulnerability databases with improved search strategy.
     """
     vulnerabilities = []
     
@@ -538,223 +685,142 @@ def check_technology_vulnerabilities(tech_name, version, verbose=True, api_key=N
     try:
         # Clean up the tech name for better search results
         search_term = tech_name.lower().strip()
-        
-        # Common name mappings to improve search results
-        name_mappings = {
-            'nginx': 'nginx http server',
-            'apache': 'apache http server',
-            'jquery': 'jquery javascript',
-            'jquery migrate': 'jquery-migrate',
-            'jquery-migrate': 'jquery-migrate',
-            'bootstrap': 'bootstrap framework',
-            'wordpress': 'wordpress cms',
-            'php': 'php',
-            'drupal': 'drupal cms',
-            'joomla': 'joomla cms',
-            'magento': 'magento',
-            'shopify': 'shopify',
-            'cloudflare': 'cloudflare',
-        }
-        
-        if search_term in name_mappings:
-            search_term = name_mappings[search_term]
+        version_clean = version.strip('v')
         
         if verbose:
             print(f"[*] Checking vulnerabilities for {tech_name} {version}...")
         
-        # Format version for API query
-        version_clean = version.strip('v')
+        # Strategy 1: Search by keyword first (more flexible)
+        if verbose:
+            print(f"[*] Searching vulnerabilities by keywords: {search_term} {version_clean}")
         
-        # Cache the results locally for faster performance
-        cache_dir = os.path.join("foundData", "cve_cache")
-        os.makedirs(cache_dir, exist_ok=True)
-        cache_file = os.path.join(cache_dir, f"{search_term.replace(' ', '_')}_{version_clean}.json")
+        cve_url = "https://services.nvd.nist.gov/rest/json/cves/2.0"
         
-        # Check if we have cached results that aren't too old (less than 24 hours)
-        use_cache = False
-        if os.path.exists(cache_file):
-            cache_time = os.path.getmtime(cache_file)
-            if time.time() - cache_time < 86400:  # 24 hours
-                use_cache = True
+        # First try: keyword search only
+        cve_params = {
+            "keywordSearch": f"{search_term}",
+            "resultsPerPage": 100  # Increased to get more results
+        }
         
-        if use_cache:
-            if verbose:
-                print(f"[*] Using cached vulnerability data for {tech_name} {version}")
-            with open(cache_file, 'r') as f:
-                response_data = json.load(f)
-        else:
-            # Method 1: Try NIST NVD API (preferred when API key is available)
-            response_data = None
+        headers = {
+            "User-Agent": "Mozilla/5.0 (compatible; CVE-Scanner/1.0)"
+        }
+        if api_key:
+            headers["apiKey"] = api_key
+        
+        # Sleep to respect rate limiting
+        time.sleep(1)
+        
+        try:
+            response = requests.get(cve_url, params=cve_params, headers=headers, timeout=15)
             
-            # Use the NIST NVD API to search for vulnerabilities
-            base_url = "https://services.nvd.nist.gov/rest/json/cves/2.0"
-            params = {
-                "keywordSearch": search_term,
-                "versionStart": version_clean,
-                "versionEnd": version_clean,
-                "resultsPerPage": 20  # Increased from 10
-            }
-            
-            headers = {}
-            if api_key:
-                # Add API key for higher rate limits if provided
-                headers["apiKey"] = api_key
-            
-            # Sleep to respect rate limiting
-            time.sleep(1)
-            
-            try:
-                response = requests.get(base_url, params=params, headers=headers, timeout=10)
+            if response.status_code == 200:
+                cve_data = response.json()
                 
-                if response.status_code == 200:
-                    response_data = response.json()
-                    
-                    # Cache the results
-                    with open(cache_file, 'w') as f:
-                        json.dump(response_data, f)
-                else:
+                if 'vulnerabilities' in cve_data and cve_data['vulnerabilities']:
                     if verbose:
-                        print(f"[!] NVD API error: {response.status_code} {response.text}")
-                        if response.status_code == 403:
-                            print("[!] You may need to provide an API key for the NVD API")
-                            print("[!] Get one at: https://nvd.nist.gov/developers/request-an-api-key")
-            except Exception as e:
-                if verbose:
-                    print(f"[!] Error querying NVD API: {str(e)}")
-            
-            # Method 2: Try OSV Database API (alternative)
-            if not response_data or 'vulnerabilities' not in response_data or not response_data['vulnerabilities']:
-                if verbose:
-                    print(f"[*] Trying alternative vulnerability database (OSV) for {tech_name} {version}")
-                
-                try:
-                    # Google's Open Source Vulnerabilities Database
-                    osv_url = "https://api.osv.dev/v1/query"
-                    osv_data = {
-                        "package": {"name": search_term},
-                        "version": version_clean
-                    }
+                        print(f"[+] Found {len(cve_data['vulnerabilities'])} potential vulnerabilities to analyze")
                     
-                    osv_response = requests.post(osv_url, json=osv_data, timeout=10)
-                    
-                    if osv_response.status_code == 200:
-                        osv_results = osv_response.json()
+                    # Filter vulnerabilities that affect our version
+                    for vuln in cve_data['vulnerabilities']:
+                        cve = vuln['cve']
+                        cve_id = cve['id']
+                        description = cve['descriptions'][0]['value'] if cve['descriptions'] else "No description available"
                         
-                        # Convert OSV results to same format as NVD for consistent processing
-                        if 'vulns' in osv_results:
-                            response_data = {
-                                'vulnerabilities': []
+                        # Check if this vulnerability affects our version
+                        if is_version_affected(tech_name, version_clean, cve, verbose):
+                            # Get severity if available
+                            severity = "Unknown"
+                            cvss_score = None
+                            
+                            if 'metrics' in cve:
+                                # Try CVSS v3.1 first
+                                if 'cvssMetricV31' in cve['metrics']:
+                                    cvss_data = cve['metrics']['cvssMetricV31'][0]['cvssData']
+                                    severity = cvss_data.get('baseSeverity', "Unknown")
+                                    cvss_score = cvss_data.get('baseScore', None)
+                                # Try CVSS v3.0
+                                elif 'cvssMetricV30' in cve['metrics']:
+                                    cvss_data = cve['metrics']['cvssMetricV30'][0]['cvssData']
+                                    severity = cvss_data.get('baseSeverity', "Unknown")
+                                    cvss_score = cvss_data.get('baseScore', None)
+                                # Try CVSS v2.0
+                                elif 'cvssMetricV2' in cve['metrics']:
+                                    cvss_data = cve['metrics']['cvssMetricV2'][0]['cvssData']
+                                    score = cvss_data.get('baseScore', 0)
+                                    cvss_score = score
+                                    severity = get_severity_from_cvss(score)
+                            
+                            # Create vulnerability entry
+                            vulnerability = {
+                                'id': cve_id,
+                                'tech_name': tech_name,
+                                'tech_version': version,
+                                'description': description[:200] + "..." if len(description) > 200 else description,
+                                'severity': severity,
+                                'cvss_score': cvss_score,
+                                'url': f"https://nvd.nist.gov/vuln/detail/{cve_id}"
                             }
                             
-                            for vuln in osv_results['vulns']:
-                                cve_id = next((ref for ref in vuln.get('aliases', []) if ref.startswith('CVE-')), 
-                                             vuln.get('id', 'OSV-Unknown'))
+                            vulnerabilities.append(vulnerability)
+                            
+                            if verbose:
+                                cvss_info = f" (CVSS: {cvss_score})" if cvss_score else ""
+                                print(f"[+] Found vulnerability: {cve_id} - {severity}{cvss_info}")
+                
+                # Strategy 2: If no results, try CPE-based search as fallback
+                if not vulnerabilities:
+                    if verbose:
+                        print(f"[*] No results from keyword search, trying CPE-based search...")
+                    
+                    # Generate CPE for the technology
+                    cpe = generate_cpe(tech_name, version_clean)
+                    
+                    cve_params_cpe = {
+                        "cpeName": cpe,
+                        "resultsPerPage": 50
+                    }
+                    
+                    time.sleep(1)
+                    response_cpe = requests.get(cve_url, params=cve_params_cpe, headers=headers, timeout=15)
+                    
+                    if response_cpe.status_code == 200:
+                        cve_data_cpe = response_cpe.json()
+                        
+                        if 'vulnerabilities' in cve_data_cpe and cve_data_cpe['vulnerabilities']:
+                            if verbose:
+                                print(f"[+] CPE search found {len(cve_data_cpe['vulnerabilities'])} vulnerabilities")
+                            
+                            # Process CPE-based results the same way
+                            for vuln in cve_data_cpe['vulnerabilities']:
+                                cve = vuln['cve']
+                                cve_id = cve['id']
+                                description = cve['descriptions'][0]['value'] if cve['descriptions'] else "No description available"
                                 
+                                # Get severity
                                 severity = "Unknown"
                                 cvss_score = None
                                 
-                                # Extract CVSS info if available
-                                for severity_info in vuln.get('severity', []):
-                                    if severity_info.get('type') == 'CVSS_V3':
-                                        cvss_score = severity_info.get('score')
-                                        severity = get_severity_from_cvss(cvss_score)
+                                if 'metrics' in cve:
+                                    if 'cvssMetricV31' in cve['metrics']:
+                                        cvss_data = cve['metrics']['cvssMetricV31'][0]['cvssData']
+                                        severity = cvss_data.get('baseSeverity', "Unknown")
+                                        cvss_score = cvss_data.get('baseScore', None)
+                                    elif 'cvssMetricV30' in cve['metrics']:
+                                        cvss_data = cve['metrics']['cvssMetricV30'][0]['cvssData']
+                                        severity = cvss_data.get('baseSeverity', "Unknown")
+                                        cvss_score = cvss_data.get('baseScore', None)
+                                    elif 'cvssMetricV2' in cve['metrics']:
+                                        cvss_data = cve['metrics']['cvssMetricV2'][0]['cvssData']
+                                        score = cvss_data.get('baseScore', 0)
+                                        cvss_score = score
+                                        severity = get_severity_from_cvss(score)
                                 
-                                # Create vulnerability entry in NVD-like format for consistent processing
-                                vuln_entry = {
-                                    'cve': {
-                                        'id': cve_id,
-                                        'descriptions': [{'value': vuln.get('summary', 'No description available')}],
-                                        'metrics': {}
-                                    }
-                                }
-                                
-                                if cvss_score:
-                                    vuln_entry['cve']['metrics'] = {
-                                        'cvssMetricV31': [{
-                                            'cvssData': {
-                                                'baseScore': cvss_score,
-                                                'baseSeverity': severity
-                                            }
-                                        }]
-                                    }
-                                
-                                response_data['vulnerabilities'].append(vuln_entry)
-                            
-                            # Cache the results
-                            with open(cache_file, 'w') as f:
-                                json.dump(response_data, f)
-                except Exception as e:
-                    if verbose:
-                        print(f"[!] Error querying OSV API: {str(e)}")
-        
-        # Process the NVD API results
-        if response_data and 'vulnerabilities' in response_data and response_data['vulnerabilities']:
-            for vuln in response_data['vulnerabilities']:
-                cve = vuln['cve']
-                cve_id = cve['id']
-                description = cve['descriptions'][0]['value'] if cve['descriptions'] else "No description available"
-                
-                # Get severity if available
-                severity = "Unknown"
-                cvss_score = None
-                
-                if 'metrics' in cve and 'cvssMetricV31' in cve['metrics']:
-                    cvss_data = cve['metrics']['cvssMetricV31'][0]['cvssData']
-                    severity = cvss_data.get('baseSeverity', "Unknown")
-                    cvss_score = cvss_data.get('baseScore', None)
-                elif 'metrics' in cve and 'cvssMetricV30' in cve['metrics']:
-                    cvss_data = cve['metrics']['cvssMetricV30'][0]['cvssData']
-                    severity = cvss_data.get('baseSeverity', "Unknown")
-                    cvss_score = cvss_data.get('baseScore', None)
-                elif 'metrics' in cve and 'cvssMetricV2' in cve['metrics']:
-                    cvss_data = cve['metrics']['cvssMetricV2'][0]['cvssData']
-                    score = cvss_data.get('baseScore', 0)
-                    cvss_score = score
-                    
-                    # Map CVSS v2 score to severity
-                    severity = get_severity_from_cvss(score)
-                
-                # Create vulnerability entry
-                vulnerability = {
-                    'id': cve_id,
-                    'tech_name': tech_name,
-                    'tech_version': version,
-                    'description': description,
-                    'severity': severity,
-                    'cvss_score': cvss_score,
-                    'url': f"https://nvd.nist.gov/vuln/detail/{cve_id}"
-                }
-                
-                vulnerabilities.append(vulnerability)
-                
-                if verbose:
-                    cvss_info = f" (CVSS: {cvss_score})" if cvss_score else ""
-                    print(f"[+] Found vulnerability: {cve_id} - {severity}{cvss_info}")
-            
-        # Fallback to local vulnerability database if available and no results from APIs
-        if not vulnerabilities:
-            fallback_db_file = os.path.join("foundData", "vulnerability_db.csv")
-            if os.path.exists(fallback_db_file):
-                if verbose:
-                    print(f"[*] Checking local vulnerability database for {tech_name} {version}")
-                with open(fallback_db_file, 'r') as f:
-                    reader = csv.DictReader(f)
-                    for row in reader:
-                        if search_term.lower() in row.get('product', '').lower():
-                            # Check if version is affected
-                            affected_version = row.get('version', '')
-                            if affected_version and version_matches(version_clean, affected_version):
-                                cve_id = row.get('cve_id', 'Unknown')
-                                description = row.get('description', 'No description available')
-                                severity = row.get('severity', 'Unknown')
-                                cvss_score = float(row.get('cvss_score', 0)) if row.get('cvss_score', '').strip() else None
-                                
-                                # Create vulnerability entry
                                 vulnerability = {
                                     'id': cve_id,
                                     'tech_name': tech_name,
                                     'tech_version': version,
-                                    'description': description,
+                                    'description': description[:200] + "..." if len(description) > 200 else description,
                                     'severity': severity,
                                     'cvss_score': cvss_score,
                                     'url': f"https://nvd.nist.gov/vuln/detail/{cve_id}"
@@ -764,7 +830,19 @@ def check_technology_vulnerabilities(tech_name, version, verbose=True, api_key=N
                                 
                                 if verbose:
                                     cvss_info = f" (CVSS: {cvss_score})" if cvss_score else ""
-                                    print(f"[+] Found vulnerability (local DB): {cve_id} - {severity}{cvss_info}")
+                                    print(f"[+] Found vulnerability: {cve_id} - {severity}{cvss_info}")
+                
+            else:
+                if verbose:
+                    print(f"[!] NVD API error: {response.status_code}")
+                    if response.status_code == 403:
+                        print("[!] API key may be invalid or rate limit exceeded")
+                    elif response.status_code == 503:
+                        print("[!] NVD service temporarily unavailable")
+                        
+        except Exception as e:
+            if verbose:
+                print(f"[!] Error querying vulnerabilities: {str(e)}")
         
         if verbose:
             if vulnerabilities:
@@ -779,6 +857,169 @@ def check_technology_vulnerabilities(tech_name, version, verbose=True, api_key=N
             print(f"[!] Error checking vulnerabilities for {tech_name} {version}: {str(e)}")
         return vulnerabilities
 
+def is_version_affected(tech_name, target_version, cve_data, verbose=False):
+    """
+    Check if a specific version is affected by a CVE by analyzing
+    the vulnerability configurations and version ranges.
+    """
+    try:
+        tech_lower = tech_name.lower()
+        
+        # Check if the CVE description mentions the technology
+        description = ""
+        if 'descriptions' in cve_data:
+            description = cve_data['descriptions'][0]['value'].lower()
+        
+        # Basic check: does the description mention our technology?
+        if tech_lower not in description:
+            return False
+        
+        # Check configurations for version ranges
+        if 'configurations' in cve_data:
+            for config in cve_data['configurations']:
+                if 'nodes' in config:
+                    for node in config['nodes']:
+                        if 'cpeMatch' in node:
+                            for cpe_match in node['cpeMatch']:
+                                if cpe_match.get('vulnerable', False):
+                                    cpe_name = cpe_match.get('criteria', '')
+                                    
+                                    # Check if this CPE matches our technology
+                                    if tech_lower in cpe_name.lower():
+                                        # Check version ranges
+                                        version_start_incl = cpe_match.get('versionStartIncluding')
+                                        version_start_excl = cpe_match.get('versionStartExcluding')
+                                        version_end_incl = cpe_match.get('versionEndIncluding')
+                                        version_end_excl = cpe_match.get('versionEndExcluding')
+                                        
+                                        # If no version constraints, assume it affects our version
+                                        if not any([version_start_incl, version_start_excl, version_end_incl, version_end_excl]):
+                                            # Check if the CPE contains our exact version or is a wildcard
+                                            if target_version in cpe_name or '*' in cpe_name:
+                                                return True
+                                        else:
+                                            # Check if our version falls within the vulnerable range
+                                            if is_version_in_range(target_version, version_start_incl, 
+                                                                 version_start_excl, version_end_incl, version_end_excl):
+                                                return True
+        
+        # Fallback: if we can't determine from configurations, 
+        # check if version is mentioned in description
+        if target_version in description:
+            if verbose:
+                print(f"[*] Version {target_version} mentioned in CVE description, assuming vulnerable")
+            return True
+            
+        return False
+        
+    except Exception as e:
+        if verbose:
+            print(f"[!] Error checking if version is affected: {str(e)}")
+        # When in doubt, include it for manual review
+        return True
+
+def is_version_in_range(target_version, start_incl=None, start_excl=None, end_incl=None, end_excl=None):
+    """
+    Check if a version falls within the specified vulnerable range.
+    """
+    try:
+        target_parts = parse_version(target_version)
+        
+        # Check start boundary (inclusive)
+        if start_incl:
+            start_parts = parse_version(start_incl)
+            if compare_versions(target_parts, start_parts) < 0:
+                return False
+        
+        # Check start boundary (exclusive)
+        if start_excl:
+            start_parts = parse_version(start_excl)
+            if compare_versions(target_parts, start_parts) <= 0:
+                return False
+        
+        # Check end boundary (inclusive)
+        if end_incl:
+            end_parts = parse_version(end_incl)
+            if compare_versions(target_parts, end_parts) > 0:
+                return False
+        
+        # Check end boundary (exclusive)
+        if end_excl:
+            end_parts = parse_version(end_excl)
+            if compare_versions(target_parts, end_parts) >= 0:
+                return False
+        
+        return True
+        
+    except Exception:
+        # If version parsing fails, assume vulnerable for safety
+        return True
+
+def parse_version(version_str):
+    """Parse version string into comparable parts."""
+    # Remove 'v' prefix if present
+    version_str = version_str.lstrip('v')
+    
+    # Split by dots and convert to integers
+    parts = []
+    for part in version_str.split('.'):
+        # Handle cases like "2.0.0-beta1" by taking only the numeric part
+        numeric_part = ""
+        for char in part:
+            if char.isdigit():
+                numeric_part += char
+            else:
+                break
+        parts.append(int(numeric_part) if numeric_part else 0)
+    
+    return parts
+
+def compare_versions(version1_parts, version2_parts):
+    """
+    Compare two version part lists.
+    Returns: -1 if version1 < version2, 0 if equal, 1 if version1 > version2
+    """
+    # Pad shorter version with zeros
+    max_len = max(len(version1_parts), len(version2_parts))
+    v1 = version1_parts + [0] * (max_len - len(version1_parts))
+    v2 = version2_parts + [0] * (max_len - len(version2_parts))
+    
+    for i in range(max_len):
+        if v1[i] < v2[i]:
+            return -1
+        elif v1[i] > v2[i]:
+            return 1
+    
+    return 0
+
+def generate_cpe(tech_name, version):
+    """Generate a CPE string for the given technology and version."""
+    # Common CPE mappings for popular technologies
+    cpe_mappings = {
+        'jquery': 'cpe:2.3:a:jquery:jquery',
+        'bootstrap': 'cpe:2.3:a:getbootstrap:bootstrap',
+        'wordpress': 'cpe:2.3:a:wordpress:wordpress',
+        'php': 'cpe:2.3:a:php:php',
+        'nginx': 'cpe:2.3:a:nginx:nginx',
+        'apache': 'cpe:2.3:a:apache:http_server',
+        'react': 'cpe:2.3:a:facebook:react',
+        'angular': 'cpe:2.3:a:angular:angular',
+        'vue': 'cpe:2.3:a:vuejs:vue',
+        'drupal': 'cpe:2.3:a:drupal:drupal',
+        'joomla': 'cpe:2.3:a:joomla:joomla'
+    }
+    
+    tech_lower = tech_name.lower()
+    
+    if tech_lower in cpe_mappings:
+        base_cpe = cpe_mappings[tech_lower]
+    else:
+        # Generic CPE format
+        tech_clean = tech_lower.replace(' ', '_').replace('-', '_')
+        base_cpe = f"cpe:2.3:a:*:{tech_clean}"
+    
+    return f"{base_cpe}:{version}:*:*:*:*:*:*:*"
+
 def get_severity_from_cvss(score):
     """Map CVSS score to severity rating."""
     if score is None:
@@ -791,42 +1032,10 @@ def get_severity_from_cvss(score):
         return "High"
     elif score >= 4.0:
         return "Medium"
-    else:
+    elif score > 0.0:
         return "Low"
-
-def version_matches(detected_version, affected_version):
-    """
-    Check if a detected version matches an affected version pattern.
-    Handles exact match, version ranges, and wildcard patterns.
-    """
-    # Exact match
-    if detected_version == affected_version:
-        return True
-    
-    # Range in format "x.y.z-a.b.c"
-    if '-' in affected_version:
-        try:
-            min_version, max_version = affected_version.split('-')
-            min_parts = [int(p) for p in min_version.split('.')]
-            max_parts = [int(p) for p in max_version.split('.')]
-            detected_parts = [int(p) for p in detected_version.split('.')]
-            
-            # Compare each part of the version
-            return min_parts <= detected_parts <= max_parts
-        except:
-            pass
-    
-    # Wildcard match (e.g., "2.4.*")
-    if '*' in affected_version:
-        try:
-            pattern = affected_version.replace('*', '\\d+')
-            return re.match(f"^{pattern}$", detected_version) is not None
-        except:
-            pass
-    
-    # Default: only exact match
-    return False
-
+    else:
+        return "None"
 def detect_and_save_technologies(domains, output_file, max_domains=None, verbose=True):
     """
     Detect technologies for a list of domains and save results to a JSON file.
@@ -981,6 +1190,7 @@ def main():
     parser = argparse.ArgumentParser(description='Web Technology Detection')
     parser.add_argument('--input', help='Input file containing domains (one per line or JSON)')
     parser.add_argument('--output-dir', help='Output directory for results')
+    parser.add_argument('--api-key', help='NVD API key for vulnerability checks')
     args = parser.parse_args()
     
     # Define paths
@@ -1003,6 +1213,8 @@ def main():
                     # Try to parse as JSON first
                     data = json.loads(content)
                     domains = []
+                    main_domain = None
+                    
                     for item in data:
                         if isinstance(item, dict) and 'results' in item:
                             # Process subdomains from the results array
@@ -1011,9 +1223,24 @@ def main():
                                     subdomain = result['subdomain']
                                     if subdomain and subdomain != "No names were discovered":
                                         domains.append(subdomain)
+                        
+                        # Try to extract main domain if available
+                        if isinstance(item, dict) and 'domain' in item:
+                            main_domain = item['domain']
                 except json.JSONDecodeError:
                     # If not JSON, treat as plain text
                     domains = [line.strip() for line in content.splitlines() if line.strip()]
+                    
+                    # For plain text, try to identify main domain from first entry
+                    if domains:
+                        first_domain = domains[0]
+                        # Extract main domain from the first subdomain
+                        parts = first_domain.split('.')
+                        if len(parts) > 2:
+                            # Take last two parts as the main domain (e.g., example.com from sub.example.com)
+                            main_domain = '.'.join(parts[-2:])
+                        else:
+                            main_domain = first_domain
         except Exception as e:
             print(f"[!] Error reading input file: {e}")
             sys.exit(1)
@@ -1023,7 +1250,13 @@ def main():
     
     # Remove duplicates and sort
     domains = sorted(list(set(domains)))
-    print(f"[+] Found {len(domains)} unique subdomains\n")
+    
+    # Ensure main domain is included in the list to test
+    if main_domain and main_domain not in domains:
+        print(f"[+] Adding main domain: {main_domain}")
+        domains.insert(0, main_domain)  # Add main domain at the beginning
+    
+    print(f"[+] Found {len(domains)} unique domains to scan\n")
     
     # Initialize results dictionary
     results = {}
@@ -1032,8 +1265,14 @@ def main():
     for i, domain in enumerate(domains, 1):
         print(f"[*] Processing subdomain {i}/{len(domains)}: {domain}")
         try:
-            # Try WhatRuns first
-            whatruns_techs = detect_technologies_with_whatruns(domain, verbose=True)
+            # Try WhatRuns API first
+            whatruns_techs = detect_technologies_with_whatruns_api(domain, verbose=True)
+            
+            # If API returns no results, fall back to website scraping
+            if not whatruns_techs:
+                if verbose:
+                    print(f"[*] WhatRuns API returned no results, trying website scraping...")
+                whatruns_techs = detect_technologies_with_whatruns(domain, verbose=True)
             
             # Then try HTTPS detection
             https_techs = detect_web_technologies(domain, protocol="https", verbose=True)
@@ -1054,6 +1293,12 @@ def main():
                         all_techs.append(tech)
             
             if all_techs:
+                # Check for vulnerabilities if version is known
+                for tech in all_techs:
+                    if tech['version'] != 'Unknown':
+                        vulnerabilities = check_technology_vulnerabilities(tech['name'], tech['version'], verbose=True, api_key="c41ff7d1-5976-4cf4-ac76-c64a3f850969")
+                        tech['vulnerabilities'] = vulnerabilities
+            
                 results[domain] = {
                     "status": "success",
                     "technologies": all_techs
@@ -1084,5 +1329,12 @@ def main():
     print(f"\n[+] Scan complete! Processed {len(domains)} subdomains")
     print(f"[+] Final results saved to {output_file}")
 
+# For proper CPE formatting
+def create_cpe_string(tech_name, version):
+    """Convert technology name and version to CPE format."""
+    # Remove spaces and special characters
+    tech_clean = tech_name.lower().replace(' ', '_').replace('-', '_')
+    return f"cpe:2.3:a:*:{tech_clean}:{version}:*:*:*:*:*:*:*"
+
 if __name__ == "__main__":
-    main() 
+    main()

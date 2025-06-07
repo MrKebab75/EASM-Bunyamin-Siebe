@@ -1,0 +1,249 @@
+Starting complete_scan scan...
+[Domain 1/1: thebrand.craftsportswear.com] [*] Starting CompleteSecurityScan.py
+[Domain 1/1: thebrand.craftsportswear.com] [*] Arguments parsed:
+[Domain 1/1: thebrand.craftsportswear.com]     Input file: /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/uploads/temp_domain_1.txt
+[Domain 1/1: thebrand.craftsportswear.com]     Output directory: foundData
+[Domain 1/1: thebrand.craftsportswear.com] [*] Reading domains from /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/uploads/temp_domain_1.txt
+[Domain 1/1: thebrand.craftsportswear.com] [+] Successfully read input file
+[Domain 1/1: thebrand.craftsportswear.com] [+] Found 1 domains to scan
+[Domain 1/1: thebrand.craftsportswear.com] [+] Created scan directory: foundData/scan_thebrand.craftsportswear.com_20250602_235837
+[Domain 1/1: thebrand.craftsportswear.com] [+] Results will be saved in: foundData/scan_thebrand.craftsportswear.com_20250602_235837
+[Domain 1/1: thebrand.craftsportswear.com] [+] Total number of scans to run: 6
+[Domain 1/1: thebrand.craftsportswear.com] 
+[Domain 1/1: thebrand.craftsportswear.com] [*] Starting scan 1/6: subdom.py
+[Domain 1/1: thebrand.craftsportswear.com] 
+[Domain 1/1: thebrand.craftsportswear.com] [*] Running subdom.py...
+[Domain 1/1: thebrand.craftsportswear.com] [*] Full script path: Scripts/subdom.py
+[Domain 1/1: thebrand.craftsportswear.com] [*] Input file: /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/uploads/temp_domain_1.txt
+[Domain 1/1: thebrand.craftsportswear.com] [*] Output directory: foundData/scan_thebrand.craftsportswear.com_20250602_235837
+[Domain 1/1: thebrand.craftsportswear.com] [+] Created/verified scan directory: /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/foundData/scan_thebrand.craftsportswear.com_20250602_235837
+[Domain 1/1: thebrand.craftsportswear.com] [*] Creating symbolic link from /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/foundData/scan_thebrand.craftsportswear.com_20250602_235837/foundData to /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/foundData/scan_thebrand.craftsportswear.com_20250602_235837
+[Domain 1/1: thebrand.craftsportswear.com] [+] Created symbolic link from /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/foundData/scan_thebrand.craftsportswear.com_20250602_235837/foundData to /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/foundData/scan_thebrand.craftsportswear.com_20250602_235837
+[Domain 1/1: thebrand.craftsportswear.com] [*] Executing command: python3 -u /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/Scripts/subdom.py --input /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/uploads/temp_domain_1.txt --output-dir /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/foundData/scan_thebrand.craftsportswear.com_20250602_235837
+[Domain 1/1: thebrand.craftsportswear.com] [*] Changed working directory to: /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/Scripts
+[Domain 1/1: thebrand.craftsportswear.com] [*] Process started with PID: 114911
+[Domain 1/1: thebrand.craftsportswear.com] [*] Using output directory: /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/foundData/scan_thebrand.craftsportswear.com_20250602_235837
+[Domain 1/1: thebrand.craftsportswear.com] [+] Loading domains from /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/uploads/temp_domain_1.txt
+[Domain 1/1: thebrand.craftsportswear.com] [+] Loaded 1 unique domains from input.
+[Domain 1/1: thebrand.craftsportswear.com] 
+[Domain 1/1: thebrand.craftsportswear.com] === Processing domain 1/1: thebrand.craftsportswear.com ===
+[Domain 1/1: thebrand.craftsportswear.com] [+] Pinging domain: thebrand.craftsportswear.com
+[Domain 1/1: thebrand.craftsportswear.com] [+] Running Amass for thebrand.craftsportswear.com
+[Domain 1/1: thebrand.craftsportswear.com] [+] Running Subfinder for thebrand.craftsportswear.com
+[Domain 1/1: thebrand.craftsportswear.com] [+] Found 2 unique subdomains for thebrand.craftsportswear.com.
+[Domain 1/1: thebrand.craftsportswear.com] [+] Resolving IPs for 2 subdomains...
+[Domain 1/1: thebrand.craftsportswear.com] [+] IP resolution complete.
+[Domain 1/1: thebrand.craftsportswear.com] 
+[Domain 1/1: thebrand.craftsportswear.com] [+] All results saved to: /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/foundData/scan_thebrand.craftsportswear.com_20250602_235837/all_subdomains.json
+[Domain 1/1: thebrand.craftsportswear.com] 
+[Domain 1/1: thebrand.craftsportswear.com] [+] All domains processed successfully!
+[Domain 1/1: thebrand.craftsportswear.com] [*] Process completed with return code: 0
+[Domain 1/1: thebrand.craftsportswear.com] [*] Changed back to original directory: /home/s141422/SecurityProject/EASM-Bunyamin-Siebe
+[Domain 1/1: thebrand.craftsportswear.com] [*] Removing symbolic link: /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/foundData/scan_thebrand.craftsportswear.com_20250602_235837/foundData
+[Domain 1/1: thebrand.craftsportswear.com] [+] Removed symbolic link
+[Domain 1/1: thebrand.craftsportswear.com] 
+[Domain 1/1: thebrand.craftsportswear.com] [*] Starting scan 2/6: Certificaat.py
+[Domain 1/1: thebrand.craftsportswear.com] 
+[Domain 1/1: thebrand.craftsportswear.com] [*] Running Certificaat.py...
+[Domain 1/1: thebrand.craftsportswear.com] [*] Full script path: Scripts/Certificaat.py
+[Domain 1/1: thebrand.craftsportswear.com] [*] Input file: foundData/scan_thebrand.craftsportswear.com_20250602_235837/all_subdomains.json
+[Domain 1/1: thebrand.craftsportswear.com] [*] Output directory: foundData/scan_thebrand.craftsportswear.com_20250602_235837
+[Domain 1/1: thebrand.craftsportswear.com] [*] Executing command: python3 -u /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/Scripts/Certificaat.py --input /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/foundData/scan_thebrand.craftsportswear.com_20250602_235837/all_subdomains.json --output-dir /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/foundData/scan_thebrand.craftsportswear.com_20250602_235837
+[Domain 1/1: thebrand.craftsportswear.com] [*] Changed working directory to: /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/Scripts
+[Domain 1/1: thebrand.craftsportswear.com] [*] Process started with PID: 115494
+[Domain 1/1: thebrand.craftsportswear.com] Reading domains from /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/foundData/scan_thebrand.craftsportswear.com_20250602_235837/all_subdomains.json
+[Domain 1/1: thebrand.craftsportswear.com] Found 3 domains to check
+[Domain 1/1: thebrand.craftsportswear.com] [1/3] Checking certificate for domain: thebrand.craftsportswear.com...
+[Domain 1/1: thebrand.craftsportswear.com] - Status: valid, expires in 71 days
+[Domain 1/1: thebrand.craftsportswear.com] [2/3] Checking certificate for domain: No names were discovered...
+[Domain 1/1: thebrand.craftsportswear.com] - Status: error: dns_error
+[Domain 1/1: thebrand.craftsportswear.com] [3/3] Checking certificate for domain: www.thebrand.craftsportswear.com...
+[Domain 1/1: thebrand.craftsportswear.com] - Status: error: dns_error
+[Domain 1/1: thebrand.craftsportswear.com] 
+[Domain 1/1: thebrand.craftsportswear.com] Certificate information for 3 domains saved to /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/foundData/scan_thebrand.craftsportswear.com_20250602_235837/certificates.json
+[Domain 1/1: thebrand.craftsportswear.com] [*] Process completed with return code: 0
+[Domain 1/1: thebrand.craftsportswear.com] [*] Changed back to original directory: /home/s141422/SecurityProject/EASM-Bunyamin-Siebe
+[Domain 1/1: thebrand.craftsportswear.com] 
+[Domain 1/1: thebrand.craftsportswear.com] [*] Starting scan 3/6: DetectWebTechnologies.py
+[Domain 1/1: thebrand.craftsportswear.com] 
+[Domain 1/1: thebrand.craftsportswear.com] [*] Running DetectWebTechnologies.py...
+[Domain 1/1: thebrand.craftsportswear.com] [*] Full script path: Scripts/DetectWebTechnologies.py
+[Domain 1/1: thebrand.craftsportswear.com] [*] Input file: foundData/scan_thebrand.craftsportswear.com_20250602_235837/all_subdomains.json
+[Domain 1/1: thebrand.craftsportswear.com] [*] Output directory: foundData/scan_thebrand.craftsportswear.com_20250602_235837
+[Domain 1/1: thebrand.craftsportswear.com] [*] Executing command: python3 -u /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/Scripts/DetectWebTechnologies.py --input /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/foundData/scan_thebrand.craftsportswear.com_20250602_235837/all_subdomains.json --output-dir /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/foundData/scan_thebrand.craftsportswear.com_20250602_235837
+[Domain 1/1: thebrand.craftsportswear.com] [*] Changed working directory to: /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/Scripts
+[Domain 1/1: thebrand.craftsportswear.com] [*] Process started with PID: 115516
+[Domain 1/1: thebrand.craftsportswear.com] [+] webtech module found. Web technology detection is enabled.
+[Domain 1/1: thebrand.craftsportswear.com] [*] Reading domains from /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/foundData/scan_thebrand.craftsportswear.com_20250602_235837/all_subdomains.json
+[Domain 1/1: thebrand.craftsportswear.com] [+] Adding main domain: thebrand.craftsportswear.com
+[Domain 1/1: thebrand.craftsportswear.com] [+] Found 2 unique domains to scan
+[Domain 1/1: thebrand.craftsportswear.com] 
+[Domain 1/1: thebrand.craftsportswear.com] [*] Processing subdomain 1/2: thebrand.craftsportswear.com
+[Domain 1/1: thebrand.craftsportswear.com] [*] Querying WhatRuns API for thebrand.craftsportswear.com...
+[Domain 1/1: thebrand.craftsportswear.com] [*] Sending request to WhatRuns API...
+[Domain 1/1: thebrand.craftsportswear.com] [!] No 'apps' found in WhatRuns API response
+[Domain 1/1: thebrand.craftsportswear.com] [+] Completed subdomain 1/2: thebrand.craftsportswear.com
+[Domain 1/1: thebrand.craftsportswear.com] [+] Results saved to /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/foundData/scan_thebrand.craftsportswear.com_20250602_235837/web_technologies.json
+[Domain 1/1: thebrand.craftsportswear.com] [*] Processing subdomain 2/2: www.thebrand.craftsportswear.com
+[Domain 1/1: thebrand.craftsportswear.com] [*] Querying WhatRuns API for www.thebrand.craftsportswear.com...
+[Domain 1/1: thebrand.craftsportswear.com] [*] Sending request to WhatRuns API...
+[Domain 1/1: thebrand.craftsportswear.com] [!] No 'apps' found in WhatRuns API response
+[Domain 1/1: thebrand.craftsportswear.com] [+] Completed subdomain 2/2: www.thebrand.craftsportswear.com
+[Domain 1/1: thebrand.craftsportswear.com] [+] Results saved to /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/foundData/scan_thebrand.craftsportswear.com_20250602_235837/web_technologies.json
+[Domain 1/1: thebrand.craftsportswear.com] 
+[Domain 1/1: thebrand.craftsportswear.com] [+] Scan complete! Processed 2 subdomains
+[Domain 1/1: thebrand.craftsportswear.com] [+] Final results saved to /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/foundData/scan_thebrand.craftsportswear.com_20250602_235837/web_technologies.json
+[Domain 1/1: thebrand.craftsportswear.com] [*] Process completed with return code: 0
+[Domain 1/1: thebrand.craftsportswear.com] [*] Changed back to original directory: /home/s141422/SecurityProject/EASM-Bunyamin-Siebe
+[Domain 1/1: thebrand.craftsportswear.com] 
+[Domain 1/1: thebrand.craftsportswear.com] [*] Starting scan 4/6: Domeingeldigheid.py
+[Domain 1/1: thebrand.craftsportswear.com] 
+[Domain 1/1: thebrand.craftsportswear.com] [*] Running Domeingeldigheid.py...
+[Domain 1/1: thebrand.craftsportswear.com] [*] Full script path: Scripts/Domeingeldigheid.py
+[Domain 1/1: thebrand.craftsportswear.com] [*] Input file: foundData/scan_thebrand.craftsportswear.com_20250602_235837/all_subdomains.json
+[Domain 1/1: thebrand.craftsportswear.com] [*] Output directory: foundData/scan_thebrand.craftsportswear.com_20250602_235837
+[Domain 1/1: thebrand.craftsportswear.com] [*] Executing command: python3 -u /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/Scripts/Domeingeldigheid.py --input /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/foundData/scan_thebrand.craftsportswear.com_20250602_235837/all_subdomains.json --output-dir /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/foundData/scan_thebrand.craftsportswear.com_20250602_235837
+[Domain 1/1: thebrand.craftsportswear.com] [*] Changed working directory to: /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/Scripts
+[Domain 1/1: thebrand.craftsportswear.com] [*] Process started with PID: 115523
+[Domain 1/1: thebrand.craftsportswear.com] [*] Reading domains from /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/foundData/scan_thebrand.craftsportswear.com_20250602_235837/all_subdomains.json
+[Domain 1/1: thebrand.craftsportswear.com] [+] Found 1 unique domains
+[Domain 1/1: thebrand.craftsportswear.com] 
+[Domain 1/1: thebrand.craftsportswear.com] Domain Lease Information:
+[Domain 1/1: thebrand.craftsportswear.com] --------------------------------------------------
+[Domain 1/1: thebrand.craftsportswear.com] Domain: thebrand.craftsportswear.com
+[Domain 1/1: thebrand.craftsportswear.com] Status: valid
+[Domain 1/1: thebrand.craftsportswear.com] --------------------------------------------------
+[Domain 1/1: thebrand.craftsportswear.com] 
+[Domain 1/1: thebrand.craftsportswear.com] [+] Results saved to /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/foundData/scan_thebrand.craftsportswear.com_20250602_235837/domainLease.json
+[Domain 1/1: thebrand.craftsportswear.com] [*] Process completed with return code: 0
+[Domain 1/1: thebrand.craftsportswear.com] [*] Changed back to original directory: /home/s141422/SecurityProject/EASM-Bunyamin-Siebe
+[Domain 1/1: thebrand.craftsportswear.com] 
+[Domain 1/1: thebrand.craftsportswear.com] [*] Starting scan 5/6: EnhancedCVEScanner.py
+[Domain 1/1: thebrand.craftsportswear.com] 
+[Domain 1/1: thebrand.craftsportswear.com] [*] Running EnhancedCVEScanner.py...
+[Domain 1/1: thebrand.craftsportswear.com] [*] Full script path: Scripts/EnhancedCVEScanner.py
+[Domain 1/1: thebrand.craftsportswear.com] [*] Input file: foundData/scan_thebrand.craftsportswear.com_20250602_235837/all_subdomains.json
+[Domain 1/1: thebrand.craftsportswear.com] [*] Output directory: foundData/scan_thebrand.craftsportswear.com_20250602_235837
+[Domain 1/1: thebrand.craftsportswear.com] [*] Executing command: python3 -u /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/Scripts/EnhancedCVEScanner.py --input-json /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/foundData/scan_thebrand.craftsportswear.com_20250602_235837/all_subdomains.json --output-json /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/foundData/scan_thebrand.craftsportswear.com_20250602_235837/cve_scan_results.json --output-report /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/foundData/scan_thebrand.craftsportswear.com_20250602_235837/cve_scan_report.txt --discover-ports --verbose
+[Domain 1/1: thebrand.craftsportswear.com] [*] Changed working directory to: /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/Scripts
+[Domain 1/1: thebrand.craftsportswear.com] [*] Process started with PID: 115571
+[Domain 1/1: thebrand.craftsportswear.com] 
+[Domain 1/1: thebrand.craftsportswear.com] [*] Checking which targets are reachable...
+[Domain 1/1: thebrand.craftsportswear.com] [*] Pinging thebrand.craftsportswear.com...
+[Domain 1/1: thebrand.craftsportswear.com] [+] Host thebrand.craftsportswear.com is up
+[Domain 1/1: thebrand.craftsportswear.com] [+] thebrand.craftsportswear.com is reachable
+[Domain 1/1: thebrand.craftsportswear.com] [*] Pinging www.thebrand.craftsportswear.com...
+[Domain 1/1: thebrand.craftsportswear.com] [!] Host www.thebrand.craftsportswear.com appears to be down
+[Domain 1/1: thebrand.craftsportswear.com] [!] www.thebrand.craftsportswear.com is not reachable, skipping
+[Domain 1/1: thebrand.craftsportswear.com] 
+[Domain 1/1: thebrand.craftsportswear.com] [*] Found 1 reachable targets out of 2 total targets
+[Domain 1/1: thebrand.craftsportswear.com] 
+[Domain 1/1: thebrand.craftsportswear.com] [*] Scanning domain 1/1: thebrand.craftsportswear.com
+[Domain 1/1: thebrand.craftsportswear.com] [*] Pinging thebrand.craftsportswear.com...
+[Domain 1/1: thebrand.craftsportswear.com] [+] Host thebrand.craftsportswear.com is up
+[Domain 1/1: thebrand.craftsportswear.com] [*] Discovering open ports on thebrand.craftsportswear.com...
+[Domain 1/1: thebrand.craftsportswear.com] [*] Running: nmap -sV --open thebrand.craftsportswear.com
+[Domain 1/1: thebrand.craftsportswear.com] [+] Discovered 11 open ports on thebrand.craftsportswear.com: 21, 22, 26, 80, 110, 143, 443, 587, 993, 995, 3306
+[Domain 1/1: thebrand.craftsportswear.com] 
+[Domain 1/1: thebrand.craftsportswear.com] [*] Scanning port 21 on thebrand.craftsportswear.com for vulnerabilities...
+[Domain 1/1: thebrand.craftsportswear.com] [*] Running: nmap --script vuln -p 21 thebrand.craftsportswear.com
+[Domain 1/1: thebrand.craftsportswear.com] [+] Found vulnerability: CVE-2011-1002). [Unknown]
+[Domain 1/1: thebrand.craftsportswear.com] [+] Total 1 vulnerabilities found on thebrand.craftsportswear.com:21
+[Domain 1/1: thebrand.craftsportswear.com] 
+[Domain 1/1: thebrand.craftsportswear.com] [*] Scanning port 22 on thebrand.craftsportswear.com for vulnerabilities...
+[Domain 1/1: thebrand.craftsportswear.com] [*] Running: nmap --script vuln -p 22 thebrand.craftsportswear.com
+[Domain 1/1: thebrand.craftsportswear.com] [+] Found vulnerability: CVE-2011-1002). [Unknown]
+[Domain 1/1: thebrand.craftsportswear.com] [+] Total 1 vulnerabilities found on thebrand.craftsportswear.com:22
+[Domain 1/1: thebrand.craftsportswear.com] 
+[Domain 1/1: thebrand.craftsportswear.com] [*] Scanning port 26 on thebrand.craftsportswear.com for vulnerabilities...
+[Domain 1/1: thebrand.craftsportswear.com] [*] Running: nmap --script vuln -p 26 thebrand.craftsportswear.com
+[Domain 1/1: thebrand.craftsportswear.com] [+] Found vulnerability: CVE-2011-1002). [Unknown]
+[Domain 1/1: thebrand.craftsportswear.com] [+] Total 1 vulnerabilities found on thebrand.craftsportswear.com:26
+[Domain 1/1: thebrand.craftsportswear.com] 
+[Domain 1/1: thebrand.craftsportswear.com] [*] Scanning port 80 on thebrand.craftsportswear.com for vulnerabilities...
+[Domain 1/1: thebrand.craftsportswear.com] [*] Running: nmap --script vuln -p 80 thebrand.craftsportswear.com
+[Domain 1/1: thebrand.craftsportswear.com] [+] Found vulnerability: CVE-2011-1002). [Unknown]
+[Domain 1/1: thebrand.craftsportswear.com] [+] Total 1 vulnerabilities found on thebrand.craftsportswear.com:80
+[Domain 1/1: thebrand.craftsportswear.com] 
+[Domain 1/1: thebrand.craftsportswear.com] [*] Scanning port 110 on thebrand.craftsportswear.com for vulnerabilities...
+[Domain 1/1: thebrand.craftsportswear.com] [*] Running: nmap --script vuln -p 110 thebrand.craftsportswear.com
+[Domain 1/1: thebrand.craftsportswear.com] [+] Found vulnerability: CVE-2011-1002). [Unknown]
+[Domain 1/1: thebrand.craftsportswear.com] [+] Total 1 vulnerabilities found on thebrand.craftsportswear.com:110
+[Domain 1/1: thebrand.craftsportswear.com] 
+[Domain 1/1: thebrand.craftsportswear.com] [*] Scanning port 143 on thebrand.craftsportswear.com for vulnerabilities...
+[Domain 1/1: thebrand.craftsportswear.com] [*] Running: nmap --script vuln -p 143 thebrand.craftsportswear.com
+[Domain 1/1: thebrand.craftsportswear.com] [+] Found vulnerability: CVE-2011-1002). [Unknown]
+[Domain 1/1: thebrand.craftsportswear.com] [+] Total 1 vulnerabilities found on thebrand.craftsportswear.com:143
+[Domain 1/1: thebrand.craftsportswear.com] 
+[Domain 1/1: thebrand.craftsportswear.com] [*] Scanning port 443 on thebrand.craftsportswear.com for vulnerabilities...
+[Domain 1/1: thebrand.craftsportswear.com] [*] Running: nmap --script vuln -p 443 thebrand.craftsportswear.com
+[Domain 1/1: thebrand.craftsportswear.com] [+] Found vulnerability: CVE-2011-1002). [Unknown]
+[Domain 1/1: thebrand.craftsportswear.com] [+] Total 1 vulnerabilities found on thebrand.craftsportswear.com:443
+[Domain 1/1: thebrand.craftsportswear.com] 
+[Domain 1/1: thebrand.craftsportswear.com] [*] Scanning port 587 on thebrand.craftsportswear.com for vulnerabilities...
+[Domain 1/1: thebrand.craftsportswear.com] [*] Running: nmap --script vuln -p 587 thebrand.craftsportswear.com
+[Domain 1/1: thebrand.craftsportswear.com] [+] Found vulnerability: CVE-2011-1002). [Unknown]
+[Domain 1/1: thebrand.craftsportswear.com] [+] Total 1 vulnerabilities found on thebrand.craftsportswear.com:587
+[Domain 1/1: thebrand.craftsportswear.com] 
+[Domain 1/1: thebrand.craftsportswear.com] [*] Scanning port 993 on thebrand.craftsportswear.com for vulnerabilities...
+[Domain 1/1: thebrand.craftsportswear.com] [*] Running: nmap --script vuln -p 993 thebrand.craftsportswear.com
+[Domain 1/1: thebrand.craftsportswear.com] [+] Found vulnerability: CVE-2011-1002). [Unknown]
+[Domain 1/1: thebrand.craftsportswear.com] [+] Total 1 vulnerabilities found on thebrand.craftsportswear.com:993
+[Domain 1/1: thebrand.craftsportswear.com] 
+[Domain 1/1: thebrand.craftsportswear.com] [*] Scanning port 995 on thebrand.craftsportswear.com for vulnerabilities...
+[Domain 1/1: thebrand.craftsportswear.com] [*] Running: nmap --script vuln -p 995 thebrand.craftsportswear.com
+[Domain 1/1: thebrand.craftsportswear.com] [+] Found vulnerability: CVE-2011-1002). [Unknown]
+[Domain 1/1: thebrand.craftsportswear.com] [+] Total 1 vulnerabilities found on thebrand.craftsportswear.com:995
+[Domain 1/1: thebrand.craftsportswear.com] 
+[Domain 1/1: thebrand.craftsportswear.com] [*] Scanning port 3306 on thebrand.craftsportswear.com for vulnerabilities...
+[Domain 1/1: thebrand.craftsportswear.com] [*] Running: nmap --script vuln -p 3306 thebrand.craftsportswear.com
+[Domain 1/1: thebrand.craftsportswear.com] [+] Found vulnerability: CVE-2011-1002). [Unknown]
+[Domain 1/1: thebrand.craftsportswear.com] [+] Total 1 vulnerabilities found on thebrand.craftsportswear.com:3306
+[Domain 1/1: thebrand.craftsportswear.com] 
+[Domain 1/1: thebrand.craftsportswear.com] [+] Completed vulnerability scan for thebrand.craftsportswear.com
+[Domain 1/1: thebrand.craftsportswear.com] [+] Found 11 vulnerabilities across 11 ports
+[Domain 1/1: thebrand.craftsportswear.com] [+] Results saved to /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/foundData/scan_thebrand.craftsportswear.com_20250602_235837/cve_scan_results.json
+[Domain 1/1: thebrand.craftsportswear.com] 
+[Domain 1/1: thebrand.craftsportswear.com] [+] Results saved to /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/foundData/scan_thebrand.craftsportswear.com_20250602_235837/cve_scan_results.json
+[Domain 1/1: thebrand.craftsportswear.com] [+] Summary report saved to /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/foundData/scan_thebrand.craftsportswear.com_20250602_235837/cve_scan_report.txt
+[Domain 1/1: thebrand.craftsportswear.com] [+] Report generated at /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/foundData/scan_thebrand.craftsportswear.com_20250602_235837/cve_scan_report.txt
+[Domain 1/1: thebrand.craftsportswear.com] 
+[Domain 1/1: thebrand.craftsportswear.com] [*] Scan complete!
+[Domain 1/1: thebrand.craftsportswear.com] - Scanned 1 reachable domains
+[Domain 1/1: thebrand.craftsportswear.com] - Found 11 vulnerabilities
+[Domain 1/1: thebrand.craftsportswear.com] [*] Process completed with return code: 0
+[Domain 1/1: thebrand.craftsportswear.com] [*] Changed back to original directory: /home/s141422/SecurityProject/EASM-Bunyamin-Siebe
+[Domain 1/1: thebrand.craftsportswear.com] 
+[Domain 1/1: thebrand.craftsportswear.com] [*] Starting scan 6/6: Portscan.py
+[Domain 1/1: thebrand.craftsportswear.com] 
+[Domain 1/1: thebrand.craftsportswear.com] [*] Running Portscan.py...
+[Domain 1/1: thebrand.craftsportswear.com] [*] Full script path: Scripts/Portscan.py
+[Domain 1/1: thebrand.craftsportswear.com] [*] Input file: foundData/scan_thebrand.craftsportswear.com_20250602_235837/all_subdomains.json
+[Domain 1/1: thebrand.craftsportswear.com] [*] Output directory: foundData/scan_thebrand.craftsportswear.com_20250602_235837
+[Domain 1/1: thebrand.craftsportswear.com] [*] Executing command: python3 -u /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/Scripts/Portscan.py --input /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/foundData/scan_thebrand.craftsportswear.com_20250602_235837/all_subdomains.json --output-dir /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/foundData/scan_thebrand.craftsportswear.com_20250602_235837
+[Domain 1/1: thebrand.craftsportswear.com] [*] Changed working directory to: /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/Scripts
+[Domain 1/1: thebrand.craftsportswear.com] [*] Process started with PID: 120071
+[Domain 1/1: thebrand.craftsportswear.com] [*] Reading domains from /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/foundData/scan_thebrand.craftsportswear.com_20250602_235837/all_subdomains.json
+[Domain 1/1: thebrand.craftsportswear.com] [+] Found 11 unique domains
+[Domain 1/1: thebrand.craftsportswear.com] [*] Checking which domains are reachable...
+[Domain 1/1: thebrand.craftsportswear.com] [*] Testing domain 1/11: "ip": null - Unreachable ✗
+[Domain 1/1: thebrand.craftsportswear.com] [*] Testing domain 2/11: }, - Unreachable ✗
+[Domain 1/1: thebrand.craftsportswear.com] [*] Testing domain 3/11: "subdomain": "www.thebrand.craftsportswear.com", - Unreachable ✗
+[Domain 1/1: thebrand.craftsportswear.com] [*] Testing domain 4/11: [ - Unreachable ✗
+[Domain 1/1: thebrand.craftsportswear.com] [*] Testing domain 5/11: "results": [ - Unreachable ✗
+[Domain 1/1: thebrand.craftsportswear.com] [*] Testing domain 6/11: } - Unreachable ✗
+[Domain 1/1: thebrand.craftsportswear.com] [*] Testing domain 7/11: ] - Unreachable ✗
+[Domain 1/1: thebrand.craftsportswear.com] [*] Testing domain 8/11: { - Unreachable ✗
+[Domain 1/1: thebrand.craftsportswear.com] [*] Testing domain 9/11: "subdomain": "No names were discovered", - Unreachable ✗
+[Domain 1/1: thebrand.craftsportswear.com] [*] Testing domain 10/11: "subdomains_found": 2, - Unreachable ✗
+[Domain 1/1: thebrand.craftsportswear.com] [*] Testing domain 11/11: "domain": "thebrand.craftsportswear.com", - Unreachable ✗
+[Domain 1/1: thebrand.craftsportswear.com] [+] 0 domains are reachable
+[Domain 1/1: thebrand.craftsportswear.com] [+] 11 domains are unreachable
+[Domain 1/1: thebrand.craftsportswear.com] [!] No reachable domains found
+[Domain 1/1: thebrand.craftsportswear.com] [*] Process completed with return code: 1
+[Domain 1/1: thebrand.craftsportswear.com] [*] Changed back to original directory: /home/s141422/SecurityProject/EASM-Bunyamin-Siebe
+[Domain 1/1: thebrand.craftsportswear.com] [!] Warning: Portscan.py did not complete successfully
+[Domain 1/1: thebrand.craftsportswear.com] 
+[Domain 1/1: thebrand.craftsportswear.com] [+] All scans completed!
+
+All domains processed. Scan completed.
