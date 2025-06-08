@@ -50,7 +50,7 @@ Voor het testen van deze oplossing zijn de volgende stappen uitgevoerd:
 - Zowel de werking van de GUI als de correcte aansturing van de onderliggende scripts zijn gevalideerd.
 - Eventuele fouten of afwijkingen in de output zijn geanalyseerd en waar nodig opgelost.
 
-Hierdoor is vastgesteld dat de oplossing betrouwbaar functioneert voor zowel NWG als de domeinlijsten.loop
+Hierdoor is vastgesteld dat de oplossing betrouwbaar functioneert voor zowel NWG als de domeinlijsten
 
 ## Reflectie
 
