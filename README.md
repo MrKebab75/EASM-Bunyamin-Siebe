@@ -1,5 +1,9 @@
 # EASM-Bunyamin-Siebe
 
+## Link naar Github repo
+
+https://github.com/MrKebab75/EASM-Bunyamin-Siebe
+
 ## Architectuur van de Oplossing
 Dit project is opgezet als een modulaire security scanning suite, waarbij elk script verantwoordelijk is voor een specifiek onderdeel van External Attack Surface Management (EASM). De architectuur maakt stapsgewijze scanning, data verrijking en rapportage mogelijk, met resultaten die worden opgeslagen in gestructureerde JSON-bestanden voor verdere analyse en visualisatie.
 
@@ -9,7 +13,7 @@ Dit project is opgezet als een modulaire security scanning suite, waarbij elk sc
 - Het script `CompleteSecurityScan.py` regelt de volledige workflow, voert alle scans na elkaar uit en beheert de input/output tussen de stappen.
 - Resultaten worden opgeslagen in de map `foundData/` (of een aangepaste outputmap), met één bestand per scantype.
 
-- ![Visualisatie van de architectuur]()
+- ![Visualisatie van de architectuur](Architectuur.png)
 
 ## Context van het Project
 Deze oplossing is ontwikkeld voor New Wave Group (NWG) om een volledig en geautomatiseerd overzicht te bieden van het externe digitale aanvalsoppervlak van de organisatie. De belangrijkste meerwaarde voor NWG is:
