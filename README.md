@@ -77,7 +77,7 @@ Tijdens de ontwikkeling van onze ASM-tool hebben wij een functionaliteit ingebou
 Na tests en iteraties merken we echter dat onze zelfgebouwde dark web scraper niet het gewenste kwaliteitsniveau behaalt. Dit komt hoofdzakelijk door:
 - **De complexiteit van het dark web:** Informatie is verspreid over duizenden .onion-sites die vaak offline zijn of veranderen.
 - **Gebrek aan schaalbare en accurate data:** Het verkrijgen van relevante en actuele informatie vraagt gevorderde kennis en bronnen.
-- **Toegang tot betrouwbare dark web databases vereist vaak een goede reputatie of bestaande zakelijke relaties.** Voor veel van deze betaalde API’s is het noodzakelijk dat je als organisatie een zekere reputatie hebt opgebouwd of een screening doorloopt voordat je toegang krijgt tot hun data.
+- **Toegang tot betrouwbare dark web databases vereist vaak een goede reputatie of bestaande zakelijke relaties.** Voor veel van deze betaalde databases is het noodzakelijk dat je als organisatie een zekere reputatie hebt opgebouwd.
 
 Daarom raden wij het gebruik van bestaande en betrouwbare betaalde API’s aan om deze functionaliteit professioneel, schaalbaar en nauwkeurig in te richten. Hieronder vindt u een overzicht van enkele toonaangevende aanbieders:
 
