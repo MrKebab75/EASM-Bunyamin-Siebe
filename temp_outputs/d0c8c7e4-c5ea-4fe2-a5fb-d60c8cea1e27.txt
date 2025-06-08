@@ -1814,3 +1814,10 @@
 [Domain 1/2: nwg.se] [+] Host joyfulgiftcard-fi.dev.nwg.se is up
 [Domain 1/2: nwg.se] [*] Discovering open ports on joyfulgiftcard-fi.dev.nwg.se...
 [Domain 1/2: nwg.se] [*] Running: nmap -sV --open joyfulgiftcard-fi.dev.nwg.se
+[Domain 1/2: nwg.se] [!] Error discovering ports on joyfulgiftcard-fi.dev.nwg.se: Command '['nmap', '-sV', '--open', 'joyfulgiftcard-fi.dev.nwg.se']' timed out after 180 seconds
+[Domain 1/2: nwg.se] 
+[Domain 1/2: nwg.se] [*] Scanning domain 2/82: dochj-se.dev.nwg.se
+[Domain 1/2: nwg.se] [*] Pinging dochj-se.dev.nwg.se...
+[Domain 1/2: nwg.se] [+] Host dochj-se.dev.nwg.se is up
+[Domain 1/2: nwg.se] [*] Discovering open ports on dochj-se.dev.nwg.se...
+[Domain 1/2: nwg.se] [*] Running: nmap -sV --open dochj-se.dev.nwg.se

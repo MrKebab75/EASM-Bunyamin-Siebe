@@ -30,7 +30,11 @@ Alle code is beschikbaar in deze repository. De scripts zijn georganiseerd in de
   pip install -r requirements.txt
   ```
 - Zorg ervoor dat de externe tool Amass ook geïnstalleerd is:
-  - Amass: 
+  ```bash
+  sudo apt update
+  sudo apt install snapd
+  sudo snap install amass
+  ```
 - Start vervolgens de applicatie en de GUI door het script `main.py` uit te voeren:
   ```bash
   python main.py
@@ -39,7 +43,7 @@ Alle code is beschikbaar in deze repository. De scripts zijn georganiseerd in de
 - Voor meer details over configuratie, afhankelijkheden en outputformaten, raadpleeg de README-bestanden in de map `Scripts/`.
 
 ## Panopto video
-De Panopto video die bij dit project hoort, is te vinden hier:
+De Panopto video die bij dit project hoort, is te vinden hier: https://ap.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=139a450c-8bda-4a00-bc60-b2f6015a17fe&start=0
 
 ## Testplan
 Voor het testen van deze oplossing zijn de volgende stappen uitgevoerd:
