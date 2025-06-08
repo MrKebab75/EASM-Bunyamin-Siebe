@@ -1,0 +1,6 @@
+[Domain 1/1: test.be] 
+[Domain 1/1: test.be] [*] Scan complete!
+[Domain 1/1: test.be]     - Scanned 1 reachable domains
+[Domain 1/1: test.be]     - Found 2 vulnerabilities
+
+All domains processed. Scan completed.

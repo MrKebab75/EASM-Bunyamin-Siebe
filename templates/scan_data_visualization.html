@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Scan Data Visualization</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css" rel="stylesheet">
+    <style>
+        .scan-card {
+            margin-bottom: 20px;
+            transition: transform 0.2s;
+        }
+        .scan-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+        .data-section {
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 5px;
+            background-color: #f8f9fa;
+        }
+        .back-button {
+            margin-bottom: 20px;
+        }
+        .loading-spinner {
+            display: none;
+            text-align: center;
+            margin: 20px 0;
+        }
+        .scan-header {
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px;
+            text-decoration: none;
+            color: inherit;
+        }
+        .scan-header:hover {
+            background-color: rgba(0,0,0,0.05);
+            text-decoration: none;
+            color: inherit;
+        }
+        .scan-details {
+            display: none;
+            padding: 15px;
+            border-top: 1px solid #dee2e6;
+        }
+        .scan-info {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+            width: 100%;
+        }
+        .scan-domain-info {
+            display: flex;
+            align-items: center;
+        }
+        .scan-status-info {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .scan-domain {
+            font-weight: bold;
+            color: #0d6efd;
+        }
+        .scan-time {
+            color: #6c757d;
+            font-size: 0.9em;
+        }
+        .expand-icon {
+            transition: transform 0.3s;
+        }
+        .expanded .expand-icon {
+            transform: rotate(180deg);
+        }
+        .file-badge {
+            margin-right: 5px;
+            margin-bottom: 5px;
+        }
+        .filter-section {
+            background-color: #f8f9fa;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 30px;
+        }
+        .status-badge {
+            margin-left: 10px;
+            font-size: 0.8em;
+        }
+        .status-active {
+            background-color: #198754;
+        }
+        .status-inactive {
+            background-color: #dc3545;
+        }
+        .no-results {
+            text-align: center;
+            padding: 40px;
+            color: #6c757d;
+            font-style: italic;
+        }
+        .pagination-info {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin: 20px 0;
+            color: #6c757d;
+        }
+        .page-size-selector {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container mt-4">
+        <a href="/" class="btn btn-primary back-button">
+            <i class="bi bi-arrow-left"></i> Back to Main Page
+        </a>
+        
+        <h1 class="mb-4">Scan Data Visualization</h1>
+
+        <div class="filter-section">
+            <div class="row align-items-center">
+                <div class="col-md-6">
+                    <h5 class="mb-3">Filter Scans</h5>
+                    <div class="btn-group" role="group">
+                        <input type="radio" class="btn-check" name="statusFilter" id="all" value="all" checked>
+                        <label class="btn btn-outline-primary" for="all">All</label>
+                        
+                        <input type="radio" class="btn-check" name="statusFilter" id="active" value="active">
+                        <label class="btn btn-outline-primary" for="active">Active</label>
+                        
+                        <input type="radio" class="btn-check" name="statusFilter" id="inactive" value="inactive">
+                        <label class="btn btn-outline-primary" for="inactive">Inactive</label>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="input-group">
+                        <span class="input-group-text"><i class="bi bi-search"></i></span>
+                        <input type="text" class="form-control" id="searchInput" placeholder="Search domains...">
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="loading-spinner">
+            <div class="spinner-border text-primary" role="status">
+                <span class="visually-hidden">Loading...</span>
+            </div>
+            <p class="mt-2">Loading scan data...</p>
+        </div>
+
+        <div id="scanDataContainer"></div>
+
+        <div class="pagination-info">
+            <div class="page-size-selector">
+                <label for="pageSize">Items per page:</label>
+                <select class="form-select form-select-sm" id="pageSize" style="width: auto;">
+                    <option value="10">10</option>
+                    <option value="25" selected>25</option>
+                    <option value="50">50</option>
+                    <option value="100">100</option>
+                </select>
+            </div>
+            <div id="paginationInfo"></div>
+        </div>
+
+        <nav aria-label="Scan pagination">
+            <ul class="pagination justify-content-center" id="pagination"></ul>
+        </nav>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        let allScans = [];
+        let currentPage = 1;
+        let pageSize = 25;
+        
+        function parseScanInfo(scanFolder) {
+            const parts = scanFolder.replace('scan_', '').split('_');
+            
+            const datePart = parts[parts.length - 2];
+            const timePart = parts[parts.length - 1];
+            
+            parts.pop();
+            parts.pop();
+            const domain = parts.join('_');
+            
+            const year = datePart.substring(0, 4);
+            const month = datePart.substring(4, 6);
+            const day = datePart.substring(6, 8);
+            const hour = timePart.substring(0, 2);
+            const minute = timePart.substring(2, 4);
+            const second = timePart.substring(4, 6);
+            
+            // Create date with correct month and day order (YYYY-DD-MM)
+            const date = new Date(`${year}-${day}-${month}T${hour}:${minute}:${second}`);
+            const formattedTime = date.toLocaleString();
+            
+            return { domain, timestamp: formattedTime, date };
+        }
+
+        function createScanCard(scanFolder, scanData) {
+            const { domain, timestamp } = parseScanInfo(scanFolder);
+            
+            const card = document.createElement('div');
+            card.className = 'card scan-card';
+            card.dataset.domain = domain;
+            card.dataset.status = scanData.status || 'unknown';
+            
+            const cardHeader = document.createElement('a');
+            cardHeader.className = 'scan-header';
+            cardHeader.href = `/scan-analysis/${scanFolder}`;
+            
+            const headerContent = document.createElement('div');
+            headerContent.className = 'scan-info';
+            
+            headerContent.innerHTML = `
+                <div class="scan-domain-info">
+                    <span class="scan-domain">${domain}</span>
+                    <span class="scan-time ms-3">${timestamp}</span>
+                </div>
+                <div class="scan-status-info">
+                    <span class="badge bg-secondary">${scanData.fileCount} files</span>
+                    <span class="badge ${scanData.status === 'active' ? 'status-active' : 'status-inactive'} status-badge">${scanData.status}</span>
+                    <i class="bi bi-chevron-right"></i>
+                </div>
+            `;
+            
+            cardHeader.appendChild(headerContent);
+            card.appendChild(cardHeader);
+            
+            return card;
+        }
+
+        function updatePagination(filteredScans) {
+            const totalPages = Math.ceil(filteredScans.length / pageSize);
+            const pagination = document.getElementById('pagination');
+            const paginationInfo = document.getElementById('paginationInfo');
+            
+            // Update pagination info
+            const start = (currentPage - 1) * pageSize + 1;
+            const end = Math.min(currentPage * pageSize, filteredScans.length);
+            paginationInfo.textContent = `Showing ${start}-${end} of ${filteredScans.length} scans`;
+            
+            // Clear existing pagination
+            pagination.innerHTML = '';
+            
+            // Add previous button
+            const prevLi = document.createElement('li');
+            prevLi.className = `page-item ${currentPage === 1 ? 'disabled' : ''}`;
+            prevLi.innerHTML = `
+                <button class="page-link" ${currentPage === 1 ? 'disabled' : ''}>
+                    <i class="bi bi-chevron-left"></i>
+                </button>
+            `;
+            prevLi.onclick = () => {
+                if (currentPage > 1) {
+                    currentPage--;
+                    filterScans();
+                }
+            };
+            pagination.appendChild(prevLi);
+            
+            // Add page numbers
+            for (let i = 1; i <= totalPages; i++) {
+                const li = document.createElement('li');
+                li.className = `page-item ${i === currentPage ? 'active' : ''}`;
+                li.innerHTML = `<button class="page-link">${i}</button>`;
+                li.onclick = () => {
+                    currentPage = i;
+                    filterScans();
+                };
+                pagination.appendChild(li);
+            }
+            
+            // Add next button
+            const nextLi = document.createElement('li');
+            nextLi.className = `page-item ${currentPage === totalPages ? 'disabled' : ''}`;
+            nextLi.innerHTML = `
+                <button class="page-link" ${currentPage === totalPages ? 'disabled' : ''}>
+                    <i class="bi bi-chevron-right"></i>
+                </button>
+            `;
+            nextLi.onclick = () => {
+                if (currentPage < totalPages) {
+                    currentPage++;
+                    filterScans();
+                }
+            };
+            pagination.appendChild(nextLi);
+        }
+
+        function filterScans() {
+            const statusFilter = document.querySelector('input[name="statusFilter"]:checked').value;
+            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+            const container = document.getElementById('scanDataContainer');
+            
+            container.innerHTML = '';
+            
+            const filteredScans = allScans.filter(scan => {
+                const matchesStatus = statusFilter === 'all' || scan.status === statusFilter;
+                const matchesSearch = scan.domain.toLowerCase().includes(searchTerm);
+                return matchesStatus && matchesSearch;
+            });
+            
+            if (filteredScans.length === 0) {
+                container.innerHTML = `
+                    <div class="no-results">
+                        <i class="bi bi-search" style="font-size: 2rem;"></i>
+                        <p class="mt-3">No scans match your filter criteria</p>
+                    </div>
+                `;
+                document.getElementById('pagination').style.display = 'none';
+                document.getElementById('paginationInfo').style.display = 'none';
+                return;
+            }
+            
+            // Sort by date (newest first)
+            filteredScans.sort((a, b) => b.date - a.date);
+            
+            // Calculate pagination
+            const start = (currentPage - 1) * pageSize;
+            const end = start + pageSize;
+            const paginatedScans = filteredScans.slice(start, end);
+            
+            // Show pagination
+            document.getElementById('pagination').style.display = 'flex';
+            document.getElementById('paginationInfo').style.display = 'block';
+            
+            // Update pagination controls
+            updatePagination(filteredScans);
+            
+            // Display paginated results
+            paginatedScans.forEach(scan => {
+                container.appendChild(createScanCard(scan.folder, scan));
+            });
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            const loadingSpinner = document.querySelector('.loading-spinner');
+            const scanDataContainer = document.getElementById('scanDataContainer');
+            
+            loadingSpinner.style.display = 'block';
+            
+            fetch('/api/scan-data')
+                .then(response => response.json())
+                .then(data => {
+                    loadingSpinner.style.display = 'none';
+                    
+                    if (Object.keys(data).length === 0) {
+                        scanDataContainer.innerHTML = `
+                            <div class="alert alert-info">
+                                No scan data found. Please run some scans first.
+                            </div>
+                        `;
+                        return;
+                    }
+                    
+                    allScans = Object.entries(data).map(([folder, files]) => {
+                        const { domain, date } = parseScanInfo(folder);
+                        const fileNames = Object.keys(files);
+                        const isInactive = fileNames.includes('inactiveDomains.json');
+                        return { 
+                            folder, 
+                            domain, 
+                            status: isInactive ? 'inactive' : 'active',
+                            fileCount: fileNames.length,
+                            date
+                        };
+                    });
+                    
+                    filterScans();
+                })
+                .catch(error => {
+                    loadingSpinner.style.display = 'none';
+                    scanDataContainer.innerHTML = `
+                        <div class="alert alert-danger">
+                            Error loading scan data: ${error.message}
+                        </div>
+                    `;
+                });
+            
+            // Add event listeners for filters
+            document.querySelectorAll('input[name="statusFilter"]').forEach(radio => {
+                radio.addEventListener('change', () => {
+                    currentPage = 1;
+                    filterScans();
+                });
+            });
+            
+            document.getElementById('searchInput').addEventListener('input', () => {
+                currentPage = 1;
+                filterScans();
+            });
+
+            document.getElementById('pageSize').addEventListener('change', (e) => {
+                pageSize = parseInt(e.target.value);
+                currentPage = 1;
+                filterScans();
+            });
+        });
+    </script>
+</body>
+</html> 

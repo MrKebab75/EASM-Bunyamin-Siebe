@@ -6,6 +6,9 @@ import pandas as pd
 from werkzeug.utils import secure_filename
 import uuid
 import threading
+import zipfile
+import io
+from datetime import datetime
 
 app = Flask(__name__)
 app.secret_key = 'your-secret-key-here'  # Required for flash messages
@@ -85,7 +88,7 @@ def index():
                 flash("Please enter a domain", "error")
                 return redirect(url_for("index"))
             domains = [domain.strip()]
-        else:  # Excel file
+        elif input_type == "file" or input_type == "excel":  # Excel file
             print("\n[*] Processing Excel file upload")
             file_key = f"file_{script_name}"
             print(f"[*] Looking for file with key: {file_key}")
@@ -413,6 +416,40 @@ def port_scan_visualization():
 def darknet_visualization():
     return render_template("darknet_visualization.html")
 
+@app.route("/scan-data-visualization")
+def scan_data_visualization():
+    return render_template('scan_data_visualization.html')
+
+@app.route('/scan-analysis/<scan_folder>')
+def scan_analysis(scan_folder):
+    # Verify the scan folder exists
+    scan_path = os.path.join('foundData', scan_folder)
+    if not os.path.exists(scan_path):
+        return "Scan folder not found", 404
+    return render_template('scan_analysis.html', scan_folder=scan_folder)
+
+@app.route("/api/scan-data")
+def get_scan_data():
+    scan_data = {}
+    found_data_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'foundData')
+    
+    if os.path.exists(found_data_dir):
+        for scan_folder in os.listdir(found_data_dir):
+            if scan_folder.startswith('scan_'):
+                scan_path = os.path.join(found_data_dir, scan_folder)
+                if os.path.isdir(scan_path):
+                    scan_data[scan_folder] = {}
+                    for file in os.listdir(scan_path):
+                        if file.endswith('.json'):
+                            file_path = os.path.join(scan_path, file)
+                            try:
+                                with open(file_path, 'r') as f:
+                                    scan_data[scan_folder][file] = json.load(f)
+                            except Exception as e:
+                                scan_data[scan_folder][file] = {"error": str(e)}
+    
+    return jsonify(scan_data)
+
 @app.route("/api/domains")
 def get_domains():
     try:
@@ -521,6 +558,158 @@ def run_script(script_name):
         if os.path.exists(temp_file):
             os.remove(temp_file)
         return redirect(url_for("index"))
+
+@app.route("/api/scan-data/<scan_folder>")
+def get_scan_folder_data(scan_folder):
+    scan_data = {}
+    found_data_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'foundData')
+    scan_path = os.path.join(found_data_dir, scan_folder)
+    
+    if os.path.exists(scan_path) and os.path.isdir(scan_path):
+        for file in os.listdir(scan_path):
+            if file.endswith('.json'):
+                file_path = os.path.join(scan_path, file)
+                try:
+                    with open(file_path, 'r') as f:
+                        scan_data[file] = json.load(f)
+                except Exception as e:
+                    scan_data[file] = {"error": str(e)}
+    
+    return jsonify(scan_data)
+
+@app.route('/api/scan-data/<scan_folder>/<filename>')
+def get_scan_file(scan_folder, filename):
+    try:
+        file_path = os.path.join('foundData', scan_folder, filename)
+        if not os.path.exists(file_path):
+            return jsonify({'error': 'File not found'}), 404
+        with open(file_path, 'r') as f:
+            data = json.load(f)
+        return jsonify(data)
+    except FileNotFoundError:
+        return jsonify({'error': 'File not found'}), 404
+    except json.JSONDecodeError:
+        return jsonify({'error': 'Invalid JSON file'}), 400
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
+@app.route('/download-scan-folder/<scan_folder>')
+def download_scan_folder(scan_folder):
+    scan_folder_path = os.path.join('foundData', scan_folder)
+
+    if not os.path.isdir(scan_folder_path):
+        flash('Scan folder not found!', 'error')
+        return redirect(url_for('scan_data_visualization'))
+
+    # Create a BytesIO object to hold the zip file in memory
+    memory_file = io.BytesIO()
+
+    with zipfile.ZipFile(memory_file, 'w', zipfile.ZIP_DEFLATED) as zf:
+        for root, dirs, files in os.walk(scan_folder_path):
+            for file in files:
+                file_path = os.path.join(root, file)
+                # Ensure the path inside the zip is relative to the scan_folder
+                arcname = os.path.relpath(file_path, scan_folder_path)
+                zf.write(file_path, os.path.join(scan_folder, arcname)) # Include scan_folder in zip path
+
+    memory_file.seek(0)
+
+    return send_file(memory_file,
+                     mimetype='application/zip',
+                     as_attachment=True,
+                     download_name=f'{scan_folder}.zip')
+
+@app.route("/api/high-risk-vulnerabilities")
+def get_high_risk_vulnerabilities():
+    found_data_folder = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'foundData')
+    
+    # Dictionary to store the latest scan folder for each domain with high-risk vulnerabilities
+    domain_to_latest_high_risk_scan = {}
+
+    for scan_folder_name in os.listdir(found_data_folder):
+        scan_folder_path = os.path.join(found_data_folder, scan_folder_name)
+        
+        if os.path.isdir(scan_folder_path) and scan_folder_name.startswith('scan_'):
+            # Extract timestamp from scan folder name (e.g., scan_domain.com_YYYYMMDD_HHMMSS)
+            try:
+                timestamp_str = scan_folder_name.split('_')[-2] + scan_folder_name.split('_')[-1]
+                current_scan_timestamp = datetime.strptime(timestamp_str, '%Y%m%d%H%M%S')
+            except ValueError:
+                print(f"Could not parse timestamp from folder: {scan_folder_name}")
+                continue
+
+            has_high_risk_vuln_in_folder = False # Flag for current folder
+            
+            # Process web_technologies.json
+            web_tech_path = os.path.join(scan_folder_path, 'web_technologies.json')
+            if os.path.exists(web_tech_path):
+                try:
+                    with open(web_tech_path, 'r') as f:
+                        web_tech_data = json.load(f)
+                    for domain_name, domain_data in web_tech_data.items():
+                        if domain_data.get('status') == 'success' and 'technologies' in domain_data:
+                            for tech in domain_data['technologies']:
+                                if 'vulnerabilities' in tech and isinstance(tech['vulnerabilities'], list):
+                                    for vuln in tech['vulnerabilities']:
+                                        severity = vuln.get('severity', '').lower()
+                                        if severity == 'high' or severity == 'critical':
+                                            has_high_risk_vuln_in_folder = True
+                                            # Update if this scan folder is newer or if the domain is not yet recorded
+                                            if domain_name not in domain_to_latest_high_risk_scan or \
+                                               current_scan_timestamp > domain_to_latest_high_risk_scan[domain_name]['timestamp']:
+                                                domain_to_latest_high_risk_scan[domain_name] = {
+                                                    'timestamp': current_scan_timestamp,
+                                                    'scan_folder': scan_folder_name,
+                                                    'domain': domain_name
+                                                }
+                except Exception as e:
+                    print(f"Error reading {web_tech_path}: {e}")
+
+            # Process cve_scan_results.json
+            cve_scan_path = os.path.join(scan_folder_path, 'cve_scan_results.json')
+            if os.path.exists(cve_scan_path):
+                try:
+                    with open(cve_scan_path, 'r') as f:
+                        cve_data = json.load(f)
+                    if isinstance(cve_data, list):
+                        for entry in cve_data:
+                            domain_name = entry.get('domain')
+                            if domain_name and (
+                                ('vulnerabilities' in entry and isinstance(entry['vulnerabilities'], list)) or
+                                ('ports' in entry and isinstance(entry['ports'], dict))
+                            ):
+                                vulnerabilities_in_entry = []
+                                if 'vulnerabilities' in entry:
+                                    vulnerabilities_in_entry.extend(entry['vulnerabilities'])
+                                if 'ports' in entry:
+                                    for port_data in entry['ports'].values():
+                                        if 'vulnerabilities' in port_data and isinstance(port_data['vulnerabilities'], list):
+                                            vulnerabilities_in_entry.extend(port_data['vulnerabilities'])
+
+                                for vuln in vulnerabilities_in_entry:
+                                    severity = vuln.get('severity', '').lower()
+                                    if severity == 'high' or severity == 'critical':
+                                        has_high_risk_vuln_in_folder = True
+                                        # Update if this scan folder is newer or if the domain is not yet recorded
+                                        if domain_name not in domain_to_latest_high_risk_scan or \
+                                           current_scan_timestamp > domain_to_latest_high_risk_scan[domain_name]['timestamp']:
+                                            domain_to_latest_high_risk_scan[domain_name] = {
+                                                'timestamp': current_scan_timestamp,
+                                                'scan_folder': scan_folder_name,
+                                                'domain': domain_name
+                                            }
+                except Exception as e:
+                    print(f"Error reading {cve_scan_path}: {e}")
+
+    # Convert the dictionary values to a list, containing only domain and scan_folder
+    high_risk_domains_list = []
+    for domain_info in domain_to_latest_high_risk_scan.values():
+        high_risk_domains_list.append({
+            'domain': domain_info['domain'],
+            'scan_folder': domain_info['scan_folder']
+        })
+
+    return jsonify({'high_risk_domains': high_risk_domains_list})
 
 if __name__ == "__main__":
     app.run(debug=True)

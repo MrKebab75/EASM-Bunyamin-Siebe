@@ -1,0 +1,17 @@
+Starting subdom scan...
+[Domain 1/1: sjs.be] [+] Loading domains from /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/uploads/temp_domain_1.txt
+[Domain 1/1: sjs.be] [+] Loaded 1 unique domains from input.
+[Domain 1/1: sjs.be] 
+[Domain 1/1: sjs.be] === Processing domain 1/1: sjs.be ===
+[Domain 1/1: sjs.be] [+] Pinging domain: sjs.be
+[Domain 1/1: sjs.be] [+] Running Amass for sjs.be
+[Domain 1/1: sjs.be] [+] Running Subfinder for sjs.be
+[Domain 1/1: sjs.be] [+] Found 11 unique subdomains for sjs.be.
+[Domain 1/1: sjs.be] [+] Resolving IPs for 11 subdomains...
+[Domain 1/1: sjs.be] [+] IP resolution complete.
+[Domain 1/1: sjs.be] 
+[Domain 1/1: sjs.be] [+] All results saved to: /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/foundData/all_subdomains.json
+[Domain 1/1: sjs.be] 
+[Domain 1/1: sjs.be] [+] All domains processed successfully!
+
+All domains processed. Scan completed.

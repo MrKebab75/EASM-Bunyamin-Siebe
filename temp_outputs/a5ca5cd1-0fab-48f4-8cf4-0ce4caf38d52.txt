@@ -1,0 +1,71 @@
+Starting detect_web_tech scan...
+[Domain 1/1: nwg.se] [+] webtech module found. Web technology detection is enabled.
+[Domain 1/1: nwg.se] [*] Reading domains from /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/uploads/temp_domain_1.txt
+[Domain 1/1: nwg.se] [+] Found 1 unique domains to scan
+[Domain 1/1: nwg.se] 
+[Domain 1/1: nwg.se] [*] Processing subdomain 1/1: nwg.se
+[Domain 1/1: nwg.se] [*] Querying WhatRuns API for nwg.se...
+[Domain 1/1: nwg.se] [*] Sending request to WhatRuns API...
+[Domain 1/1: nwg.se] [*] Received response, processing data...
+[Domain 1/1: nwg.se] [+] WhatRuns API detected: Imperva (Security)
+[Domain 1/1: nwg.se] [+] WhatRuns API found 1 technologies (0 with version info)
+[Domain 1/1: nwg.se] [*] Detecting web technologies on https://nwg.se
+[Domain 1/1: nwg.se] [*] No technologies detected on https://nwg.se
+[Domain 1/1: nwg.se] [+] Detected technology: Jquery 2.2.3
+[Domain 1/1: nwg.se] [+] Detected technology: Google analytics Unknown
+[Domain 1/1: nwg.se] [*] Detecting web technologies on http://nwg.se
+[Domain 1/1: nwg.se] [*] No technologies detected on http://nwg.se
+[Domain 1/1: nwg.se] [+] Detected technology: Jquery 2.2.3
+[Domain 1/1: nwg.se] [+] Detected technology: Google analytics Unknown
+[Domain 1/1: nwg.se] [*] Checking vulnerabilities for Jquery 2.2.3...
+[Domain 1/1: nwg.se] [*] Searching vulnerabilities by keywords: jquery 2.2.3
+[Domain 1/1: nwg.se] [+] Found 100 potential vulnerabilities to analyze
+[Domain 1/1: nwg.se] [+] Found vulnerability: CVE-2007-2379 - Medium (CVSS: 5.0)
+[Domain 1/1: nwg.se] [+] Found vulnerability: CVE-2011-4969 - Medium (CVSS: 4.3)
+[Domain 1/1: nwg.se] [+] Found vulnerability: CVE-2013-4383 - Low (CVSS: 2.1)
+[Domain 1/1: nwg.se] [+] Found vulnerability: CVE-2012-6662 - Medium (CVSS: 4.3)
+[Domain 1/1: nwg.se] [+] Found vulnerability: CVE-2015-2089 - Medium (CVSS: 6.8)
+[Domain 1/1: nwg.se] [+] Found vulnerability: CVE-2015-1840 - Medium (CVSS: 5.0)
+[Domain 1/1: nwg.se] [+] Found vulnerability: CVE-2015-7943 - MEDIUM (CVSS: 6.1)
+[Domain 1/1: nwg.se] [+] Found vulnerability: CVE-2014-6071 - MEDIUM (CVSS: 6.1)
+[Domain 1/1: nwg.se] [+] Found vulnerability: CVE-2015-9251 - MEDIUM (CVSS: 6.1)
+[Domain 1/1: nwg.se] [+] Found vulnerability: CVE-2016-10707 - HIGH (CVSS: 7.5)
+[Domain 1/1: nwg.se] [+] Found vulnerability: CVE-2017-15719 - MEDIUM (CVSS: 6.1)
+[Domain 1/1: nwg.se] [+] Found vulnerability: CVE-2018-9206 - CRITICAL (CVSS: 9.8)
+[Domain 1/1: nwg.se] [+] Found vulnerability: CVE-2018-9208 - CRITICAL (CVSS: 9.8)
+[Domain 1/1: nwg.se] [+] Found vulnerability: CVE-2018-9207 - CRITICAL (CVSS: 9.8)
+[Domain 1/1: nwg.se] [+] Found vulnerability: CVE-2019-11358 - MEDIUM (CVSS: 6.1)
+[Domain 1/1: nwg.se] [+] Found vulnerability: CVE-2014-8739 - CRITICAL (CVSS: 9.8)
+[Domain 1/1: nwg.se] [+] Found vulnerability: CVE-2018-18405 - MEDIUM (CVSS: 6.1)
+[Domain 1/1: nwg.se] [+] Found vulnerability: CVE-2020-11023 - MEDIUM (CVSS: 6.9)
+[Domain 1/1: nwg.se] [+] Found vulnerability: CVE-2020-11022 - MEDIUM (CVSS: 6.9)
+[Domain 1/1: nwg.se] [+] Found vulnerability: CVE-2021-20084 - HIGH (CVSS: 8.8)
+[Domain 1/1: nwg.se] [+] Found vulnerability: CVE-2021-20087 - HIGH (CVSS: 8.8)
+[Domain 1/1: nwg.se] [+] Found vulnerability: CVE-2021-20083 - HIGH (CVSS: 8.8)
+[Domain 1/1: nwg.se] [+] Found vulnerability: CVE-2021-20086 - HIGH (CVSS: 8.8)
+[Domain 1/1: nwg.se] [+] Found vulnerability: CVE-2021-43862 - LOW (CVSS: 3.7)
+[Domain 1/1: nwg.se] [+] Found vulnerability: CVE-2022-24981 - MEDIUM (CVSS: 6.1)
+[Domain 1/1: nwg.se] [+] Found vulnerability: CVE-2022-24982 - MEDIUM (CVSS: 6.5)
+[Domain 1/1: nwg.se] [+] Found vulnerability: CVE-2022-24983 - HIGH (CVSS: 7.5)
+[Domain 1/1: nwg.se] [+] Found vulnerability: CVE-2022-24984 - CRITICAL (CVSS: 9.8)
+[Domain 1/1: nwg.se] [+] Found vulnerability: CVE-2022-24985 - HIGH (CVSS: 8.8)
+[Domain 1/1: nwg.se] [+] Found vulnerability: CVE-2021-37504 - MEDIUM (CVSS: 6.1)
+[Domain 1/1: nwg.se] [+] Found vulnerability: CVE-2022-23395 - MEDIUM (CVSS: 6.1)
+[Domain 1/1: nwg.se] [+] Found vulnerability: CVE-2022-2144 - MEDIUM (CVSS: 4.3)
+[Domain 1/1: nwg.se] [+] Found vulnerability: CVE-2022-31160 - MEDIUM (CVSS: 6.1)
+[Domain 1/1: nwg.se] [+] Found vulnerability: CVE-2023-0171 - MEDIUM (CVSS: 5.4)
+[Domain 1/1: nwg.se] [+] Found vulnerability: CVE-2021-32850 - MEDIUM (CVSS: 6.1)
+[Domain 1/1: nwg.se] [+] Found vulnerability: CVE-2021-36713 - MEDIUM (CVSS: 6.1)
+[Domain 1/1: nwg.se] [+] Found vulnerability: CVE-2023-4890 - MEDIUM (CVSS: 6.4)
+[Domain 1/1: nwg.se] [+] Found vulnerability: CVE-2023-5430 - HIGH (CVSS: 8.8)
+[Domain 1/1: nwg.se] [+] Found vulnerability: CVE-2023-5464 - HIGH (CVSS: 8.8)
+[Domain 1/1: nwg.se] [+] Found vulnerability: CVE-2023-5432 - MEDIUM (CVSS: 6.4)
+[Domain 1/1: nwg.se] [+] Found vulnerability: CVE-2024-24849 - MEDIUM (CVSS: 4.3)
+[Domain 1/1: nwg.se] [+] Found 41 vulnerabilities for Jquery 2.2.3
+[Domain 1/1: nwg.se] [+] Completed subdomain 1/1: nwg.se
+[Domain 1/1: nwg.se] [+] Results saved to /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/foundData/web_technologies.json
+[Domain 1/1: nwg.se] 
+[Domain 1/1: nwg.se] [+] Scan complete! Processed 1 subdomains
+[Domain 1/1: nwg.se] [+] Final results saved to /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/foundData/web_technologies.json
+
+All domains processed. Scan completed.

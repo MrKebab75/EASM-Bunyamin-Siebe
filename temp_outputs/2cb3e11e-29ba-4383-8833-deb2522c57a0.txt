@@ -1,0 +1,94 @@
+Starting detect_web_tech scan...
+[Domain 1/1: thebrand.craftsportswear.com] [+] webtech module found. Web technology detection is enabled.
+[Domain 1/1: thebrand.craftsportswear.com] [*] Reading domains from /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/uploads/temp_domain_1.txt
+[Domain 1/1: thebrand.craftsportswear.com] [+] Adding main domain: craftsportswear.com
+[Domain 1/1: thebrand.craftsportswear.com] [+] Found 2 unique domains to scan
+[Domain 1/1: thebrand.craftsportswear.com] 
+[Domain 1/1: thebrand.craftsportswear.com] [*] Processing subdomain 1/2: craftsportswear.com
+[Domain 1/1: thebrand.craftsportswear.com] [*] Querying WhatRuns API for craftsportswear.com...
+[Domain 1/1: thebrand.craftsportswear.com] [*] Sending request to WhatRuns API...
+[Domain 1/1: thebrand.craftsportswear.com] [*] Received response, processing data...
+[Domain 1/1: thebrand.craftsportswear.com] [+] WhatRuns API detected: Modernizr (Javascript Frameworks)
+[Domain 1/1: thebrand.craftsportswear.com] [+] WhatRuns API detected: RequireJS (Javascript Frameworks)
+[Domain 1/1: thebrand.craftsportswear.com] [+] WhatRuns API detected: jQuery (Javascript Frameworks)
+[Domain 1/1: thebrand.craftsportswear.com] [+] WhatRuns API detected: IIS 8.5 (Web Server)
+[Domain 1/1: thebrand.craftsportswear.com] [+] WhatRuns API detected: ASP.NET 4.0.30319 (Programming Language)
+[Domain 1/1: thebrand.craftsportswear.com] [+] WhatRuns API detected: Windows Server (Operating System)
+[Domain 1/1: thebrand.craftsportswear.com] [+] WhatRuns API detected: Incapsula (CDN)
+[Domain 1/1: thebrand.craftsportswear.com] [+] WhatRuns API detected: Google Tag Manager (Tag Managers)
+[Domain 1/1: thebrand.craftsportswear.com] [+] WhatRuns API found 8 technologies (2 with version info)
+[Domain 1/1: thebrand.craftsportswear.com] [*] Detecting web technologies on https://craftsportswear.com
+[Domain 1/1: thebrand.craftsportswear.com] [+] Detected from headers: Vercel Unknown
+[Domain 1/1: thebrand.craftsportswear.com] [+] Detected technology: Next.js Unknown
+[Domain 1/1: thebrand.craftsportswear.com] [+] Found 2 technologies on https://craftsportswear.com:
+[Domain 1/1: thebrand.craftsportswear.com]     - Vercel Unknown (Web Server)
+[Domain 1/1: thebrand.craftsportswear.com]     - Next.js Unknown (Web Framework)
+[Domain 1/1: thebrand.craftsportswear.com] [*] Detecting web technologies on http://craftsportswear.com
+[Domain 1/1: thebrand.craftsportswear.com] [+] Detected from headers: Vercel Unknown
+[Domain 1/1: thebrand.craftsportswear.com] [+] Detected technology: Next.js Unknown
+[Domain 1/1: thebrand.craftsportswear.com] [+] Found 2 technologies on http://craftsportswear.com:
+[Domain 1/1: thebrand.craftsportswear.com]     - Vercel Unknown (Web Server)
+[Domain 1/1: thebrand.craftsportswear.com]     - Next.js Unknown (Web Framework)
+[Domain 1/1: thebrand.craftsportswear.com] [*] Checking vulnerabilities for IIS 8.5...
+[Domain 1/1: thebrand.craftsportswear.com] [*] Searching vulnerabilities by keywords: iis 8.5
+[Domain 1/1: thebrand.craftsportswear.com] [+] Found 100 potential vulnerabilities to analyze
+[Domain 1/1: thebrand.craftsportswear.com] [*] No results from keyword search, trying CPE-based search...
+[Domain 1/1: thebrand.craftsportswear.com] [*] No known vulnerabilities found for IIS 8.5
+[Domain 1/1: thebrand.craftsportswear.com] [*] Checking vulnerabilities for ASP.NET 4.0.30319...
+[Domain 1/1: thebrand.craftsportswear.com] [*] Searching vulnerabilities by keywords: asp.net 4.0.30319
+[Domain 1/1: thebrand.craftsportswear.com] [+] Found 100 potential vulnerabilities to analyze
+[Domain 1/1: thebrand.craftsportswear.com] [+] Found vulnerability: CVE-2003-0768 - Medium (CVSS: 6.8)
+[Domain 1/1: thebrand.craftsportswear.com] [+] Found vulnerability: CVE-2004-0847 - CRITICAL (CVSS: 9.8)
+[Domain 1/1: thebrand.craftsportswear.com] [+] Found vulnerability: CVE-2005-0452 - Medium (CVSS: 4.3)
+[Domain 1/1: thebrand.craftsportswear.com] [+] Found vulnerability: CVE-2005-1664 - Medium (CVSS: 6.4)
+[Domain 1/1: thebrand.craftsportswear.com] [+] Found vulnerability: CVE-2005-1665 - Medium (CVSS: 5.0)
+[Domain 1/1: thebrand.craftsportswear.com] [+] Found vulnerability: CVE-2005-2224 - Medium (CVSS: 5.0)
+[Domain 1/1: thebrand.craftsportswear.com] [+] Found vulnerability: CVE-2006-1364 - HIGH (CVSS: 7.5)
+[Domain 1/1: thebrand.craftsportswear.com] [+] Found vulnerability: CVE-2007-4433 - Medium (CVSS: 4.3)
+[Domain 1/1: thebrand.craftsportswear.com] [+] Found vulnerability: CVE-2008-0333 - Medium (CVSS: 5.0)
+[Domain 1/1: thebrand.craftsportswear.com] [+] Found vulnerability: CVE-2009-4665 - Medium (CVSS: 5.0)
+[Domain 1/1: thebrand.craftsportswear.com] [+] Found vulnerability: CVE-2010-2084 - Medium (CVSS: 4.3)
+[Domain 1/1: thebrand.craftsportswear.com] [+] Found vulnerability: CVE-2010-2088 - Medium (CVSS: 4.3)
+[Domain 1/1: thebrand.craftsportswear.com] [+] Found vulnerability: CVE-2013-5042 - Medium (CVSS: 4.3)
+[Domain 1/1: thebrand.craftsportswear.com] [+] Found vulnerability: CVE-2014-4958 - Medium (CVSS: 4.3)
+[Domain 1/1: thebrand.craftsportswear.com] [+] Found vulnerability: CVE-2014-4075 - Medium (CVSS: 4.3)
+[Domain 1/1: thebrand.craftsportswear.com] [+] Found vulnerability: CVE-2014-2217 - High (CVSS: 7.5)
+[Domain 1/1: thebrand.craftsportswear.com] [+] Found vulnerability: CVE-2017-0247 - HIGH (CVSS: 7.5)
+[Domain 1/1: thebrand.craftsportswear.com] [+] Found vulnerability: CVE-2017-0249 - HIGH (CVSS: 7.3)
+[Domain 1/1: thebrand.craftsportswear.com] [+] Found vulnerability: CVE-2017-0256 - MEDIUM (CVSS: 5.3)
+[Domain 1/1: thebrand.craftsportswear.com] [+] Found vulnerability: CVE-2017-9248 - CRITICAL (CVSS: 9.8)
+[Domain 1/1: thebrand.craftsportswear.com] [+] Found vulnerability: CVE-2017-11317 - CRITICAL (CVSS: 9.8)
+[Domain 1/1: thebrand.craftsportswear.com] [+] Found vulnerability: CVE-2017-11357 - CRITICAL (CVSS: 9.8)
+[Domain 1/1: thebrand.craftsportswear.com] [+] Found vulnerability: CVE-2017-11879 - HIGH (CVSS: 8.8)
+[Domain 1/1: thebrand.craftsportswear.com] [+] Found vulnerability: CVE-2017-8700 - HIGH (CVSS: 7.5)
+[Domain 1/1: thebrand.craftsportswear.com] [+] Found vulnerability: CVE-2018-0784 - HIGH (CVSS: 8.8)
+[Domain 1/1: thebrand.craftsportswear.com] [+] Found vulnerability: CVE-2018-0785 - MEDIUM (CVSS: 6.5)
+[Domain 1/1: thebrand.craftsportswear.com] [+] Found vulnerability: CVE-2018-0787 - HIGH (CVSS: 8.8)
+[Domain 1/1: thebrand.craftsportswear.com] [+] Found vulnerability: CVE-2018-0808 - HIGH (CVSS: 7.5)
+[Domain 1/1: thebrand.craftsportswear.com] [+] Found vulnerability: CVE-2018-8171 - HIGH (CVSS: 7.5)
+[Domain 1/1: thebrand.craftsportswear.com] [+] Found vulnerability: CVE-2018-8356 - MEDIUM (CVSS: 5.5)
+[Domain 1/1: thebrand.craftsportswear.com] [+] Found vulnerability: CVE-2018-17060 - MEDIUM (CVSS: 5.3)
+[Domain 1/1: thebrand.craftsportswear.com] [+] Found vulnerability: CVE-2019-0548 - HIGH (CVSS: 7.5)
+[Domain 1/1: thebrand.craftsportswear.com] [+] Found vulnerability: CVE-2019-0564 - HIGH (CVSS: 7.5)
+[Domain 1/1: thebrand.craftsportswear.com] [+] Found vulnerability: CVE-2019-0815 - HIGH (CVSS: 7.5)
+[Domain 1/1: thebrand.craftsportswear.com] [+] Found vulnerability: CVE-2019-0982 - HIGH (CVSS: 7.5)
+[Domain 1/1: thebrand.craftsportswear.com] [+] Found vulnerability: CVE-2019-1075 - MEDIUM (CVSS: 6.1)
+[Domain 1/1: thebrand.craftsportswear.com] [+] Found vulnerability: CVE-2019-1302 - HIGH (CVSS: 8.8)
+[Domain 1/1: thebrand.craftsportswear.com] [+] Found vulnerability: CVE-2019-19790 - CRITICAL (CVSS: 9.8)
+[Domain 1/1: thebrand.craftsportswear.com] [+] Found vulnerability: CVE-2020-0602 - HIGH (CVSS: 7.5)
+[Domain 1/1: thebrand.craftsportswear.com] [+] Found vulnerability: CVE-2020-0603 - HIGH (CVSS: 8.8)
+[Domain 1/1: thebrand.craftsportswear.com] [+] Found 40 vulnerabilities for ASP.NET 4.0.30319
+[Domain 1/1: thebrand.craftsportswear.com] [+] Completed subdomain 1/2: craftsportswear.com
+[Domain 1/1: thebrand.craftsportswear.com] [+] Results saved to /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/foundData/web_technologies.json
+[Domain 1/1: thebrand.craftsportswear.com] [*] Processing subdomain 2/2: thebrand.craftsportswear.com
+[Domain 1/1: thebrand.craftsportswear.com] [*] Querying WhatRuns API for thebrand.craftsportswear.com...
+[Domain 1/1: thebrand.craftsportswear.com] [*] Sending request to WhatRuns API...
+[Domain 1/1: thebrand.craftsportswear.com] [*] Received response, processing data...
+[Domain 1/1: thebrand.craftsportswear.com] [!] No 'apps' found in WhatRuns API response
+[Domain 1/1: thebrand.craftsportswear.com] [+] Completed subdomain 2/2: thebrand.craftsportswear.com
+[Domain 1/1: thebrand.craftsportswear.com] [+] Results saved to /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/foundData/web_technologies.json
+[Domain 1/1: thebrand.craftsportswear.com] 
+[Domain 1/1: thebrand.craftsportswear.com] [+] Scan complete! Processed 2 subdomains
+[Domain 1/1: thebrand.craftsportswear.com] [+] Final results saved to /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/foundData/web_technologies.json
+
+All domains processed. Scan completed.

@@ -1,0 +1,12 @@
+Starting portscan scan...
+[Domain 1/1: nwg.se] [*] Reading domains from /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/uploads/temp_domain_1.txt
+[Domain 1/1: nwg.se] [+] Found 1 unique domains
+[Domain 1/1: nwg.se] [*] Checking which domains are reachable...
+[Domain 1/1: nwg.se] [*] Testing domain 1/1: nwg.se - Reachable ✓
+[Domain 1/1: nwg.se] [+] 1 domains are reachable
+[Domain 1/1: nwg.se] [+] 0 domains are unreachable
+[Domain 1/1: nwg.se] 
+[Domain 1/1: nwg.se] [!] Starting port scan for 1 reachable domains
+[Domain 1/1: nwg.se] 
+[Domain 1/1: nwg.se] [+] Scanning domain 1/1: nwg.se
+[Domain 1/1: nwg.se] [+] Performing nmap scan on nwg.se...

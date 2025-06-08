@@ -1,0 +1,1229 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Scan Analysis - {{ scan_folder }}</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #f8f9fa;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .page-header {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .back-button {
+            background: #6c757d;
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 5px;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+        }
+        .back-button:hover {
+            background: #5a6268;
+            color: white;
+        }
+        .nav-tabs {
+            border-bottom: 2px solid #dee2e6;
+            margin-bottom: 20px;
+        }
+        .nav-tabs .nav-link {
+            border: none;
+            color: #495057;
+            padding: 10px 20px;
+            margin-right: 5px;
+            border-radius: 5px 5px 0 0;
+            font-weight: 500;
+        }
+        .nav-tabs .nav-link:hover {
+            border: none;
+            color: #0d6efd;
+        }
+        .nav-tabs .nav-link.active {
+            color: #0d6efd;
+            background: none;
+            border-bottom: 3px solid #0d6efd;
+        }
+        .tab-content {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .data-table {
+            width: 100%;
+            margin-bottom: 0;
+        }
+        .data-table th {
+            background: #f8f9fa;
+            font-weight: 600;
+            color: #495057;
+            border-bottom: 2px solid #dee2e6;
+        }
+        .data-table td {
+            vertical-align: middle;
+            color: #212529;
+        }
+        .status-badge {
+            padding: 5px 10px;
+            border-radius: 15px;
+            font-size: 0.85em;
+            font-weight: 500;
+        }
+        .status-active {
+            background: #d4edda;
+            color: #155724;
+        }
+        .status-inactive {
+            background: #f8d7da;
+            color: #721c24;
+        }
+        .status-valid {
+            background: #d4edda;
+            color: #155724;
+        }
+        .status-expired {
+            background: #f8d7da;
+            color: #721c24;
+        }
+        .status-warning {
+            background: #fff3cd;
+            color: #856404;
+        }
+        .tech-category {
+            background: #e9ecef;
+            padding: 3px 8px;
+            border-radius: 12px;
+            font-size: 0.85em;
+            color: #495057;
+        }
+        .domain-info-card {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+        .domain-info-label {
+            font-weight: 600;
+            color: #495057;
+            margin-right: 10px;
+        }
+        .domain-info-value {
+            color: #212529;
+        }
+        .loading-spinner {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(255, 255, 255, 0.9);
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            z-index: 1000;
+        }
+        .table-container {
+            max-height: 600px;
+            overflow-y: auto;
+            border-radius: 10px;
+            border: 1px solid #dee2e6;
+        }
+        .table-container::-webkit-scrollbar {
+            width: 8px;
+        }
+        .table-container::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 4px;
+        }
+        .table-container::-webkit-scrollbar-thumb {
+            background: #888;
+            border-radius: 4px;
+        }
+        .table-container::-webkit-scrollbar-thumb:hover {
+            background: #555;
+        }
+        .summary-card {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .summary-card h3 {
+            color: #495057;
+            font-size: 1.2em;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .summary-card .icon {
+            font-size: 1.5em;
+            color: #0d6efd;
+        }
+        .summary-stats {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+        .stat-item {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+            flex: 1;
+            min-width: 200px;
+        }
+        .stat-label {
+            color: #6c757d;
+            font-size: 0.9em;
+            margin-bottom: 5px;
+        }
+        .stat-value {
+            color: #212529;
+            font-size: 1.2em;
+            font-weight: 600;
+        }
+    </style>
+</head>
+<body>
+    <div class="loading-overlay" id="loadingSpinner">
+        <div class="spinner-border text-primary" role="status">
+            <span class="visually-hidden">Loading...</span>
+        </div>
+    </div>
+    <div class="container-fluid mt-4">
+        <div class="page-header d-flex justify-content-between align-items-center mb-4">
+            <h1>Scan Analysis: {{ scan_folder }}</h1>
+            <div>
+                <button class="btn btn-success me-2" onclick="downloadScanFolder()">
+                    <i class="fas fa-download"></i> Download Folder
+                </button>
+                <button class="btn btn-secondary" onclick="history.back()">
+                    <i class="fas fa-arrow-left"></i> Back to Scans
+                </button>
+            </div>
+        </div>
+
+        <ul class="nav nav-tabs" id="scanTabs" role="tablist">
+            <li class="nav-item" role="presentation">
+                <button class="nav-link active" id="subdomains-tab" data-bs-toggle="tab" data-bs-target="#subdomains" type="button" role="tab">
+                    <i class="fas fa-sitemap"></i> Subdomains
+                </button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="technologies-tab" data-bs-toggle="tab" data-bs-target="#technologies" type="button" role="tab">
+                    <i class="fas fa-code"></i> Web Technologies
+                </button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="certificates-tab" data-bs-toggle="tab" data-bs-target="#certificates" type="button" role="tab">
+                    <i class="fas fa-shield-alt"></i> SSL Certificates
+                </button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="cve-tab" data-bs-toggle="tab" data-bs-target="#cve" type="button" role="tab">
+                    <i class="fas fa-bug"></i> CVE Scan
+                </button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="domain-tab" data-bs-toggle="tab" data-bs-target="#domain" type="button" role="tab">
+                    <i class="fas fa-globe"></i> Domain Info
+                </button>
+            </li>
+        </ul>
+
+        <div class="tab-content" id="scanTabContent">
+            <div class="tab-pane fade show active" id="subdomains" role="tabpanel">
+                <div class="row mb-4">
+                    <div class="col-md-4">
+                        <div class="card bg-primary text-white">
+                            <div class="card-body">
+                                <h5 class="card-title">Total Subdomains</h5>
+                                <h2 class="mb-0" id="totalSubdomains">0</h2>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card bg-success text-white">
+                            <div class="card-body">
+                                <h5 class="card-title">Active Subdomains</h5>
+                                <h2 class="mb-0" id="activeSubdomains">0</h2>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card bg-warning text-white">
+                            <div class="card-body">
+                                <h5 class="card-title">Inactive Subdomains</h5>
+                                <h2 class="mb-0" id="inactiveSubdomains">0</h2>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-header">
+                        <h5 class="mb-0">Subdomain List</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <input type="text" id="filterSubdomainsInput" class="form-control" placeholder="Filter subdomains...">
+                            </div>
+                            <div class="col-md-6">
+                                <select id="filterSubdomainsStatus" class="form-select">
+                                    <option value="all">All Statuses</option>
+                                    <option value="active">Active</option>
+                                    <option value="inactive">Inactive</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="table-responsive">
+                            <table class="table table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>Subdomain</th>
+                                        <th>Status</th>
+                                        <th>IP Address</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="subdomainsTableBody">
+                                    <!-- Subdomains will be populated here -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="tab-pane fade" id="technologies" role="tabpanel">
+                <div class="row mb-4">
+                    <div class="col-md-4">
+                        <div class="card bg-primary text-white">
+                            <div class="card-body">
+                                <h5 class="card-title">Total Technologies</h5>
+                                <h2 class="mb-0" id="totalTechnologies">0</h2>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card bg-success text-white">
+                            <div class="card-body">
+                                <h5 class="card-title">CMS Systems</h5>
+                                <h2 class="mb-0" id="cmsCount">0</h2>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card bg-info text-white">
+                            <div class="card-body">
+                                <h5 class="card-title">Web Frameworks</h5>
+                                <h2 class="mb-0" id="frameworkCount">0</h2>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Subdomains List and Technologies Table Wrapper -->
+                <div class="d-flex flex-column gap-4">
+                    <!-- Subdomains List -->
+                    <div class="card mb-4">
+                        <div class="card-header">
+                            <h5 class="mb-0">Subdomains</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="row mb-3">
+                                <div class="col-md-6">
+                                    <input type="text" id="filterWebTechSubdomainsInput" class="form-control" placeholder="Filter subdomains...">
+                                </div>
+                                <div class="col-md-6">
+                                    <select id="filterWebTechSubdomainsStatus" class="form-select">
+                                        <option value="all">All Statuses</option>
+                                        <option value="success">Success</option>
+                                        <option value="error">Error</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="table-responsive">
+                                <table class="table table-hover">
+                                    <thead>
+                                        <tr>
+                                            <th>Subdomain</th>
+                                            <th>Status</th>
+                                            <th>Technologies</th>
+                                            <th>Action</th>
+                                            <th>Vulnerabilities</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="webTechSubdomainsTableBody">
+                                        <!-- Subdomains will be populated here -->
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Technologies Table -->
+                    <div class="card" id="technologiesCard" style="display: none; position: relative !important; margin-top: 0 !important;">
+                        <div class="card-header d-flex justify-content-between align-items-center">
+                            <h5 class="mb-0">Technologies for <span id="selectedSubdomain"></span></h5>
+                            <button class="btn btn-sm btn-outline-secondary" onclick="document.getElementById('technologiesCard').style.display = 'none'">
+                                <i class="fas fa-times"></i> Close
+                            </button>
+                        </div>
+                        <div class="card-body">
+                            <div class="row mb-3">
+                                <div class="col-md-6">
+                                    <input type="text" id="filterDetailedTechnologiesInput" class="form-control" placeholder="Filter technologies...">
+                                </div>
+                                <div class="col-md-6">
+                                    <select id="filterDetailedTechnologiesCategory" class="form-select">
+                                        <option value="all">All Categories</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="table-responsive">
+                                <table class="table table-hover">
+                                    <thead>
+                                        <tr>
+                                            <th>Technology</th>
+                                            <th>Category</th>
+                                            <th>Version</th>
+                                            <th>Confidence</th>
+                                            <th>Detection Method</th>
+                                            <th>Vulnerabilities</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="technologiesTableBody">
+                                        <!-- Technologies will be populated here -->
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="tab-pane fade" id="certificates" role="tabpanel">
+                <div class="row mb-4">
+                    <div class="col-md-4">
+                        <div class="card bg-primary text-white">
+                            <div class="card-body">
+                                <h5 class="card-title">Total Certificates</h5>
+                                <h2 class="mb-0" id="totalCertificates">0</h2>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card bg-success text-white">
+                            <div class="card-body">
+                                <h5 class="card-title">Valid Certificates</h5>
+                                <h2 class="mb-0" id="validCertificates">0</h2>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card bg-danger text-white">
+                            <div class="card-body">
+                                <h5 class="card-title">Expired Certificates</h5>
+                                <h2 class="mb-0" id="expiredCertificates">0</h2>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-header">
+                        <h5 class="mb-0">Certificate List</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <input type="text" id="filterCertificatesInput" class="form-control" placeholder="Filter certificates...">
+                            </div>
+                            <div class="col-md-6">
+                                <select id="filterCertificatesStatus" class="form-select">
+                                    <option value="all">All Statuses</option>
+                                    <option value="valid">Valid</option>
+                                    <option value="expired">Expired</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="table-responsive">
+                            <table class="table table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>Domain</th>
+                                        <th>Issuer</th>
+                                        <th>Valid From</th>
+                                        <th>Valid Until</th>
+                                        <th>Status</th>
+                                        <th>Subject</th>
+                                        <th>Days Remaining</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="certificatesTableBody">
+                                    <!-- Certificates will be populated here -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="tab-pane fade" id="cve" role="tabpanel">
+                <div class="summary-card">
+                    <h3><i class="fas fa-bug icon"></i> Vulnerability Summary</h3>
+                    <div class="summary-stats">
+                        <div class="stat-item">
+                            <div class="stat-label">Total Vulnerabilities</div>
+                            <div class="stat-value" id="totalVulnerabilities">-</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-label">High Severity</div>
+                            <div class="stat-value" id="highSeverityCount">-</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-label">Medium Severity</div>
+                            <div class="stat-value" id="mediumSeverityCount">-</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="table-container">
+                    <table class="table data-table">
+                        <thead>
+                            <tr>
+                                <th>CVE ID</th>
+                                <th>Severity</th>
+                                <th>Description</th>
+                                <th>CVSS Score</th>
+                            </tr>
+                        </thead>
+                        <tbody id="cveTableBody"></tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="tab-pane fade" id="domain" role="tabpanel">
+                <div class="summary-card">
+                    <h3><i class="fas fa-globe icon"></i> Domain Information</h3>
+                    <div id="domainInfoContent"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Detailed Technologies Modal -->
+    <div class="modal fade" id="technologiesModal" tabindex="-1" aria-labelledby="technologiesModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-xl modal-dialog-scrollable">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="technologiesModalLabel">Technologies for <span id="selectedSubdomainModal"></span></h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="row mb-3">
+                        <div class="col-md-12 mb-3">
+                            <div class="card bg-danger text-white">
+                                <div class="card-body">
+                                    <h5 class="card-title">Total Vulnerabilities Found</h5>
+                                    <h2 class="mb-0" id="modalTotalVulnerabilities">0</h2>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <input type="text" id="filterDetailedTechnologiesInput" class="form-control" placeholder="Filter technologies...">
+                        </div>
+                        <div class="col-md-6">
+                            <select id="filterDetailedTechnologiesCategory" class="form-select">
+                                <option value="all">All Categories</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th>Technology</th>
+                                    <th>Category</th>
+                                    <th>Version</th>
+                                    <th>Confidence</th>
+                                    <th>Detection Method</th>
+                                    <th>Vulnerabilities</th>
+                                </tr>
+                            </thead>
+                            <tbody id="technologiesTableBodyModal">
+                                <!-- Technologies will be populated here -->
+                            </tbody>
+                        </table>
+                    </div>
+                    <!-- New section for Domain Vulnerabilities - MOVED HERE -->
+                    <div class="card mt-4" id="domainVulnerabilitiesCard">
+                        <div class="card-header">
+                            <h5 class="mb-0" id="domainVulnerabilitiesTitle"></h5>
+                        </div>
+                        <div class="card-body" style="border: 3px solid purple;">
+                            <div id="domainVulnerabilitiesList" style="min-height: 100px; overflow-y: auto;">
+                                <!-- Vulnerabilities will be populated here -->
+                                <p id="noDomainVulnerabilitiesMessage" class="text-center text-muted" style="display: none;">No vulnerabilities found for this domain.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        let allTechnologiesData = {}; // Global variable to store web technologies data
+        let allCveData = {}; // Global variable to store CVE data, mapping domain to vulnerabilities
+        const loadingSpinner = document.getElementById('loadingSpinner');
+
+        document.addEventListener('DOMContentLoaded', function() {
+            loadingSpinner.style.display = 'flex'; // Show spinner when DOM is ready
+            const scanFolder = "{{ scan_folder }}";
+
+            // Hide the domain vulnerabilities card initially
+            document.getElementById('domainVulnerabilitiesCard').style.display = 'none';
+
+            const fetchSubdomains = fetch('/api/scan-data/{{ scan_folder }}/all_subdomains.json')
+                .then(response => response.json())
+                .then(data => {
+                    const tbody = document.getElementById('subdomainsTableBody');
+                    tbody.innerHTML = '';
+                    
+                    if (data && data[0] && data[0].results) {
+                        // updateSummaryStats(data[0].results, 'subdomains'); // Assuming this is for overall subdomains
+                        const subdomainsList = data[0].results; // Store original data for filtering
+                        
+                        // Update summary stats
+                        const totalSubs = subdomainsList.length;
+                        const activeSubs = subdomainsList.filter(sub => sub.ip).length;
+                        document.getElementById('totalSubdomains').textContent = totalSubs;
+                        document.getElementById('activeSubdomains').textContent = activeSubs;
+                        document.getElementById('inactiveSubdomains').textContent = totalSubs - activeSubs;
+
+                        subdomainsList.forEach(subdomain => {
+                            const row = document.createElement('tr');
+                            const domainTd = document.createElement('td');
+                            domainTd.textContent = subdomain.subdomain || '-';
+                            row.appendChild(domainTd);
+
+                            const statusTd = document.createElement('td');
+                            statusTd.innerHTML = `<span class="status-badge status-${subdomain.ip ? 'active' : 'inactive'}">${subdomain.ip ? 'Active' : 'Inactive'}</span>`;
+                            row.appendChild(statusTd);
+
+                            const ipTd = document.createElement('td');
+                            ipTd.textContent = subdomain.ip || '-';
+                            row.appendChild(ipTd);
+
+                            tbody.appendChild(row);
+                        });
+
+                        // Filtering logic for Subdomains tab
+                        const filterSubdomainsInput = document.getElementById('filterSubdomainsInput');
+                        const filterSubdomainsStatus = document.getElementById('filterSubdomainsStatus');
+
+                        function applySubdomainsFilter() {
+                            const textFilter = filterSubdomainsInput.value.toLowerCase();
+                            const statusFilter = filterSubdomainsStatus.value;
+                            const rows = tbody.getElementsByTagName('tr');
+
+                            for (let i = 0; i < rows.length; i++) {
+                                const row = rows[i];
+                                const subdomainText = row.cells[0].textContent.toLowerCase();
+                                const statusBadge = row.cells[1].querySelector('.status-badge');
+                                const currentStatus = statusBadge ? statusBadge.textContent.toLowerCase() : '';
+
+                                const matchesText = subdomainText.includes(textFilter);
+                                const matchesStatus = (statusFilter === 'all' || currentStatus === statusFilter);
+
+                                if (matchesText && matchesStatus) {
+                                    row.style.display = '';
+                                } else {
+                                    row.style.display = 'none';
+                                }
+                            }
+                        }
+
+                        filterSubdomainsInput.addEventListener('keyup', applySubdomainsFilter);
+                        filterSubdomainsStatus.addEventListener('change', applySubdomainsFilter);
+
+                    } else {
+                        tbody.innerHTML = `<tr><td colspan="3" class="text-center">No subdomains found.</td></tr>`;
+                    }
+                })
+                .catch(error => {
+                    console.error('Error loading subdomains:', error);
+                    document.getElementById('subdomainsTableBody').innerHTML = `<tr><td colspan="3" class="text-center text-danger">Error loading subdomain data.</td></tr>`;
+                });
+
+            const fetchWebTechnologies = fetch('/api/scan-data/{{ scan_folder }}/web_technologies.json')
+                .then(response => response.json())
+                .then(data => {
+                    console.log('Received web technologies data:', data); // Debug log
+                    allTechnologiesData = data; // Store data globally
+                    const webTechSubdomainsTbody = document.getElementById('webTechSubdomainsTableBody');
+                    webTechSubdomainsTbody.innerHTML = '';
+                    
+                    let totalTechs = 0;
+                    let totalCms = 0;
+                    let totalFrameworks = 0;
+
+                    // Populate allCveData from web_technologies.json
+                    Object.entries(data).forEach(([domain, domainData]) => {
+                        allCveData[domain] = []; // Initialize for each domain
+                        if (domainData.status === 'success' && Array.isArray(domainData.technologies)) {
+                            domainData.technologies.forEach(tech => {
+                                if (tech.vulnerabilities && Array.isArray(tech.vulnerabilities)) {
+                                    allCveData[domain] = allCveData[domain].concat(tech.vulnerabilities);
+                                }
+                            });
+                        }
+                    });
+                    console.log("allCveData populated from web_technologies.json:", allCveData); // Debug log
+
+                    // Populate subdomains table
+                    Object.entries(data).forEach(([domain, domainData]) => {
+                        console.log('Processing domain for technologies:', domain, domainData); // Debug log
+                        const row = document.createElement('tr');
+                        
+                        let techCount = 0;
+                        let status = 'error';
+                        let statusClass = 'danger';
+                        
+                        if (domainData.status === 'success' && Array.isArray(domainData.technologies)) {
+                            techCount = domainData.technologies.length;
+                            status = 'success';
+                            statusClass = 'success';
+                            
+                            // Update totals
+                            totalTechs += techCount;
+                            totalCms += domainData.technologies.filter(tech => 
+                                tech.categories && 
+                                tech.categories.some(cat => cat.includes('CMS'))
+                            ).length;
+                            totalFrameworks += domainData.technologies.filter(tech => 
+                                tech.categories && 
+                                tech.categories.some(cat => 
+                                    cat.includes('Framework') || 
+                                    cat.includes('JavaScript Framework')
+                                )
+                            ).length;
+                        }
+
+                        // Calculate total vulnerabilities for the subdomain
+                        let totalSubdomainVulnerabilities = 0;
+                        if (allCveData[domain]) { // Use allCveData for accurate count
+                            totalSubdomainVulnerabilities = allCveData[domain].length;
+                        }
+
+                        // Create and append <td> elements
+                        const domainTd = document.createElement('td');
+                        domainTd.textContent = domain;
+                        row.appendChild(domainTd);
+
+                        const statusTd = document.createElement('td');
+                        statusTd.innerHTML = `<span class="badge bg-${statusClass}">${status}</span>`;
+                        row.appendChild(statusTd);
+
+                        const techCountTd = document.createElement('td');
+                        techCountTd.textContent = techCount;
+                        row.appendChild(techCountTd);
+
+                        const actionTd = document.createElement('td');
+                        if (techCount > 0) {
+                            actionTd.innerHTML = `<button class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#technologiesModal" onclick="showTechnologies('${domain}')"><i class="fas fa-eye"></i> View</button>`;
+                        } else {
+                            actionTd.textContent = '-';
+                        }
+                        row.appendChild(actionTd);
+
+                        // New TD for overall subdomain vulnerabilities
+                        const overallVulnerabilitiesTd = document.createElement('td');
+                        if (totalSubdomainVulnerabilities > 0) {
+                            overallVulnerabilitiesTd.innerHTML = `<span class="badge bg-danger">Vulnerable (${totalSubdomainVulnerabilities})</span>`;
+                        } else if (domainData.status === 'success') {
+                            overallVulnerabilitiesTd.innerHTML = `<span class="badge bg-success">Clean</span>`;
+                        } else {
+                            overallVulnerabilitiesTd.textContent = '-';
+                        }
+                        row.appendChild(overallVulnerabilitiesTd);
+                        
+                        webTechSubdomainsTbody.appendChild(row); // Corrected ID
+                    });
+
+                    // Update summary stats
+                    document.getElementById('totalTechnologies').textContent = totalTechs;
+                    document.getElementById('cmsCount').textContent = totalCms;
+                    document.getElementById('frameworkCount').textContent = totalFrameworks;
+
+                    // Debug log: Check children count after population
+                    console.log('webTechSubdomainsTableBody children count after population:', webTechSubdomainsTbody.children.length);
+
+                    // If no data was found, show a message
+                    if (webTechSubdomainsTbody.children.length === 0) {
+                        webTechSubdomainsTbody.innerHTML = `
+                            <tr>
+                                <td colspan="5" class="text-center">No subdomain data available</td>
+                            </tr>
+                        `;
+                    }
+
+                    // Filtering logic for Web Technologies Subdomains table
+                    const filterWebTechSubdomainsInput = document.getElementById('filterWebTechSubdomainsInput');
+                    const filterWebTechSubdomainsStatus = document.getElementById('filterWebTechSubdomainsStatus');
+
+                    function applyWebTechSubdomainsFilter() {
+                        const textFilter = filterWebTechSubdomainsInput.value.toLowerCase();
+                        const statusFilter = filterWebTechSubdomainsStatus.value;
+                        const rows = webTechSubdomainsTbody.getElementsByTagName('tr');
+
+                        for (let i = 0; i < rows.length; i++) {
+                            const row = rows[i];
+                            const subdomainText = row.cells[0].textContent.toLowerCase();
+                            const statusBadge = row.cells[1].querySelector('.badge');
+                            const currentStatus = statusBadge ? statusBadge.textContent.toLowerCase() : '';
+                            const vulnerabilitiesText = row.cells[4].textContent.toLowerCase(); // Get text from new Vulnerabilities column
+
+                            const matchesText = subdomainText.includes(textFilter) || vulnerabilitiesText.includes(textFilter);
+                            const matchesStatus = (statusFilter === 'all' || currentStatus === statusFilter);
+
+                            if (matchesText && matchesStatus) {
+                                row.style.display = '';
+                            } else {
+                                row.style.display = 'none';
+                            }
+                        }
+                    }
+
+                    filterWebTechSubdomainsInput.addEventListener('keyup', applyWebTechSubdomainsFilter);
+                    filterWebTechSubdomainsStatus.addEventListener('change', applyWebTechSubdomainsFilter);
+                })
+                .catch(error => {
+                    console.error('Error loading web technologies:', error);
+                    const webTechSubdomainsTbody = document.getElementById('webTechSubdomainsTableBody');
+                    webTechSubdomainsTbody.innerHTML = `
+                        <tr>
+                            <td colspan="5" class="text-center text-danger">Error loading technology data</td>
+                        </tr>
+                    `;
+                });
+
+            const fetchCertificates = fetch('/api/scan-data/{{ scan_folder }}/certificates.json')
+                .then(response => response.json())
+                .then(data => {
+                    const tbody = document.getElementById('certificatesTableBody');
+                    tbody.innerHTML = '';
+                    
+                    if (data && Array.isArray(data)) {
+                        const validCerts = data.filter(cert => cert.status === 'valid' && !cert.expired).length;
+                        const expiredCerts = data.filter(cert => cert.status === 'valid' && cert.expired).length;
+                        document.getElementById('totalCertificates').textContent = data.length;
+                        document.getElementById('validCertificates').textContent = validCerts;
+                        document.getElementById('expiredCertificates').textContent = expiredCerts;
+
+                        data.forEach(cert => {
+                            if (cert.status === 'valid') {
+                                const row = document.createElement('tr');
+                                const domainTd = document.createElement('td');
+                                domainTd.textContent = cert.domain || '-';
+                                row.appendChild(domainTd);
+
+                                const issuerTd = document.createElement('td');
+                                issuerTd.textContent = cert.issuer || '-';
+                                row.appendChild(issuerTd);
+
+                                const validFromTd = document.createElement('td');
+                                validFromTd.textContent = cert.valid_from ? formatDate(cert.valid_from) : '-';
+                                row.appendChild(validFromTd);
+
+                                const validUntilTd = document.createElement('td');
+                                validUntilTd.textContent = cert.valid_until ? formatDate(cert.valid_until) : '-';
+                                row.appendChild(validUntilTd);
+
+                                const statusTd = document.createElement('td');
+                                statusTd.innerHTML = `<span class="status-badge status-${cert.expired ? 'expired' : 'valid'}">${cert.expired ? 'Expired' : 'Valid'}</span>`;
+                                row.appendChild(statusTd);
+
+                                const subjectTd = document.createElement('td');
+                                subjectTd.textContent = cert.subject || '-';
+                                row.appendChild(subjectTd);
+
+                                // Calculate and display Days Remaining
+                                const daysRemainingTd = document.createElement('td');
+                                if (cert.valid_until) {
+                                    const validUntilDate = new Date(cert.valid_until);
+                                    const today = new Date();
+                                    const diffTime = validUntilDate.getTime() - today.getTime();
+                                    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+                                    if (diffDays >= 0) {
+                                        daysRemainingTd.textContent = diffDays;
+                                    } else {
+                                        daysRemainingTd.textContent = 'Expired';
+                                    }
+                                } else {
+                                    daysRemainingTd.textContent = '-';
+                                }
+                                row.appendChild(daysRemainingTd);
+
+                                tbody.appendChild(row);
+                            }
+                        });
+
+                        // Filtering logic for Certificates table
+                        const filterCertificatesInput = document.getElementById('filterCertificatesInput');
+                        const filterCertificatesStatus = document.getElementById('filterCertificatesStatus');
+
+                        function applyCertificatesFilter() {
+                            const textFilter = filterCertificatesInput.value.toLowerCase();
+                            const statusFilter = filterCertificatesStatus.value;
+                            const rows = tbody.getElementsByTagName('tr');
+
+                            for (let i = 0; i < rows.length; i++) {
+                                const row = rows[i];
+                                const domainText = row.cells[0].textContent.toLowerCase();
+                                const issuerText = row.cells[1].textContent.toLowerCase();
+                                const subjectText = row.cells[5].textContent.toLowerCase();
+                                const daysRemainingText = row.cells[6].textContent.toLowerCase(); // Get text from new Days Remaining column
+                                const statusBadge = row.cells[4].querySelector('.status-badge');
+                                const currentStatus = statusBadge ? statusBadge.textContent.toLowerCase() : '';
+
+                                const matchesText = domainText.includes(textFilter) || issuerText.includes(textFilter) || subjectText.includes(textFilter) || daysRemainingText.includes(textFilter);
+                                const matchesStatus = (statusFilter === 'all' || currentStatus === statusFilter);
+
+                                if (matchesText && matchesStatus) {
+                                    row.style.display = '';
+                                } else {
+                                    row.style.display = 'none';
+                                }
+                            }
+                        }
+
+                        filterCertificatesInput.addEventListener('keyup', applyCertificatesFilter);
+                        filterCertificatesStatus.addEventListener('change', applyCertificatesFilter);
+
+                    } else {
+                        tbody.innerHTML = `<tr><td colspan="7" class="text-center">No valid certificates found.</td></tr>`; // Adjusted colspan
+                    }
+                })
+                .catch(error => {
+                    console.error('Error loading certificates:', error);
+                    document.getElementById('certificatesTableBody').innerHTML = `<tr><td colspan="7" class="text-center text-danger">Error loading certificate data.</td></tr>`;
+                });
+
+            const fetchDomainInfo = fetch('/api/scan-data/{{ scan_folder }}/domainLease.json')
+                .then(response => response.json())
+                .then(data => {
+                    const container = document.getElementById('domainInfoContent');
+                    if (data && Array.isArray(data) && data[0]) {
+                        const domain = data[0];
+                        container.innerHTML = `
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="stat-item">
+                                        <div class="stat-label">Domain</div>
+                                        <div class="stat-value">${domain.domain || '-'}</div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="stat-item">
+                                        <div class="stat-label">Registrar</div>
+                                        <div class="stat-value">${domain.registrar || '-'}</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row mt-3">
+                                <div class="col-md-6">
+                                    <div class="stat-item">
+                                        <div class="stat-label">Registration Date</div>
+                                        <div class="stat-value">${domain.creation_date ? formatDate(domain.creation_date) : '-'}</div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="stat-item">
+                                        <div class="stat-label">Last Updated</div>
+                                        <div class="stat-value">${domain.last_updated ? formatDate(domain.last_updated) : '-'}</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row mt-3">
+                                <div class="col-md-6">
+                                    <div class="stat-item">
+                                        <div class="stat-label">Days Remaining</div>
+                                        <div class="stat-value">${domain.days_remaining !== undefined && domain.days_remaining !== null ? domain.days_remaining : '-'}</div>
+                                    </div>
+                                </div>
+                            </div>
+                        `;
+                    } else {
+                        container.innerHTML = `<p class="text-center">No domain information available.</p>`;
+                    }
+                })
+                .catch(error => {
+                    console.error('Error loading domain info:', error);
+                    document.getElementById('domainInfoContent').innerHTML = `<p class="text-center text-danger">Error loading domain information.</p>`;
+                });
+
+            const fetchCveScanResults = fetch('/api/scan-data/{{ scan_folder }}/cve_scan_results.json')
+                .then(response => response.json())
+                .then(data => {
+                    console.log('Received CVE scan results data:', data); // Debug log
+                    const cveTableBody = document.getElementById('cveTableBody');
+                    cveTableBody.innerHTML = '';
+
+                    let totalVulnerabilities = 0;
+                    let highSeverityCount = 0;
+                    let mediumSeverityCount = 0;
+
+                    if (data && Array.isArray(data)) {
+                        data.forEach(domainData => {
+                            if (domainData.vulnerabilities && Array.isArray(domainData.vulnerabilities)) {
+                                domainData.vulnerabilities.forEach(vuln => {
+                                    totalVulnerabilities++;
+                                    const severity = vuln.severity ? vuln.severity.toLowerCase() : 'unknown';
+                                    if (severity === 'critical' || severity === 'high') {
+                                        highSeverityCount++;
+                                    } else if (severity === 'medium') {
+                                        mediumSeverityCount++;
+                                    }
+
+                                    const row = document.createElement('tr');
+
+                                    const cveIdTd = document.createElement('td');
+                                    cveIdTd.textContent = vuln.id || '-';
+                                    row.appendChild(cveIdTd);
+
+                                    const severityTd = document.createElement('td');
+                                    let severityBadgeClass = 'bg-secondary';
+                                    if (severity === 'critical' || severity === 'high') {
+                                        severityBadgeClass = 'bg-danger';
+                                    } else if (severity === 'medium') {
+                                        severityBadgeClass = 'bg-warning';
+                                    } else if (severity === 'low') {
+                                        severityBadgeClass = 'bg-info';
+                                    }
+                                    severityTd.innerHTML = `<span class="badge ${severityBadgeClass}">${vuln.severity || 'Unknown'}</span>`;
+                                    row.appendChild(severityTd);
+
+                                    const descriptionTd = document.createElement('td');
+                                    descriptionTd.textContent = vuln.details || '-'; // Corrected to use 'details' for CVE table
+                                    row.appendChild(descriptionTd);
+
+                                    const cvssScoreTd = document.createElement('td');
+                                    cvssScoreTd.textContent = vuln.cvss !== null ? vuln.cvss : '-'; // Corrected to use 'cvss' for CVE table
+                                    row.appendChild(cvssScoreTd);
+
+                                    cveTableBody.appendChild(row);
+                                });
+                            }
+                        });
+                    }
+
+                    document.getElementById('totalVulnerabilities').textContent = totalVulnerabilities;
+                    document.getElementById('highSeverityCount').textContent = highSeverityCount;
+                    document.getElementById('mediumSeverityCount').textContent = mediumSeverityCount;
+
+                    if (cveTableBody.children.length === 0) {
+                        cveTableBody.innerHTML = `<tr><td colspan="4" class="text-center">No CVE scan results found.</td></tr>`;
+                    }
+                })
+                .catch(error => {
+                    console.error('Error loading CVE scan results:', error);
+                    document.getElementById('cveTableBody').innerHTML = `<tr><td colspan="4" class="text-center text-danger">Error loading CVE scan results.</td></tr>`;
+                });
+
+            Promise.all([fetchSubdomains, fetchWebTechnologies, fetchCertificates, fetchDomainInfo, fetchCveScanResults])
+                .finally(() => {
+                    loadingSpinner.style.display = 'none'; // Hide spinner after all fetches
+                    console.log("Final allCveData after all fetches:", allCveData); // Added debug log
+                });
+        });
+
+        function formatDate(dateString) {
+            if (!dateString) return '-';
+            const options = { year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit' };
+            try {
+                return new Date(dateString).toLocaleDateString(undefined, options);
+            } catch (e) {
+                console.error("Error parsing date:", dateString, e);
+                return dateString; // Return original string if parsing fails
+            }
+        }
+
+        // Function to show technologies for a specific subdomain
+        window.showTechnologies = function(domain) {
+            const domainData = allTechnologiesData[domain]; // Get data from global variable
+            console.log('Showing technologies for:', domain, domainData); // Debug log
+            const tbody = document.getElementById('technologiesTableBodyModal'); // Target modal tbody
+            tbody.innerHTML = '';
+            
+            document.getElementById('selectedSubdomainModal').textContent = domain; // Update modal title
+
+            if (domainData && domainData.status === 'success' && Array.isArray(domainData.technologies)) {
+                // Calculate total vulnerabilities for the selected subdomain in the modal
+                let modalVulnerabilitiesCount = 0;
+                const vulnerabilitiesForDomain = allCveData[domain];
+                if (vulnerabilitiesForDomain) {
+                    modalVulnerabilitiesCount = vulnerabilitiesForDomain.length;
+                }
+                document.getElementById('modalTotalVulnerabilities').textContent = modalVulnerabilitiesCount;
+
+                const uniqueCategories = new Set();
+                domainData.technologies.forEach(tech => {
+                    if (tech.categories) {
+                        tech.categories.forEach(cat => uniqueCategories.add(cat));
+                    }
+                });
+
+                const categoryFilterSelect = document.getElementById('filterDetailedTechnologiesCategory');
+                categoryFilterSelect.innerHTML = '<option value="all">All Categories</option>';
+                uniqueCategories.forEach(category => {
+                    const option = document.createElement('option');
+                    option.value = category.toLowerCase();
+                    option.textContent = category;
+                    categoryFilterSelect.appendChild(option);
+                });
+
+                // Function to apply filters for detailed technologies
+                function applyDetailedTechnologiesFilter() {
+                    const textFilter = document.getElementById('filterDetailedTechnologiesInput').value.toLowerCase();
+                    const categoryFilter = categoryFilterSelect.value;
+                    
+                    const rows = tbody.getElementsByTagName('tr');
+                    for (let i = 0; i < rows.length; i++) {
+                        const row = rows[i];
+                        const nameText = row.cells[0].textContent.toLowerCase();
+                        const categoryText = row.cells[1].textContent.toLowerCase();
+
+                        const matchesText = nameText.includes(textFilter) || categoryText.includes(textFilter);
+                        const matchesCategory = (categoryFilter === 'all' || categoryText.includes(categoryFilter));
+
+                        if (matchesText && matchesCategory) {
+                            row.style.display = '';
+                        } else {
+                            row.style.display = 'none';
+                        }
+                    }
+                }
+
+                document.getElementById('filterDetailedTechnologiesInput').addEventListener('keyup', applyDetailedTechnologiesFilter);
+                categoryFilterSelect.addEventListener('change', applyDetailedTechnologiesFilter);
+
+                // Initial population and filter application
+                tbody.innerHTML = ''; // Clear previous data
+                domainData.technologies.forEach(tech => {
+                    const row = document.createElement('tr');
+                    const nameTd = document.createElement('td');
+                    nameTd.textContent = tech.name || '-';
+                    row.appendChild(nameTd);
+
+                    const categoryTd = document.createElement('td');
+                    categoryTd.innerHTML = `<span class="tech-category">${tech.categories ? tech.categories.join(', ') : '-'}</span>`;
+                    row.appendChild(categoryTd);
+
+                    const versionTd = document.createElement('td');
+                    versionTd.textContent = tech.version || '-';
+                    row.appendChild(versionTd);
+
+                    const confidenceTd = document.createElement('td');
+                    confidenceTd.textContent = tech.confidence ? tech.confidence + '%' : '-';
+                    row.appendChild(confidenceTd);
+
+                    const detectionMethodTd = document.createElement('td');
+                    detectionMethodTd.textContent = tech.detection_method || '-';
+                    row.appendChild(detectionMethodTd);
+
+                    const vulnerabilitiesTd = document.createElement('td');
+                    vulnerabilitiesTd.textContent = '-'; 
+                    row.appendChild(vulnerabilitiesTd);
+
+                    tbody.appendChild(row);
+                });
+                applyDetailedTechnologiesFilter(); // Apply initial filter after population
+
+            } else {
+                tbody.innerHTML = `
+                    <tr>
+                        <td colspan="6" class="text-center">No technology data available</td>
+                    </tr>
+                `;
+            }
+
+            // Populate domain vulnerabilities section in modal
+            const domainVulnerabilitiesCard = document.getElementById('domainVulnerabilitiesCard');
+            const domainVulnerabilitiesList = document.getElementById('domainVulnerabilitiesList');
+            const noDomainVulnerabilitiesMessage = document.getElementById('noDomainVulnerabilitiesMessage');
+
+            document.getElementById('domainVulnerabilitiesTitle').textContent = 'Vulnerabilities for ' + domain; 
+            console.log('Setting domainVulnerabilitiesTitle to:', document.getElementById('domainVulnerabilitiesTitle').textContent); 
+
+            domainVulnerabilitiesList.innerHTML = ''; 
+
+            const vulnerabilitiesForDomain = allCveData[domain];
+            console.log('allCveData for domain ' + domain + ':', vulnerabilitiesForDomain); 
+
+            if (vulnerabilitiesForDomain && vulnerabilitiesForDomain.length > 0) {
+                domainVulnerabilitiesList.classList.add('list-group', 'list-group-flush');
+
+                vulnerabilitiesForDomain.forEach((vuln, index) => {
+                    const listItem = document.createElement('p');
+                    listItem.classList.add('list-group-item', 'list-group-item-action');
+
+                    let severityBadgeClass = 'bg-secondary'; 
+                    if (vuln.severity) {
+                        const lowerSeverity = vuln.severity.toLowerCase();
+                        if (lowerSeverity === 'critical' || lowerSeverity === 'high') {
+                            severityBadgeClass = 'bg-danger';
+                        } else if (lowerSeverity === 'medium') {
+                            severityBadgeClass = 'bg-warning';
+                        } else if (lowerSeverity === 'low') {
+                            severityBadgeClass = 'bg-info';
+                        }
+                    }
+                    console.log("Vulnerability object being processed:", vuln); // NEW DEBUG LOG
+                    // Corrected for web_technologies.json structure - explicitly using description and cvss_score
+                    const listItemContent = `<strong>${vuln.id || '-'}</strong> - <span class="badge ${severityBadgeClass}">${vuln.severity || 'Unknown'}</span> ${vuln.cvss_score !== null && vuln.cvss_score !== undefined ? `(CVSS: ${vuln.cvss_score})` : ''}: ${vuln.description || '-'} ${vuln.url ? `<a href="${vuln.url}" target="_blank" class="badge bg-primary text-decoration-none">Details <i class="fas fa-external-link-alt"></i></a>` : ''}`;
+                    listItem.innerHTML = listItemContent;
+                    console.log(`Adding vulnerability ${index}:`, listItemContent); // New debug log
+                    domainVulnerabilitiesList.appendChild(listItem);
+                });
+                domainVulnerabilitiesList.style.display = 'block';
+                noDomainVulnerabilitiesMessage.style.display = 'none';
+            } else {
+                domainVulnerabilitiesList.style.display = 'none';
+                noDomainVulnerabilitiesMessage.style.display = 'block';
+            }
+            domainVulnerabilitiesCard.style.display = 'block'; // Ensure the card itself is always visible
+            console.log('domainVulnerabilitiesCard display:', domainVulnerabilitiesCard.style.display); // Debug log
+            console.log('domainVulnerabilitiesList display:', domainVulnerabilitiesList.style.display); // Debug log
+            console.log('noDomainVulnerabilitiesMessage display:', noDomainVulnerabilitiesMessage.style.display); // Debug log
+        };
+
+        function downloadScanFolder() {
+            const scanFolder = "{{ scan_folder }}";
+            window.location.href = `/download-scan-folder/${scanFolder}`;
+        }
+
+    </script>
+</body>
+</html> 

@@ -1,0 +1,9 @@
+Starting certificaat scan...
+Reading domains from /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/uploads/temp_domains.txt
+Found 1 domains to check
+[1/1] Checking certificate for domain: nwg.se...
+  - Status: valid, expires in 159 days
+
+Certificate information for 1 domains saved to /home/s141422/SecurityProject/EASM-Bunyamin-Siebe/foundData/certificates.json
+
+###JSON_OUTPUT_INFO:certificates.json###
